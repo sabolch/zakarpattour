@@ -53,16 +53,22 @@
                                     <v-select
                                             label="Sort By"
                                             prepend-inner-icon="filter_list"
-                                            :items="['All','Title']"
+                                            :items="sortByItems"
+                                            item-text="name"
                                             outline
                                             solo
                                     ></v-select>
                                 </v-flex>
                                 <v-spacer class="hidden-md-and-down"></v-spacer>
                                 <v-flex xs2 md1 class="mb-4">
-                                    <v-btn flat outline @click="filters = !filters" active-class="">
+                                    <v-tooltip bottom>
+
+                                    <v-btn   slot="activator" flat outline @click="filters = !filters" active-class="">
+
                                         <v-icon>tune</v-icon>
                                     </v-btn>
+                                        <span>{{$t('marker_filtering')}}</span>
+                                    </v-tooltip>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -154,38 +160,6 @@
                         <v-flex>
                             <v-subheader class="font-weight-black headline text-xs-center">Filtering results
                             </v-subheader>
-                            <v-divider></v-divider>
-                            <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Price</v-subheader>
-                            <v-layout row pa-2>
-                                <v-flex shrink xs2>
-                                    <v-text-field
-                                            v-model="price[0]"
-                                            class="mt-0"
-                                            hide-details
-                                            single-line
-                                            type="number"
-                                    ></v-text-field>
-                                </v-flex>
-
-                                <v-flex class="px-3" xs8>
-                                    <v-range-slider
-                                            v-model="price"
-                                            :max="600"
-                                            :min="10"
-                                            :step="10"
-                                    ></v-range-slider>
-                                </v-flex>
-
-                                <v-flex shrink xs2>
-                                    <v-text-field
-                                            v-model="price[1]"
-                                            class="mt-0"
-                                            hide-details
-                                            single-line
-                                            type="number"
-                                    ></v-text-field>
-                                </v-flex>
-                            </v-layout>
                         </v-flex>
 
                         <v-divider></v-divider>
@@ -222,60 +196,6 @@
                         </v-layout>
 
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Start date</v-subheader>
-                        <v-flex xs12>
-                            <v-dialog
-                                    ref="dialog1"
-                                    v-model="modal"
-                                    :return-value.sync="date"
-                                    persistent
-                                    lazy
-                                    full-width
-                            >
-                                <v-text-field
-                                        slot="activator"
-                                        class="mx-3"
-                                        v-model="date"
-                                        label="Picker start date"
-                                        prepend-inner-icon="event"
-                                        readonly
-                                ></v-text-field>
-                                <v-date-picker v-model="date" scrollable>
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
-                                    <v-btn flat color="primary" @click="$refs.dialog1.save(date)">OK</v-btn>
-                                </v-date-picker>
-                            </v-dialog>
-                        </v-flex>
-
-                        <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">End date</v-subheader>
-                        <v-flex xs12>
-                            <v-dialog
-                                    ref="dialog"
-                                    v-model="modal2"
-                                    :return-value.sync="date2"
-                                    persistent
-                                    lazy
-                                    full-width
-                            >
-                                <v-text-field
-                                        slot="activator"
-                                        class="mx-3"
-                                        v-model="date2"
-                                        label="Picker start date"
-                                        prepend-inner-icon="event"
-                                        readonly
-                                ></v-text-field>
-                                <v-date-picker v-model="date2" scrollable>
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
-                                    <v-btn flat color="primary" @click="$refs.dialog.save(date2)">OK</v-btn>
-                                </v-date-picker>
-                            </v-dialog>
-                        </v-flex>
-
-                        <v-divider></v-divider>
                         <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Category</v-subheader>
                         <v-flex xs12>
                             <v-combobox
@@ -305,39 +225,7 @@
                             </v-combobox>
                         </v-flex>
 
-                        <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Sights</v-subheader>
-                        <v-flex xs12>
-                            <v-autocomplete
-                                    v-model="select"
-                                    :loading="loading"
-                                    :items="items"
-                                    :search-input.sync="search"
-                                    cache-items
-                                    class="mx-3"
-                                    hide-selected
-                                    chips
-                                    clearable
-                                    multiple
-                                    single-line
-                                    label="Select sights"
-                            >
-                                <template slot="selection" slot-scope="data">
-                                    <v-chip
-                                            :selected="data.selected"
-                                            close
-                                            outline
-                                            color="indigo"
-                                            @input="remove(data.item)"
-
-                                    >
-                                        <v-icon left>place</v-icon>
-                                        <strong>{{ data.item }}</strong>&nbsp;
-                                    </v-chip>
-                                </template>
-                            </v-autocomplete>
-                        </v-flex>
-                    </v-list>
+                      </v-list>
                 </v-navigation-drawer>
             </v-layout>
 
@@ -479,6 +367,8 @@
             }
         },
         mounted() {
+            this.sortByItems = $nuxt.$t('marker_sort');
+            console.log(this.sortByItems);
             // axios.get('/types/all').then((response) => {
             //     this.typeItems = response.data
             // });

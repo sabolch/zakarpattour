@@ -30,21 +30,5 @@
   "password_updated": "Your password has been updated!",
   "new_password": "New Password",
   "login_with": "Login with",
-  "register_with": "Register with",
-
-  "marker_sort": [
-    {
-      "name": "Title ABC",
-      "value": "title-asc"
-    },
-    {
-      "name": "Title CBA",
-      "value": "title-desc"
-    },
-    {
-      "name": "Best rated first",
-      "value": "rate-desc"
-    }
-  ],
-  "marker_filtering": "Filtering options"
+  "register_with": "Register with"
 }

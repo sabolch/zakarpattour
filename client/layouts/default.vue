@@ -1,5 +1,5 @@
 <template>
-    <v-app id="inspire" :dark="isDarkTheme">
+    <v-app id="inspire" :dark="isDarkTheme"  v-scroll="onScroll">
         <v-navigation-drawer
                 :clipped="$vuetify.breakpoint.lgAndUp"
                 v-model="drawer"
@@ -118,14 +118,14 @@
                 <v-btn  :to="{name: 'welcome'}" exact flat> Home</v-btn>
                 <v-btn :to="{name: 'sights'}" exact flat>Sights</v-btn>
                 <v-btn :to="{name: 'tours'}" flat>Tours</v-btn>
-                <v-btn flat>About</v-btn>
-                <v-btn flat>Contacts</v-btn>
+                <v-btn :to="{name: 'about'}" flat>About Us</v-btn>
+                <v-btn :to="{name: 'contact'}" flat>Contacts</v-btn>
             </v-toolbar-items>
             <v-spacer/>
                 <v-btn icon :to="{name: 'login'}">
                     <v-icon medium>apps</v-icon>
                 </v-btn>
-                <v-btn icon :to="{name: 'register'}">
+                <v-btn icon :to="{name: 'cart.cart'}">
                     <v-icon medium>shopping_cart</v-icon>
                 </v-btn>
 
@@ -156,20 +156,36 @@
                 </v-btn>
         </v-toolbar>
         <v-content>
-
-            <nuxt/>
-
+                <nuxt />
         </v-content>
+        <!--scroll btn-->
+        <v-fab-transition>
+        <v-btn
+                v-show="scroll"
+                fab
+                bottom
+                right
+                color="pink"
+                dark
+                fixed
+                @click="$vuetify.goTo(target, options)"
+        >
+            <v-icon medium>keyboard_arrow_up</v-icon>
+        </v-btn>
+        </v-fab-transition>
     </v-app>
 </template>
-import {mapGetters} from 'vuex'
-
 <script>
+    import { mapGetters } from 'vuex'
+    import { loadMessages } from '~/plugins/i18n'
     export default {
         name: 'FrontPage',
         data: () => ({
             appName: process.env.appName,
             isDarkTheme: false,
+
+            scroll:false,
+            offsetTop: 0,
 
             fav: true,
             menu: false,
@@ -186,18 +202,58 @@ import {mapGetters} from 'vuex'
                 {icon: 'place', text: 'Sights'},
                 {icon: 'info', text: 'About'},
                 {icon: 'help_outline', text: 'Help'}
-
             ]
 
         }),
         mounted() {
             // Vue.i18n.set(this.lang);
         },
+        watch:{
+            offsetTop:function (value) {
+                if(value > 500){
+                    this.scroll = true;
+                    return;
+                }
+                this.scroll = false;
+            }
+        },
         methods: {
             eventHandler(name) {
             },
+            setLocale (locale) {
+                if (this.$i18n.locale !== locale) {
+                    loadMessages(locale)
+                    this.$store.dispatch('lang/setLocale', { locale })
+                }
+            },
             changeLanguage(lang) {
+                switch (lang) {
+                    case 'en':
+                        this.setLocale('en')
+                        break
+                    case 'ua':
+                        this.setLocale('uk')
+                        break
+                    case 'hu':
+                        this.setLocale('hu')
+                        break
+                }
+            },
+            onScroll (e) {
+                this.offsetTop = window.pageYOffset || document.documentElement.scrollTop
+            }
+        },
 
+        computed: {
+            target() {
+                 return 0
+            },
+            options() {
+                return {
+                    duration: 800,
+                    offset: 0,
+                    easing: 'easeInQuint'
+                }
             }
         }
     }

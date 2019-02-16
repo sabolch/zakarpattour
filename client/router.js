@@ -18,6 +18,19 @@ const SettingsPassword = () => import('~/pages/settings/password').then(m => m.d
 
 const MarkersIndex = () => import('~/pages/marker/index').then(m => m.default || m)
 const ToursIndex = () => import('~/pages/tour/index').then(m => m.default || m)
+const About = () => import('~/pages/aboutus').then(m => m.default || m)
+const Contact = () => import('~/pages/contact').then(m => m.default || m)
+
+// User cart
+const UserShoppingCart = () => import('~/pages/user/cart/cart').then(m => m.default || m)
+const CartWish = () => import('~/pages/user/cart/wish').then(m => m.default || m)
+const CartProcessing = () => import('~/pages/user/cart/processing').then(m => m.default || m)
+const CartChecked = () => import('~/pages/user/cart/checked').then(m => m.default || m)
+const CartHistory = () => import('~/pages/user/cart/history').then(m => m.default || m)
+
+const Favorites = () => import('~/pages/user/favorites').then(m => m.default || m)
+
+
 
 const routes = [
 
@@ -27,7 +40,25 @@ const routes = [
     //
   { path: '/sights', name: 'sights', component: MarkersIndex },
   { path: '/tours', name: 'tours', component: ToursIndex },
+  { path: '/about', name: 'about', component: About },
+  { path: '/contact', name: 'contact', component: Contact },
+    //
+    //User
+    { path: '/user', component: UserShoppingCart,
+      children: [
+        { path: '', redirect: { name: 'cart.cart' } },
+        { path: 'cart', name: 'cart.cart', component: CartWish },
+        { path: 'processing', name: 'cart.processing', component: CartProcessing },
+        { path: 'checked', name: 'cart.checked', component: CartChecked },
+        { path: 'history', name: 'cart.history', component: CartHistory },
 
+        { path: 'favorites', name: 'user.favorites', component: Favorites },
+      ] },
+
+
+
+
+  // User login/register/reset
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },
   { path: '/password/reset', name: 'password.request', component: PasswordRequest },

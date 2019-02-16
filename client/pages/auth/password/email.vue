@@ -1,30 +1,43 @@
 <template>
-  <div class="row">
-    <div class="col-lg-8 m-auto">
-      <card :title="$t('reset_password')">
-        <form @submit.prevent="send" @keydown="form.onKeydown($event)">
-          <alert-success :form="form" :message="status"/>
+  <v-container fluid fill-height>
+    <v-layout align-center justify-center>
+      <v-flex xs12 sm8 md4>
+        <v-slide-y-transition>
+          <v-card class="elevation-12" v-show="expand">
+            <v-toolbar color="primary">
+              <v-toolbar-title class="white--text">Send reset password email</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-card-text class="mb-0 pb-0">
+              <v-form @submit.prevent="send" @keydown="form.onKeydown($event)">
+                <alert-success :form="form" :message="status"/>
+                <v-text-field v-model="form.email" prepend-icon="mail" name="email" label="Email"
+                              type="text"></v-text-field>
+                        </v-form>
+            </v-card-text>
+            <v-card-actions class="mt-0 pt-0">
+              <v-layout row wrap>
 
-          <!-- Email -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email"
-                     class="form-control">
-              <has-error :form="form" field="email"/>
-            </div>
-          </div>
+                <v-flex xs12>
+                  <v-layout row wrap>
+                    <v-flex class="text-xs-right">
+                      <v-btn
+                              color="primary"
+                              @click="send"
+                              :loading="form.busy"
+                      >Send
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-card-actions>
+          </v-card>
+        </v-slide-y-transition>
+      </v-flex>
+    </v-layout>
+  </v-container>
 
-          <!-- Submit Button -->
-          <div class="form-group row">
-            <div class="col-md-9 ml-md-auto">
-              <v-button :loading="form.busy">{{ $t('send_password_reset_link') }}</v-button>
-            </div>
-          </div>
-        </form>
-      </card>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -36,6 +49,7 @@ export default {
   },
 
   data: () => ({
+    expand:false,
     status: '',
     form: new Form({
       email: ''
@@ -50,6 +64,9 @@ export default {
 
       this.form.reset()
     }
+  },
+  mounted () {
+    this.expand = true
   }
 }
 </script>

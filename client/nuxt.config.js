@@ -44,6 +44,7 @@ module.exports = {
       { src: `https://cdn.polyfill.io/v2/polyfill.min.js?features=${polyfills.join(',')}` },
       { src: `/js/markerclusterer.js` },
       { src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBZcUbHJ5REVnm-q98yKqSmpbWkKtmLSuE&libraries=places` },
+      { src: `https://www.google.com/recaptcha/api.js`,render:`explicit` , async:true, defer:true },
     ]
   },
 
@@ -80,6 +81,9 @@ module.exports = {
     '@nuxtjs/router',
     '~/modules/spa',
     '@nuxtjs/vuetify',
+    ['nuxt-validate', {
+      lang: 'en',
+    }],
     ['@nuxtjs/moment', { locales: ['hu','uk','en-gb'], defaultLocale: 'en-gb' }]
   ],
 

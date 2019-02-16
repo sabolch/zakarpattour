@@ -4,7 +4,7 @@
             <v-flex xs12 pa-0>
                 <v-parallax
                         dark
-                        src="http://img11.nnm.me/f/6/4/7/b/2724ec57475c46357b0c3c5b761.jpg"
+                        src="/images/bg/bg.jpg"
                         height="400"
                 >
                     <p class="font-weight-bold mt-2 subheading text-xs-right">{{ datetime }}</p>
@@ -138,7 +138,20 @@
 
                     </v-card>
                 </v-flex>
-
+                <v-flex xs12 pa-1>
+                    <v-parallax
+                            dark
+                            src="/images/bg/bg2.jpg"
+                            height="300"
+                    >
+                        <v-layout fill-height column ma-0 >
+                            <v-spacer></v-spacer>
+                            <v-flex class="text-xs-right" shrink>
+                                <h1 class=" text-xs-right title font-weight-bold mb-3">/Долина нарцисів/</h1>
+                            </v-flex>
+                        </v-layout>
+                    </v-parallax>
+                </v-flex>
                 <v-flex xs12>
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
@@ -215,7 +228,20 @@
                     </v-card>
                 </v-flex>
 
-
+                <v-flex xs12 pa-1>
+                    <v-parallax
+                            dark
+                            src="/images/bg/bg3.jpg"
+                            height="300"
+                    >
+                        <v-layout fill-height column ma-0 >
+                            <v-spacer></v-spacer>
+                            <v-flex class="text-xs-right" shrink>
+                                <h1 class=" text-xs-right title font-weight-bold mb-3">/Синевир/</h1>
+                            </v-flex>
+                        </v-layout>
+                    </v-parallax>
+                </v-flex>
 
                 <v-flex xs12>
                     <v-card>
@@ -289,6 +315,21 @@
                     </v-card>
                 </v-flex>
 
+
+                <v-flex xs12 pa-1>
+                    <v-parallax
+                            dark
+                            src="/images/bg/bg4.jpg"
+                            height="300"
+                    >
+                        <v-layout fill-height column ma-0 >
+                            <v-spacer></v-spacer>
+                            <v-flex class="text-xs-right" shrink>
+                                <h1 class=" text-xs-right title font-weight-bold mb-3">/Сакури Ужгород/</h1>
+                            </v-flex>
+                        </v-layout>
+                    </v-parallax>
+                </v-flex>
 
 
 
@@ -386,7 +427,7 @@
                                     </v-layout>
                                 </v-container>
                         </v-flex>
-                        <v-divider vertical="false"></v-divider>
+                        <v-divider :vertical="true"></v-divider>
                         <v-flex xs3>
                                 <v-container fluid fill-height>
                                     <v-layout column>
@@ -400,7 +441,7 @@
                                     </v-layout>
                                 </v-container>
                         </v-flex>
-                        <v-divider vertical="false"></v-divider>
+                        <v-divider :vertical="true"></v-divider>
                         <v-flex xs3>
                                 <v-container fluid fill-height>
                                     <v-layout column>
