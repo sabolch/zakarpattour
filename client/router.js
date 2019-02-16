@@ -12,9 +12,9 @@ const Register = () => import('~/pages/auth/register').then(m => m.default || m)
 const PasswordReset = () => import('~/pages/auth/password/reset').then(m => m.default || m)
 const PasswordRequest = () => import('~/pages/auth/password/email').then(m => m.default || m)
 
-const Settings = () => import('~/pages/settings/index').then(m => m.default || m)
-const SettingsProfile = () => import('~/pages/settings/profile').then(m => m.default || m)
-const SettingsPassword = () => import('~/pages/settings/password').then(m => m.default || m)
+const Settings = () => import('~/pages/user/settings/settings').then(m => m.default || m)
+const SettingsProfile = () => import('~/pages/user/settings/profile').then(m => m.default || m)
+const SettingsPassword = () => import('~/pages/user/settings/password').then(m => m.default || m)
 
 const MarkersIndex = () => import('~/pages/marker/index').then(m => m.default || m)
 const ToursIndex = () => import('~/pages/tour/index').then(m => m.default || m)
@@ -48,9 +48,9 @@ const routes = [
       children: [
         { path: '', redirect: { name: 'cart.cart' } },
         { path: 'cart', name: 'cart.cart', component: CartWish },
-        { path: 'processing', name: 'cart.processing', component: CartProcessing },
-        { path: 'checked', name: 'cart.checked', component: CartChecked },
-        { path: 'history', name: 'cart.history', component: CartHistory },
+        { path: 'cart/processing', name: 'cart.processing', component: CartProcessing },
+        { path: 'cart/checked', name: 'cart.checked', component: CartChecked },
+        { path: 'cart/history', name: 'cart.history', component: CartHistory },
 
         { path: 'favorites', name: 'user.favorites', component: Favorites },
       ] },
@@ -64,9 +64,7 @@ const routes = [
   { path: '/password/reset', name: 'password.request', component: PasswordRequest },
   { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },
 
-
-
-
+    // User profile
   { path: '/settings',
     component: Settings,
     children: [

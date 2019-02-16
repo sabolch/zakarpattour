@@ -25,6 +25,7 @@
                                               data-vv-name="email"
                                 ></v-text-field>
                                 <v-text-field v-model="form.password" id="password" prepend-icon="lock" name="password"
+                                              ref="password"
                                               label="Password"
                                               :type="showPassword ? 'text' : 'password'"
                                               :append-icon="showPassword ? 'visibility_off' : 'visibility'"

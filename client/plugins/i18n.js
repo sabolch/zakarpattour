@@ -13,7 +13,6 @@ export default async ({ app, store }) => {
   if (process.client) {
     await loadMessages(store.getters['lang/locale'])
   }
-
   app.i18n = i18n
 }
 

@@ -1,4 +1,11 @@
 {
+  "navbar": {
+    "home": "Головна",
+    "sights": "Пам'ятки",
+    "tours": "Тури",
+    "about": "Про Нас",
+    "contact": "Контакти"
+  },
   "ok": "Ok",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",

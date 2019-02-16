@@ -1,5 +1,5 @@
 <template>
-    <v-app id="inspire" :dark="isDarkTheme"  v-scroll="onScroll">
+    <v-app id="inspire" :dark="isDarkTheme" v-scroll="onScroll">
         <v-navigation-drawer
                 :clipped="$vuetify.breakpoint.lgAndUp"
                 v-model="drawer"
@@ -13,7 +13,7 @@
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title>
-                            Home
+                            {{ $t('navbar.home') }}
                         </v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
@@ -67,7 +67,7 @@
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list-group>
-                    <v-list-tile v-else :key="item.text" >
+                    <v-list-tile v-else :key="item.text">
                         <v-list-tile-action>
                             <v-icon class="icon-fix" medium>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
@@ -115,19 +115,19 @@
             </v-toolbar-title>
             <v-toolbar-items class="hidden-sm-and-down">
 
-                <v-btn  :to="{name: 'welcome'}" exact flat> Home</v-btn>
-                <v-btn :to="{name: 'sights'}" exact flat>Sights</v-btn>
-                <v-btn :to="{name: 'tours'}" flat>Tours</v-btn>
-                <v-btn :to="{name: 'about'}" flat>About Us</v-btn>
-                <v-btn :to="{name: 'contact'}" flat>Contacts</v-btn>
+                <v-btn :to="{name: 'welcome'}" exact flat> {{ $t('navbar.home') }}</v-btn>
+                <v-btn :to="{name: 'sights'}" exact flat>{{ $t('navbar.sights') }}</v-btn>
+                <v-btn :to="{name: 'tours'}" flat>{{ $t('navbar.tours') }}</v-btn>
+                <v-btn :to="{name: 'about'}" flat>{{ $t('navbar.about') }}</v-btn>
+                <v-btn :to="{name: 'contact'}" flat>{{ $t('navbar.contact') }}</v-btn>
             </v-toolbar-items>
             <v-spacer/>
-                <v-btn icon :to="{name: 'login'}">
-                    <v-icon medium>apps</v-icon>
-                </v-btn>
-                <v-btn icon :to="{name: 'cart.cart'}">
-                    <v-icon medium>shopping_cart</v-icon>
-                </v-btn>
+            <v-btn icon :to="{name: 'login'}">
+                <v-icon medium>apps</v-icon>
+            </v-btn>
+            <v-btn icon :to="{name: 'cart.cart'}">
+                <v-icon medium>shopping_cart</v-icon>
+            </v-btn>
 
             <v-menu
                     bottom
@@ -151,40 +151,41 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
-                <v-btn icon :to="{name: 'login'}">
-                    <v-icon medium>person</v-icon>
-                </v-btn>
+            <v-btn icon :to="{name: 'settings.profile'}">
+                <v-icon medium>person</v-icon>
+            </v-btn>
         </v-toolbar>
         <v-content>
-                <nuxt />
+            <nuxt/>
         </v-content>
         <!--scroll btn-->
         <v-fab-transition>
-        <v-btn
-                v-show="scroll"
-                fab
-                bottom
-                right
-                color="pink"
-                dark
-                fixed
-                @click="$vuetify.goTo(target, options)"
-        >
-            <v-icon medium>keyboard_arrow_up</v-icon>
-        </v-btn>
+            <v-btn
+                    v-show="scroll"
+                    fab
+                    bottom
+                    right
+                    color="pink"
+                    dark
+                    fixed
+                    @click="$vuetify.goTo(target, options)"
+            >
+                <v-icon medium>keyboard_arrow_up</v-icon>
+            </v-btn>
         </v-fab-transition>
     </v-app>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
-    import { loadMessages } from '~/plugins/i18n'
+    import {mapGetters} from 'vuex'
+    import {loadMessages} from '~/plugins/i18n'
+
     export default {
         name: 'FrontPage',
         data: () => ({
             appName: process.env.appName,
             isDarkTheme: false,
 
-            scroll:false,
+            scroll: false,
             offsetTop: 0,
 
             fav: true,
@@ -208,9 +209,9 @@
         mounted() {
             // Vue.i18n.set(this.lang);
         },
-        watch:{
-            offsetTop:function (value) {
-                if(value > 500){
+        watch: {
+            offsetTop: function (value) {
+                if (value > 500) {
                     this.scroll = true;
                     return;
                 }
@@ -220,10 +221,10 @@
         methods: {
             eventHandler(name) {
             },
-            setLocale (locale) {
+            setLocale(locale) {
                 if (this.$i18n.locale !== locale) {
                     loadMessages(locale)
-                    this.$store.dispatch('lang/setLocale', { locale })
+                    this.$store.dispatch('lang/setLocale', {locale})
                 }
             },
             changeLanguage(lang) {
@@ -239,14 +240,14 @@
                         break
                 }
             },
-            onScroll (e) {
+            onScroll(e) {
                 this.offsetTop = window.pageYOffset || document.documentElement.scrollTop
             }
         },
 
         computed: {
             target() {
-                 return 0
+                return 0
             },
             options() {
                 return {
@@ -264,9 +265,10 @@
         width: 30px;
     }
 
-    .container{
+    .container {
         width: auto;
     }
+
     a {
         text-decoration: none;
     }
@@ -280,9 +282,11 @@
         background-color: transparent;
         color: inherit;
     }
-    .v-chip__content{
-        cursor: pointer!important;
+
+    .v-chip__content {
+        cursor: pointer !important;
     }
+
     .v-dialog {
         text-align: center;
         box-shadow: none;

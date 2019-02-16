@@ -1,4 +1,15 @@
 {
+  "navbar": {
+    "home": "Főoldal",
+    "sights": "Látnivalók",
+    "tours": "Túrák",
+    "about": "Rólunk",
+    "contact": "Kapcsolat"
+  },
+  "paralax": {
+    "main": "Kárpátaljai utazások",
+    "subtitle": "Визначні пам'ятки, природні та історичні пам'ятки!"
+  },
   "ok": "Ok",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",

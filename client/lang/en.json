@@ -1,4 +1,11 @@
 {
+  "navbar": {
+    "home": "Home",
+    "sights": "Sights",
+    "tours": "Tours",
+    "about": "About Us",
+    "contact": "Contact"
+  },
   "ok": "Ok",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",

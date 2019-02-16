@@ -1,17 +1,22 @@
 <template>
     <v-container fill-height fluid>
         <v-layout row wrap>
-
             <v-flex xs12>
                 <v-container pa-2>
-                    <v-layout row class="indigo">
+                    <v-layout row>
                         <v-card>
                             <v-navigation-drawer
                                     v-model="drawer"
-                                    permanent
+                                    :mini-variant="$store.state.user_cart_mini"
+                                    hide-overlay
+                                    stateless
                             >
-                                <v-toolbar flat class="transparent">
                                     <v-list class="pa-0">
+                                        <v-list-tile v-if="$store.state.user_cart_mini" @click.stop="setMinify">
+                                            <v-list-tile-action>
+                                                <v-icon>chevron_right</v-icon>
+                                            </v-list-tile-action>
+                                        </v-list-tile>
                                         <v-list-tile avatar>
                                             <v-list-tile-avatar>
                                                 <v-icon color="primary" size="32">favorite</v-icon>
@@ -21,9 +26,16 @@
                                                 <v-list-tile-title class="title font-weight-light">Bucket list
                                                 </v-list-tile-title>
                                             </v-list-tile-content>
+                                            <v-list-tile-action>
+                                                <v-btn
+                                                        icon
+                                                        @click.stop="setMinify"
+                                                >
+                                                    <v-icon>chevron_left</v-icon>
+                                                </v-btn>
+                                            </v-list-tile-action>
                                         </v-list-tile>
                                     </v-list>
-                                </v-toolbar>
                                 <v-list class="pa-0" dense>
                                     <v-divider></v-divider>
                                     <v-list-tile
@@ -76,8 +88,8 @@
                             </v-navigation-drawer>
                         </v-card>
 
-                        <v-container fill-height grid-md-list>
-                            <v-layout row wrap>
+                        <v-container fill-height fluid ma-1 pa-0>
+                            <v-layout row wrap ma-0 pa-0>
                                 <v-flex xs12>
                                     <transition name="fade" mode="out-in">
                                         <router-view/>
@@ -98,6 +110,8 @@
         data() {
             return {
                 drawer: true,
+                mini:false,
+
                 items: [
                     {title: 'Cart', icon: 'shopping_cart', route: 'cart.cart'},
                     {title: 'Processing', icon: 'loop', route: 'cart.processing'},
@@ -107,7 +121,13 @@
                 right: null
             }
         },
-        mounted () {}
+        mounted () {},
+        methods: {
+            setMinify () {
+                this.$store.commit('user_cart_mini')
+                console.log(this.$store.state.user_cart_mini)
+            }
+        }
     }
 </script>
 
