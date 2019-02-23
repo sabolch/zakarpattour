@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -19,9 +21,10 @@ class ProfileController extends Controller
 
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id,
+            'telephone' => 'required|numeric',
+            'email' => 'required|email|unique:users,email,' . $user->id,
         ]);
-
-        return tap($user)->update($request->only('name', 'email'));
+        User::where('id', $user->id)->update($request->only('name', 'email', 'telephone'));
+        return tap($user)->update($request->only('email'));
     }
 }

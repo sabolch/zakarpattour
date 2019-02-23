@@ -5,57 +5,81 @@
                 <v-container pa-2>
                     <v-layout row>
                         <v-card>
-                        <v-navigation-drawer
-                                v-model="drawer"
-                                :mini-variant="$store.state.user_navbar_mini"
-                                hide-overlay
-                                temporary
-                                stateless
-                        >
-                            <v-list class="pa-1">
-                                <v-list-tile v-if="$store.state.user_navbar_mini" @click.stop="setMinify">
-                                    <v-list-tile-action>
-                                        <v-icon>chevron_right</v-icon>
-                                    </v-list-tile-action>
-                                </v-list-tile>
+                            <v-navigation-drawer
+                                    v-model="drawer"
+                                    :mini-variant="$store.state.user_navbar_mini"
+                                    hide-overlay
+                                    temporary
+                                    stateless
+                            >
+                                <v-list class="pa-1">
+                                    <v-list-tile v-if="$store.state.user_navbar_mini" @click.stop="setMinify">
+                                        <v-list-tile-action>
+                                            <v-icon>chevron_right</v-icon>
+                                        </v-list-tile-action>
+                                    </v-list-tile>
 
-                                <v-list-tile avatar tag="div">
-                                    <v-list-tile-avatar size="50">
-                                        <img src="https://randomuser.me/api/portraits/men/85.jpg">
-                                    </v-list-tile-avatar>
+                                    <v-list-tile avatar tag="div">
+                                        <v-list-tile-avatar size="50">
+                                            <v-img :src="$store.state.auth.user ? `${$store.state.auth.user.photo_url}/64x64` : '' ">
+                                                <v-layout
+                                                        slot="placeholder"
+                                                        fill-height
+                                                        align-center
+                                                        justify-center
+                                                        ma-0
+                                                >
+                                                    <v-progress-circular indeterminate color="blue lighten-5"></v-progress-circular>
+                                                </v-layout>
+                                            </v-img>
+                                        </v-list-tile-avatar>
 
-                                    <v-list-tile-content>
-                                        <v-list-tile-title class="title font-weight-light">username</v-list-tile-title>
-                                    </v-list-tile-content>
+                                        <v-list-tile-content>
+                                            <v-list-tile-title class="title font-weight-light">
+                                                {{$store.state.auth.user ? $store.state.auth.user.name : ''}}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
 
-                                    <v-list-tile-action>
-                                        <v-btn icon @click.stop="setMinify">
-                                            <v-icon>chevron_left</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-                            </v-list>
+                                        <v-list-tile-action>
+                                            <v-btn icon @click.stop="setMinify">
+                                                <v-icon>chevron_left</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+                                    </v-list-tile>
+                                </v-list>
 
-                            <v-list class="pt-0" dense>
-                                <v-divider light></v-divider>
+                                <v-list class="pt-0" dense>
+                                    <v-divider light></v-divider>
 
-                                <v-list-tile
-                                        v-for="item in items"
-                                        :key="item.title"
-                                        @click=""
-                                        :to="{name:item.route}"
-                                        :class="item.route === $route.name ? 'active-cart-route' : ''"
-                                >
-                                    <v-list-tile-action>
-                                        <v-icon>{{ item.icon }}</v-icon>
-                                    </v-list-tile-action>
+                                    <v-list-tile
+                                            v-for="item in items"
+                                            :key="item.title"
+                                            @click=""
+                                            :to="{name:item.route}"
+                                            :class="item.route === $route.name ? 'active-cart-route' : ''"
+                                    >
+                                        <v-list-tile-action>
+                                            <v-icon>{{ item.icon }}</v-icon>
+                                        </v-list-tile-action>
 
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-                            </v-list>
-                        </v-navigation-drawer>
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                    <v-list-tile
+                                            :key="'Logout'"
+                                            @click="logout"
+                                    >
+                                        <v-list-tile-action>
+                                            <v-icon>logout</v-icon>
+                                        </v-list-tile-action>
+
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>Logout</v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </v-list>
+                            </v-navigation-drawer>
                         </v-card>
                         <v-container fill-height grid-md-list pa-0 ml-1>
                             <v-layout row wrap>
@@ -75,6 +99,7 @@
 
 <script>
     export default {
+        middleware: 'auth',
         name: "settings",
         data() {
             return {
@@ -84,18 +109,25 @@
                     {title: 'Profile', icon: 'account_circle', route: 'settings.profile'},
                     {title: 'Password', icon: 'vpn_key', route: 'settings.password'},
                 ],
-                right: null
+                right: null,
+
             }
         },
-        mounted() {},
+        mounted() {
+        },
         methods: {
-            setMinify () {
+            setMinify() {
                 this.$store.commit('user_navbar_mini')
+            },
+            async logout() {
+                // Log out the user.
+                await this.$store.dispatch('auth/logout')
+                // Redirect to login.
+                this.$router.push({name: 'login'})
             }
         },
         watch: {
-            'window.innerWidth':function (value) {
-
+            'window.innerWidth': function (value) {
             }
         }
     }

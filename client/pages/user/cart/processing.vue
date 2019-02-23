@@ -88,6 +88,11 @@
 <script>
     export default {
         name: "processing",
+        head() {
+            return {
+                title: 'Shopping cart waiting for processing order',
+            }
+        },
         data() {
             return {
                 rating: 4,

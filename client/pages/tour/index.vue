@@ -116,7 +116,7 @@
                             </v-btn>
                             <v-spacer/>
                             <v-btn flat class="blue--text"
-                                   @click="readMore(item.slug)"
+                                   :to="{name:'tour.show',params: {slug:item}}"
                                    outline
                             >Read More
                             </v-btn>
@@ -173,6 +173,7 @@
                                             :max="600"
                                             :min="10"
                                             :step="10"
+                                            thumb-size="100"
                                     ></v-range-slider>
                                 </v-flex>
 
@@ -240,7 +241,7 @@
                                         prepend-inner-icon="event"
                                         readonly
                                 ></v-text-field>
-                                <v-date-picker v-model="date" scrollable>
+                                <v-date-picker v-model="date" :locale="$i18n.locale" scrollable>
                                     <v-spacer></v-spacer>
                                     <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
                                     <v-btn flat color="primary" @click="$refs.dialog1.save(date)">OK</v-btn>
@@ -267,7 +268,7 @@
                                         prepend-inner-icon="event"
                                         readonly
                                 ></v-text-field>
-                                <v-date-picker v-model="date2" scrollable>
+                                <v-date-picker v-model="date2" :locale="$i18n.locale" scrollable>
                                     <v-spacer></v-spacer>
                                     <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
                                     <v-btn flat color="primary" @click="$refs.dialog.save(date2)">OK</v-btn>
@@ -360,6 +361,11 @@
 <script>
     export default {
         name: "index",
+        head() {
+            return {
+                title: 'Tours',
+            }
+        },
         data() {
             return {
                 rating: 4,

@@ -82,6 +82,11 @@
 <script>
     export default {
         name: "history",
+        head() {
+            return {
+                title: 'Shopping cart history',
+            }
+        },
         data() {
             return {
                 page:1,

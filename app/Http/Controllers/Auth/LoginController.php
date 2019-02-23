@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Tymon\JWTAuth\Validators\Validator;
 
 class LoginController extends Controller
 {
@@ -28,15 +30,35 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        $token = $this->guard()->attempt($this->credentials($request));
+        $g_token = $request->input('recaptchaToken');
 
-        if ($token) {
-            $this->guard()->setToken($token);
+        // if google captcha is not empty
+        if(strlen($g_token) > 0) {
+            // create https client for check the token
+            $client = new Client();
+            $response = $client->post("https://www.google.com/recaptcha/api/siteverify", [
+                'form_params' => array(
+                    'secret' => '6LfeIXYUAAAAADT7qhrqb5jNZVBh1qTcJ4uau2Oj',
+                    'response' => $g_token
+                )
+            ]);
+            $verification = json_decode($response->getBody()->getContents());
+            if ($verification->success) {
 
-            return true;
+
+                $token = $this->guard()->attempt($this->credentials($request));
+
+                if ($token) {
+                    $this->guard()->setToken($token);
+                    return true;
+                }
+
+                return false;
+            }
+            return false;
         }
-
         return false;
+
     }
 
     /**

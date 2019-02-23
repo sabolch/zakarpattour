@@ -470,6 +470,12 @@
     import {mapGetters} from 'vuex'
 
     export default {
+        name:'indexpage',
+        head() {
+            return {
+                title: 'Home',
+            }
+        },
         components: {},
 
         data: () => ({
@@ -483,9 +489,13 @@
         }),
         mounted() {
             window.$nuxt.$moment.locale('uk');
-            this.datetime = window.$nuxt.$moment().format('ll')
+            this.datetime = window.$nuxt.$moment().locale(this.$i18n.locale).format('ll')
         },
-
+        watch:{
+            '$i18n.locale':function (value) {
+                this.datetime = window.$nuxt.$moment().locale(value).format('ll')
+            }
+        },
         methods: {
             async logout() {
                 // Log out the user.

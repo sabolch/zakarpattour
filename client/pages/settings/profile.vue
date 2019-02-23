@@ -40,8 +40,10 @@ import { mapGetters } from 'vuex'
 export default {
   scrollToTop: false,
 
-  head () {
-    return { title: this.$t('settings') }
+  head() {
+    return {
+      title: 'Profile Settings',
+    }
   },
 
   data: () => ({

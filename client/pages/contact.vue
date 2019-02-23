@@ -101,6 +101,11 @@
     import VueRecaptcha from "vue-recaptcha"
     export default {
         name: "contact",
+        head() {
+            return {
+                title: 'Contact',
+            }
+        },
         components: {VueRecaptcha},
         data: () => ({
             expand: false,

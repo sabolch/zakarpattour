@@ -71,6 +71,11 @@
 <script>
     export default {
         name: "favorites",
+        head() {
+            return {
+                title: 'Bucket list',
+            }
+        },
         data() {
             return {
                 rating: 4,

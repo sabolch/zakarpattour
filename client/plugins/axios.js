@@ -61,3 +61,5 @@ export default ({ app, store, redirect }) => {
     return Promise.reject(error)
   })
 }
+
+

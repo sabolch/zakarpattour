@@ -106,6 +106,7 @@
 
 <script>
     export default {
+        middleware: 'auth',
         name: "cart",
         data() {
             return {

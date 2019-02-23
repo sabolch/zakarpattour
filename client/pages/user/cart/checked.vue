@@ -88,6 +88,11 @@
 <script>
     export default {
         name: "checked",
+        head() {
+            return {
+                title: 'Shopping cart processed',
+            }
+        },
         data() {
             return {
                 rating: 4,

@@ -122,7 +122,7 @@
                             </v-btn>
                             <v-spacer/>
                             <v-btn flat class="blue--text"
-                                   @click="readMore(item.slug)"
+                                   :to="{name:'sight.show',params: {slug:item}}"
                                    outline
                             >Read More
                             </v-btn>
@@ -247,7 +247,12 @@
 </template>
 <script>
     export default {
-        name: "index",
+        name: "markerindex",
+        head() {
+            return {
+                title: 'Sights',
+            }
+        },
         data() {
             return {
                 rating: 4,

@@ -13,13 +13,13 @@ const polyfills = [
 ]
 
 module.exports = {
-  // mode: 'spa',
+  mode: 'universal',
 
   srcDir: __dirname,
 
   env: {
     apiUrl: process.env.APP_URL || 'http://localhost:8000',
-    appName: process.env.APP_NAME || 'Laravel-Nuxt',
+    appName: process.env.APP_NAME || 'Zakarpattour',
     appLocale: process.env.APP_LOCALE || 'en',
     githubAuth: !!process.env.GITHUB_CLIENT_ID
   },
@@ -80,11 +80,12 @@ module.exports = {
   modules: [
     '@nuxtjs/router',
     '~/modules/spa',
+    ['@nuxtjs/axios',{baseURL:process.env.APP_URL}],
     '@nuxtjs/vuetify',
     ['nuxt-validate', {
       lang: 'en',
     }],
-    ['@nuxtjs/moment', { locales: ['hu','uk','en-gb'], defaultLocale: 'en-gb' }]
+    ['@nuxtjs/moment', { locales: ['hu','uk','en-gb'], defaultLocale: 'en-gb' }],
   ],
 
   build: {

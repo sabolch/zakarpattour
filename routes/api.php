@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
+
+Route::post('/user/store/avatar', 'UserAvatarController@store');
+Route::get('/user/get/avatar/{user_id}/{size?}', 'UserAvatarController@get');
+
+
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', 'Auth\LoginController@logout');
 
@@ -22,6 +27,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', 'Settings\ProfileController@update');
     Route::patch('settings/password', 'Settings\PasswordController@update');
+    Route::delete('settings/destroy', 'Settings\PasswordController@destroy');
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

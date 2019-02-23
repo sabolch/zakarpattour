@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -22,5 +23,9 @@ class PasswordController extends Controller
         $request->user()->update([
             'password' => bcrypt($request->password),
         ]);
+    }
+    public function destroy(Request $request){
+        User::destroy($request->user()->id);
+        return response()->json(['success'=>true],200);
     }
 }

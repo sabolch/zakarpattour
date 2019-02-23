@@ -73,6 +73,11 @@
 <script>
     export default {
         name: "aboutus",
+        head() {
+            return {
+                title: 'About Us',
+            }
+        },
         data () {
             return {
                 expand:false,

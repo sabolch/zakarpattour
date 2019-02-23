@@ -14,14 +14,14 @@
                                               type="text" clearable
                                               :counter="10"
                                               v-validate="'required|min:4|max:10'"
-                                              :error-messages="errors.collect('name')"
+                                              :error-messages="errors.collect('name').length == 0 ? ErrorsObj.name : errors.collect('name')"
                                               data-vv-name="name"
                                 ></v-text-field>
                                 <v-text-field v-model="form.email" prepend-icon="email" name="login" label="Email"
                                               type="text" clearable
                                               :counter="40"
                                               v-validate="'required|email|max:40'"
-                                              :error-messages="errors.collect('email')"
+                                              :error-messages="errors.collect('email').length == 0 ? ErrorsObj.email : errors.collect('email')"
                                               data-vv-name="email"
                                 ></v-text-field>
                                 <v-text-field v-model="form.password" id="password" prepend-icon="lock" name="password"
@@ -31,7 +31,7 @@
                                               :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                                               @click:append="showPassword = !showPassword"
                                               v-validate="'required|min:7|max:15'"
-                                              :error-messages="errors.collect('password')"
+                                              :error-messages="errors.collect('password').length == 0 ? ErrorsObj.password : errors.collect('password')"
                                               data-vv-name="password"
 
                                 ></v-text-field>
@@ -45,6 +45,13 @@
                                               :error-messages="errors.collect('password_confirmation')"
                                               data-vv-name="password_confirmation"
                                 ></v-text-field>
+                                <v-alert
+                                        v-if="ErrorsObj.recaptchaToken"
+                                        :value="true"
+                                        color="error"
+                                >
+                                    {{ ErrorsObj.recaptchaToken[0] }}
+                                </v-alert>
                                 <vue-recaptcha
                                         ref="recaptcha"
                                         @verify="onCaptchaVerified"
@@ -97,38 +104,47 @@
     import VueRecaptcha from "vue-recaptcha"
 
     export default {
+        middleware: 'loggedIn',
+
         head() {
             return {title: this.$t('register')}
         },
         components: {VueRecaptcha},
         data: () => ({
-            showPassword:false,
-            showConfPassword:false,
+            showPassword: false,
+            showConfPassword: false,
             expand: false,
             form: new Form({
                 name: '',
                 email: '',
                 password: '',
-                password_confirmation: ''
-            })
+                password_confirmation: '',
+                recaptchaToken: ''
+            }),
+            ErrorsObj: {}
         }),
 
         methods: {
             async register() {
-                // Register the user.
-                const {data} = await this.form.post('/register')
-
-                // Log in the user.
-                const {data: {token}} = await this.form.post('/login')
-
-                // Save the token.
-                this.$store.dispatch('auth/saveToken', {token})
-
-                // Update the user.
-                await this.$store.dispatch('auth/updateUser', {user: data})
-
-                // Redirect home.
-                this.$router.push({name: 'home'})
+                try {
+                    this.ErrorsObj = {}
+                    // Register the user.
+                    const {data} = await this.form.post('/register')
+                    // Log in the user.
+                    const {data: {token}} = await this.form.post('/login')
+                    // Save the token.
+                    this.$store.dispatch('auth/saveToken', {token})
+                    // Update the user.
+                    await this.$store.dispatch('auth/updateUser', {user: data})
+                    // Redirect home.
+                    this.$router.push({name: 'settings.profile'})
+                    this.$refs.recaptcha.reset()
+                } catch (e) {
+                    this.ErrorsObj = e.response.data.errors
+                    setTimeout(() => {
+                        this.ErrorsObj = {}
+                    }, 6000)
+                }
             },
             setLanguage(locale) {
                 switch (locale) {
@@ -145,7 +161,6 @@
             },
             onCaptchaVerified: function (recaptchaToken) {
                 this.form.recaptchaToken = recaptchaToken
-                console.log(recaptchaToken);
 
             },
             onCaptchaExpired: function () {

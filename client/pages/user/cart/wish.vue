@@ -92,6 +92,11 @@
 <script>
     export default {
         name: "wish",
+        head() {
+            return {
+                title: 'Shopping cart',
+            }
+        },
         data() {
             return {
                 rating: 4,

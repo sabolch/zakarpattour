@@ -18,6 +18,11 @@ const SettingsPassword = () => import('~/pages/user/settings/password').then(m =
 
 const MarkersIndex = () => import('~/pages/marker/index').then(m => m.default || m)
 const ToursIndex = () => import('~/pages/tour/index').then(m => m.default || m)
+
+const MarkerShow = () => import('~/pages/marker/_show').then(m => m.default || m)
+const TourShow= () => import('~/pages/tour/_show').then(m => m.default || m)
+
+
 const About = () => import('~/pages/aboutus').then(m => m.default || m)
 const Contact = () => import('~/pages/contact').then(m => m.default || m)
 
@@ -29,7 +34,8 @@ const CartChecked = () => import('~/pages/user/cart/checked').then(m => m.defaul
 const CartHistory = () => import('~/pages/user/cart/history').then(m => m.default || m)
 
 const Favorites = () => import('~/pages/user/favorites').then(m => m.default || m)
-
+// admin Test
+const AdminIndex = () => import('~/pages/admin/index').then(m => m.default || m)
 
 
 const routes = [
@@ -39,7 +45,9 @@ const routes = [
 
     //
   { path: '/sights', name: 'sights', component: MarkersIndex },
+  { path: '/sight/:slug', name: 'sight.show', component: MarkerShow },
   { path: '/tours', name: 'tours', component: ToursIndex },
+  { path: '/tour/:slug', name: 'tour.show', component: TourShow },
   { path: '/about', name: 'about', component: About },
   { path: '/contact', name: 'contact', component: Contact },
     //
@@ -47,7 +55,7 @@ const routes = [
     { path: '/user', component: UserShoppingCart,
       children: [
         { path: '', redirect: { name: 'cart.cart' } },
-        { path: 'cart', name: 'cart.cart', component: CartWish },
+        { path: 'cart/cart', name: 'cart.cart', component: CartWish },
         { path: 'cart/processing', name: 'cart.processing', component: CartProcessing },
         { path: 'cart/checked', name: 'cart.checked', component: CartChecked },
         { path: 'cart/history', name: 'cart.history', component: CartHistory },
@@ -71,8 +79,11 @@ const routes = [
       { path: '', redirect: { name: 'settings.profile' } },
       { path: 'profile', name: 'settings.profile', component: SettingsProfile },
       { path: 'password', name: 'settings.password', component: SettingsPassword }
-    ] }
+    ] },
     // {path:'/404', name: '404', component: { template: '<p>Page Not Found</p>'  }}
+
+ // Admin test
+  { path: '/admin', name: 'admin.index', component: AdminIndex }
 ]
 
 export function createRouter () {

@@ -11,10 +11,15 @@
                         <v-card-text class="mb-0 pb-0 text-xs-center">
                             <v-form @submit.prevent="login()" @keydown="form.onKeydown($event)">
                                 <v-text-field v-model="form.email" prepend-icon="person" name="login" label="Login"
-                                              type="text"></v-text-field>
+                                              type="text"
+                                :error-messages="ErrList"
+                                ></v-text-field>
                                 <v-text-field v-model="form.password" id="password" prepend-icon="lock" name="password"
                                               label="Password"
-                                              type="password"></v-text-field>
+                                              :type="showPassword ? 'text' : 'password'"
+                                              :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                                              @click:append="showPassword = !showPassword"
+                                ></v-text-field>
 
                                 <vue-recaptcha
                                         ref="recaptcha"
@@ -54,6 +59,7 @@
                                         </v-flex>
                                         <v-flex class="text-xs-right">
                                             <v-btn
+                                                    :disabled="form.recaptchaToken.length < 1"
                                                     color="primary"
                                                     @click="login"
                                                     :loading="form.busy"
@@ -77,45 +83,56 @@
     import VueRecaptcha from "vue-recaptcha"
 
     export default {
+        middleware: 'loggedIn',
         head() {
             return {title: this.$t('login')}
         },
         components: {VueRecaptcha},
         data: () => ({
             expand: false,
+            showPassword:false,
             form: new Form({
                 email: '',
                 password: '',
-                recaptchaToken: ''
+                recaptchaToken:''
             }),
-            remember: false
+            remember: false,
+            ErrList:null
         }),
         mounted() {
             this.expand = true
-
+            if (this.$store.state.auth.loggedIn) {
+                this.$router.push({ name: 'settings.profile' })
+            }
         },
         methods: {
             async login() {
-                // Submit the form.
-                const {data} = await this.form.post('/login')
+                try{
+                    this.ErrList = []
+                    // Submit the form.
+                    const {data} = await this.form.post('/login')
 
-                // Save the token.
-                this.$store.dispatch('auth/saveToken', {
-                    token: data.token,
-                    remember: this.remember
-                })
+                    // Save the token.
+                    this.$store.dispatch('auth/saveToken', {
+                        token: data.token,
+                        remember: this.remember
+                    })
 
-                // Fetch the user.
-                await this.$store.dispatch('auth/fetchUser')
+                    // Fetch the user.
+                    await this.$store.dispatch('auth/fetchUser')
 
-                // Redirect home.
-                this.$router.push({name: 'settings.profile'})
+                    // Redirect home.
+                    // this.$router.go(-1)
+                    this.$router.push({name: 'settings.profile'})
+                }catch (e) {
+                    this.ErrList.push(e.response.data.message)
+                }
+                this.$refs.recaptcha.reset()
+
             },
 
             onCaptchaVerified: function (recaptchaToken) {
                 this.form.recaptchaToken = recaptchaToken
-                console.log(recaptchaToken);
-
             },
             onCaptchaExpired: function () {
                 this.$refs.recaptcha.reset()
