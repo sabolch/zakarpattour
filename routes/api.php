@@ -79,7 +79,7 @@ Route::group(['prefix'=>'marker'], function(){
     Route::put('/store','MarkerController@store');
     Route::put('/edit','MarkerController@edit');
     Route::delete('/trash','MarkerController@destroy');
-    Route::post('/show','MarkerController@show');
+    Route::get('/show/{slug}','MarkerController@show');
     Route::post('/restore','MarkerController@restoreTrashed');
     Route::get('/','MarkerController@index');
     Route::get('/trashed','MarkerController@trashed');

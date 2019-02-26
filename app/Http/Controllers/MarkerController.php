@@ -101,19 +101,19 @@ class MarkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($slug)
     {
         try{
-            $marker = Marker::findOrFail($request->input('id'))->with('category')->first();
+            $marker = Marker::findBySlugOrFail($slug)->with('category')->first();
             return response()->json([
                 'success'=>true,
                 'data'=> $marker
             ],200);
-        }catch (ModelNotFoundException $e){
+        }catch (\Exception $e){
             return response()->json([
                 'success'=>false,
                 'error'=>'Data not found!'
-            ],400);
+            ],404);
         }
     }
 

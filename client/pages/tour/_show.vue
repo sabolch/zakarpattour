@@ -239,13 +239,21 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
+        async asyncData ({ params, $axios, $router }) {
+            try {
+                let {data} = await  $axios.$get(`/tour/show/${params.slug}`)
+                if (data.success) return {tour: data.data}
+            }catch (e) {
+                $router.push({name:'error'})
+            }
+        },
         data() {
             return {
                 showmenu:false,
                 fab:false,
                 right:false,
 
-                route: {},
+                tour: {},
                 map:{},
                 mapRoute:{},
 
@@ -295,7 +303,6 @@
                         src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
                     }
                 ],
-                map: {},
 
                 mapClaster:{},
                 directionsService:{},

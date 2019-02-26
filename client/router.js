@@ -36,6 +36,7 @@ const CartHistory = () => import('~/pages/user/cart/history').then(m => m.defaul
 const Favorites = () => import('~/pages/user/favorites').then(m => m.default || m)
 // admin Test
 const AdminIndex = () => import('~/pages/admin/index').then(m => m.default || m)
+const AdminLogin = () => import('~/pages/admin/auth/login').then(m => m.default || m)
 
 
 const routes = [
@@ -83,7 +84,8 @@ const routes = [
     // {path:'/404', name: '404', component: { template: '<p>Page Not Found</p>'  }}
 
  // Admin test
-  { path: '/admin', name: 'admin.index', component: AdminIndex }
+  { path: '/admin', name: 'admin.index', component: AdminIndex },
+  { path: '/admin/login', name: 'admin.login', component: AdminLogin }
 ]
 
 export function createRouter () {

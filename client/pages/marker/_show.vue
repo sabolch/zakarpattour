@@ -177,8 +177,20 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
+
+        async asyncData ({ params, $axios, $router }) {
+            try {
+                let {data} = await  $axios.$get(`/marker/show/${params.slug}`)
+                if (data.success) return {marker: data.data}
+            }catch (e) {
+                $router.push({name:'error'})
+            }
+        },
+
         data() {
             return {
+                marker:{},
+
                 dialog:false,
                 snackbar:false,
                 snackbarText:'Copied to clipboard',
@@ -204,7 +216,6 @@
                     }
                 ],
                 map: {},
-                marker:{}
             }
         },
         mounted() {

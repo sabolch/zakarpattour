@@ -1,17 +1,12 @@
 <template>
-    <v-app>
-        <v-container fill-height>
-            <v-layout row wrap align-center justify-center>
-                <v-flex xs12>
-                    Hello Admin!
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-app>
+    <div>
+        Test Admin
+    </div>
 </template>
 
 <script>
     export default {
+        layout:'admin',
         name: "index"
     }
 </script>
