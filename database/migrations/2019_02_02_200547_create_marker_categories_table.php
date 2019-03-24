@@ -15,7 +15,7 @@ class CreateMarkerCategoriesTable extends Migration
     {
         Schema::create('marker_categories', function (Blueprint $table) {
             $table->increments('id')->unique();
-            $table->string('icon',500);
+            $table->string('icon',500)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

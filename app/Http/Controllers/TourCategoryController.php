@@ -24,7 +24,7 @@ class TourCategoryController extends Controller
     {
         $search_query = Input::has('q') ? Input::get('q') : false;
         $order_by = Input::has('order') ? Input::get('order') : 'asc';
-        $per_page = Input::has('limit') ? Input::get('limit') : 10;
+        $per_page = Input::has('per_page') ? (int) Input::get('per_page') : 5;
 
         return  TourCategoryResource::collection(TourCategory::pagination($search_query,$order_by,$per_page));
     }
@@ -33,7 +33,7 @@ class TourCategoryController extends Controller
     {
         $search_query = Input::has('q') ? Input::get('q') : false;
         $order_by = Input::has('order') ? Input::get('order') : 'asc';
-        $per_page = Input::has('limit') ? Input::get('limit') : 10;
+        $per_page = Input::has('per_page') ? (int) Input::get('per_page') : 5;
 
         return  TourCategoryResource::collection(TourCategory::paginateTrashed($search_query,$order_by,$per_page));
     }
@@ -64,10 +64,10 @@ class TourCategoryController extends Controller
     {
         $validator =  Validator::make($request->all(),
             [
-                'name'    => 'required',
+                'translations'    => 'required',
                 'icon'=>'max:500'
             ],[
-                'name.required'=>'Name array is required!',
+                'translations.required'=>'Translations array is required!',
                 'icon.max'=>'Icon max size 500 character!'
             ]);
         if ($validator->fails()) {
@@ -77,13 +77,11 @@ class TourCategoryController extends Controller
         $data = $validator->valid();
         // Create new category
         $tour_category = new TourCategory();
-        $tour_category->icon = $data['icon'];
+//        if($data['icon']) $tour_category->icon = $data['icon'];
         $tour_category->save();
         // Translate category
-        foreach ($data['name'] as $array){
-            foreach ($array as $locale => $name){
-                $tour_category->translateOrNew($locale)->name =$name;
-            }
+        foreach ($data['translations'] as $array) {
+            $tour_category->translateOrNew($array['locale'])->name = $array['name'];
         }
         $tour_category->save();
 
@@ -127,12 +125,12 @@ class TourCategoryController extends Controller
         $validator =  Validator::make($request->all(),
             [
                 'id' => 'required|numeric',
-                'name'    => 'required',
+                'translations'    => 'required',
                 'icon'=>'max:500'
             ],[
                 'id.required'=>'Category ID required!',
                 'id.numeric'=>'Category ID must be numeric!',
-                'name.required'=>'Name array is required!',
+                'translations.required'=>'Translations array is required!',
                 'icon.max'=>'Icon max size 500 character!'
             ]);
         if ($validator->fails()) {
@@ -146,10 +144,8 @@ class TourCategoryController extends Controller
             $tour_category->icon = $data['icon'];
             $tour_category->save();
             // Translate category
-            foreach ($data['name'] as $array){
-                foreach ($array as $locale => $name){
-                    $tour_category->translateOrNew($locale)->name =$name;
-                }
+            foreach ($data['translations'] as $array) {
+                $tour_category->translateOrNew($array['locale'])->name = $array['name'];
             }
             $tour_category->save();
 

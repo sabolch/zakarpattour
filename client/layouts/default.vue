@@ -181,6 +181,7 @@
 
     export default {
         name: 'FrontPage',
+        middleware:'user-route',
         data: () => ({
             appName: process.env.appName,
             isDarkTheme: false,

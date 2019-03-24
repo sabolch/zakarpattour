@@ -66,18 +66,12 @@
                                                             data-vv-name="message"
                                                     >
                                                     </v-textarea>
-                                                    <vue-recaptcha
-                                                            ref="recaptcha"
-                                                            @verify="onCaptchaVerified"
-                                                            @expired="onCaptchaExpired"
-                                                            class="g-recaptcha"
-                                                            sitekey="6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2"
-                                                    ></vue-recaptcha>
-
+                                                    <recaptcha/>
                                                     <v-btn class="ma-2" large color="primary"
                                                            right
                                                            @click="sendMail"
                                                            :loading="form.busy"
+                                                           :disabled="!form.busy"
                                                     >Send Email
                                                     </v-btn>
                                                 </v-form>
@@ -98,7 +92,6 @@
     import hu from 'vee-validate/dist/locale/hu';
     import uk from 'vee-validate/dist/locale/uk';
     import Form from 'vform'
-    import VueRecaptcha from "vue-recaptcha"
     export default {
         name: "contact",
         head() {
@@ -106,14 +99,14 @@
                 title: 'Contact',
             }
         },
-        components: {VueRecaptcha},
         data: () => ({
             expand: false,
             form: new Form({
                 name: '',
                 email: '',
                 subject: '',
-                message: ''
+                message: '',
+                recaptchaToken:''
             }),
             remember: false,
         }),
@@ -125,24 +118,18 @@
                 deep: true
             }
         },
-        mounted() {
+        async mounted() {
+            await this.$recaptcha.init()
             this.setLanguage($nuxt.$i18n.locale)
             this.expand = true
         },
         methods: {
-            sendMail() {
+            async sendMail() {
+                this.form.recaptchaToken = await this.$recaptcha.getResponse()
                 // Send mail
                 console.log('Hello');
             },
 
-            onCaptchaVerified: function (recaptchaToken) {
-                this.form.recaptchaToken = recaptchaToken
-                console.log(recaptchaToken);
-
-            },
-            onCaptchaExpired: function () {
-                this.$refs.recaptcha.reset()
-            },
             setLanguage(locale) {
                 switch (locale) {
                     case 'en':
@@ -160,8 +147,11 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="css">
     .contact-bg {
         background-image: linear-gradient(rgb(0, 0, 255), rgb(0, 0, 100));
+    }
+    .g-recaptcha div{
+        margin: auto !important;
     }
 </style>

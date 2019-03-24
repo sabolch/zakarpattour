@@ -15,6 +15,7 @@ class MarkerCategoryController extends Controller
     {
 //        $this->middleware('auth:admin')->except([]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,19 +24,19 @@ class MarkerCategoryController extends Controller
     public function index()
     {
         $search_query = Input::has('q') ? Input::get('q') : false;
-        $order_by = Input::has('order') ? Input::get('order') : 'asc';
-        $per_page = Input::has('limit') ? Input::get('limit') : 10;
+        $order_by = Input::has('order') ? 'desc' : 'asc';
+        $per_page = Input::has('per_page') ? (int) Input::get('per_page') : 5;
 
-        return  MarkerCategoryResource::collection(MarkerCategory::pagination($search_query,$order_by,$per_page));
+        return MarkerCategoryResource::collection(MarkerCategory::pagination($search_query, $order_by, $per_page));
     }
 
     public function trashed()
     {
         $search_query = Input::has('q') ? Input::get('q') : false;
-        $order_by = Input::has('order') ? Input::get('order') : 'asc';
-        $per_page = Input::has('limit') ? Input::get('limit') : 10;
+        $order_by = Input::has('order') ? 'desc' : 'asc';
+        $per_page = Input::has('per_page') ? (int) Input::get('per_page') : 5;
 
-        return  MarkerCategoryResource::collection(MarkerCategory::paginateTrashed($search_query,$order_by,$per_page));
+        return MarkerCategoryResource::collection(MarkerCategory::paginateTrashed($search_query, $order_by, $per_page));
     }
 
     /**
@@ -46,32 +47,32 @@ class MarkerCategoryController extends Controller
     public function listOfCategories()
     {
         return response()->json([
-            'success'=> true,
-            'data' =>  MarkerCategory::select(['marker_categories.id'])
+            'success' => true,
+            'data' => MarkerCategory::select(['marker_categories.id'])
                 ->join('marker_category_translations as t', 'marker_categories.id', '=', 't.marker_category_id')
                 ->groupBy('marker_categories.id')
                 ->get()
-        ],200);
+        ], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $validator =  Validator::make($request->all(),
-        [
-            'name'    => 'required',
-            'icon'=>'max:500'
-        ],[
-            'name.required'=>'Name array is required!',
-            'icon.max'=>'Icon max size 500 character!'
+        $validator = Validator::make($request->all(),
+            [
+                'translations' => 'required',
+                'icon' => 'max:500'
+            ], [
+                'translations.required' => 'Translations array is required!',
+                'icon.max' => 'Icon max size 500 character!'
             ]);
         if ($validator->fails()) {
-            return response()->json(['errors'=>$validator->errors()],400);
+            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         $data = $validator->valid();
@@ -80,88 +81,84 @@ class MarkerCategoryController extends Controller
         $marker_category->icon = $data['icon'];
         $marker_category->save();
         // Translate category
-        foreach ($data['name'] as $array){
-            foreach ($array as $locale => $name){
-                $marker_category->translateOrNew($locale)->name =$name;
-            }
+        foreach ($data['translations'] as $array) {
+            $marker_category->translateOrNew($array['locale'])->name = $array['name'];
         }
         $marker_category->save();
 
         return response()->json([
-            'success'=>true,
-            'data'=> $marker_category,
-        ],201);
+            'success' => true,
+            'data' => $marker_category,
+        ], 201);
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
     {
-        try{
+        try {
             $marker_category = MarkerCategory::findOrFail($request->input('id'));
             return response()->json([
-                'success'=>true,
-                'data'=> $marker_category
-            ],200);
-        }catch (ModelNotFoundException $e){
+                'success' => true,
+                'data' => $marker_category
+            ], 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json([
-                'success'=>false,
-                'error'=>'Data not found!'
-            ],400);
+                'success' => false,
+                'error' => 'Data not found!'
+            ], 400);
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
     {
-        $validator =  Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             [
                 'id' => 'required|numeric',
-                'name'    => 'required',
-                'icon'=>'max:500'
-            ],[
-                'id.required'=>'Category ID required!',
-                'id.numeric'=>'Category ID must be numeric!',
-                'name.required'=>'Name array is required!',
-                'icon.max'=>'Icon max size 500 character!'
+                'translations' => 'required',
+                'icon' => 'max:500'
+            ], [
+                'id.required' => 'Category ID required!',
+                'id.numeric' => 'Category ID must be numeric!',
+                'translations.required' => 'Translations array is required!',
+                'icon.max' => 'Icon max size 500 character!'
             ]);
         if ($validator->fails()) {
-            return response()->json(['errors'=>$validator->errors()],400);
+            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         $data = $validator->valid();
-        try{
+        try {
             $marker_category = MarkerCategory::findOrFail($data['id']);
             // Edit category
             $marker_category->icon = $data['icon'];
             $marker_category->save();
             // Translate category
-            foreach ($data['name'] as $array){
-                foreach ($array as $locale => $name){
-                    $marker_category->translateOrNew($locale)->name =$name;
-                }
+            foreach ($data['translations'] as $array) {
+                    $marker_category->translateOrNew($array['locale'])->name = $array['name'];
             }
             $marker_category->save();
 
             return response()->json([
-                'success'=>true,
-                'data'=> $marker_category,
-            ],202);
-        }catch (ModelNotFoundException $e){
+                'success' => true,
+                'data' => $marker_category,
+            ], 202);
+        } catch (ModelNotFoundException $e) {
             return response()->json(
                 [
-                    'success'=>false,
-                    'error'=>'Data not found!'
+                    'success' => false,
+                    'error' => 'Data not found!'
                 ],
                 400
             );
@@ -170,42 +167,42 @@ class MarkerCategoryController extends Controller
 
     public function restoreTrashed(Request $request)
     {
-        try{
+        try {
             $marker = MarkerCategory::onlyTrashed()->findOrFail($request->input('id'));
             $marker->deleted_at = null;
             $marker->save();
             return response()->json([
-                'success'=>true,
-                'data'=> $marker
-            ],200);
-        }catch (ModelNotFoundException $e){
+                'success' => true,
+                'data' => $marker
+            ], 200);
+        } catch (ModelNotFoundException $e) {
             return response()->json([
-                'success'=>false,
-                'error'=>'Data not found!'
-            ],400);
+                'success' => false,
+                'error' => 'Data not found!'
+            ], 400);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
-        try{
+        try {
             $marker_category = MarkerCategory::findOrFail($request->input('id'));
             $marker_category->delete();
             return response()->json(
-                ['success'=>true],
+                ['success' => true],
                 200
             );
-        }catch (ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return response()->json(
                 [
-                    'success'=>false,
-                    'error'=>'Data not found!'
+                    'success' => false,
+                    'error' => 'Data not found!'
                 ],
                 400
             );
@@ -214,18 +211,18 @@ class MarkerCategoryController extends Controller
 
     public function destroyForever(Request $request)
     {
-        try{
+        try {
             $marker_category = MarkerCategory::onlyTrashed()->findOrFail($request->input('id'));
             $marker_category->forcedelete();
             return response()->json(
-                ['success'=>true],
+                ['success' => true],
                 200
             );
-        }catch (ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return response()->json(
                 [
-                    'success'=>false,
-                    'error'=>'Data not found!'
+                    'success' => false,
+                    'error' => 'Data not found!'
                 ],
                 400
             );

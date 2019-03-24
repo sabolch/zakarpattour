@@ -8,16 +8,11 @@
     "generate": "nuxt generate -c client/nuxt.config.js"
   },
   "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.7",
-    "@fortawesome/fontawesome-free-brands": "^5.0.12",
-    "@fortawesome/fontawesome-free-regular": "^5.0.12",
-    "@fortawesome/fontawesome-free-solid": "^5.0.12",
-    "@fortawesome/vue-fontawesome": "^0.0.22",
     "@nuxtjs/moment": "^1.2.0",
+    "@nuxtjs/recaptcha": "^0.2.2",
     "@nuxtjs/router": "^1.0.1",
     "@nuxtjs/vuetify": "^0.5.5",
     "axios": "^0.18.0",
-    "bootstrap": "^4.1.1",
     "dotenv": "^5.0.1",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",

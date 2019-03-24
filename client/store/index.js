@@ -9,6 +9,11 @@ export const actions = {
       commit('auth/SET_TOKEN', token)
     }
 
+    const admin_token = cookieFromRequest(req, 'admin_token')
+    if (admin_token) {
+      commit('admin/SET_TOKEN', admin_token)
+    }
+
     const locale = cookieFromRequest(req, 'locale')
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
@@ -21,6 +26,11 @@ export const actions = {
     const token = Cookies.get('token')
     if (token) {
       commit('auth/SET_TOKEN', token)
+    }
+
+    const admin_token = cookieFromRequest(req, 'admin_token')
+    if (admin_token) {
+      commit('admin/SET_TOKEN', admin_token)
     }
 
     const locale = Cookies.get('locale')

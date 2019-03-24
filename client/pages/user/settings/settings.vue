@@ -127,8 +127,8 @@
             }
         },
         watch: {
-            'window.innerWidth': function (value) {
-            }
+            // 'window.innerWidth': function (value) {
+            // }
         }
     }
 </script>

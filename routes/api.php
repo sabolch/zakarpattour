@@ -42,56 +42,77 @@ Route::group(['middleware' => 'guest:api'], function () {
 });
 
 //    Tour category
-Route::group(['prefix'=>'tour/category'], function(){
-    Route::put('/store','TourCategoryController@store');
-    Route::put('/edit','TourCategoryController@edit');
-    Route::delete('/trash','TourCategoryController@destroy');
-    Route::post('/show','TourCategoryController@show');
-    Route::post('/restore','TourCategoryController@restoreTrashed');
-    Route::get('/','TourCategoryController@index');
-    Route::get('/trashed','TourCategoryController@trashed');
-    Route::delete('/remove','TourCategoryController@destroyForever');
+Route::group(['prefix' => 'tour/category'], function () {
+    Route::put('/store', 'TourCategoryController@store');
+    Route::put('/edit', 'TourCategoryController@edit');
+    Route::delete('/trash', 'TourCategoryController@destroy');
+    Route::post('/show', 'TourCategoryController@show');
+    Route::post('/restore', 'TourCategoryController@restoreTrashed');
+    Route::get('/', 'TourCategoryController@index');
+    Route::get('/trashed', 'TourCategoryController@trashed');
+    Route::delete('/remove', 'TourCategoryController@destroyForever');
 });
 //    Tours
-Route::group(['prefix'=>'tour'], function(){
-    Route::put('/store','TourCategoryController@store');
-    Route::put('/edit','TourCategoryController@edit');
-    Route::delete('/delete','TourCategoryController@destroy');
-    Route::post('/show','TourCategoryController@show');
-    Route::post('/trashed','TourCategoryController@trashed');
-    Route::get('/','TourCategoryController@index');
-    Route::get('/list','TourCategoryController@listOfCategories');
+Route::group(['prefix' => 'tour'], function () {
+    Route::put('/store', 'TourCategoryController@store');
+    Route::put('/edit', 'TourCategoryController@edit');
+    Route::delete('/delete', 'TourCategoryController@destroy');
+    Route::post('/show', 'TourCategoryController@show');
+    Route::post('/trashed', 'TourCategoryController@trashed');
+    Route::get('/', 'TourCategoryController@index');
+    Route::get('/list', 'TourCategoryController@listOfCategories');
 });
 //    Marker Category
-Route::group(['prefix'=>'marker/category'], function(){
-    Route::put('/store','MarkerCategoryController@store');
-    Route::put('/edit','MarkerCategoryController@edit');
-    Route::delete('/trash','MarkerCategoryController@destroy');
-    Route::post('/show','MarkerCategoryController@show');
-    Route::post('/restore','MarkerCategoryController@restoreTrashed');
-    Route::get('/','MarkerCategoryController@index');
-    Route::get('/trashed','MarkerCategoryController@trashed');
-    Route::delete('/remove','MarkerCategoryController@destroyForever');
+Route::group(['prefix' => 'marker/category'], function () {
+    Route::put('/store', 'MarkerCategoryController@store');
+    Route::put('/edit', 'MarkerCategoryController@edit');
+    Route::delete('/trash', 'MarkerCategoryController@destroy');
+    Route::post('/show', 'MarkerCategoryController@show');
+    Route::post('/restore', 'MarkerCategoryController@restoreTrashed');
+    Route::get('/', 'MarkerCategoryController@index');
+    Route::get('/trashed', 'MarkerCategoryController@trashed');
+    Route::delete('/remove', 'MarkerCategoryController@destroyForever');
 
 });
 //    Marker
-Route::group(['prefix'=>'marker'], function(){
-    Route::put('/store','MarkerController@store');
-    Route::put('/edit','MarkerController@edit');
-    Route::delete('/trash','MarkerController@destroy');
-    Route::get('/show/{slug}','MarkerController@show');
-    Route::post('/restore','MarkerController@restoreTrashed');
-    Route::get('/','MarkerController@index');
-    Route::get('/trashed','MarkerController@trashed');
-    Route::delete('/remove','MarkerController@destroyForever');
+Route::group(['prefix' => 'marker'], function () {
+    Route::put('/store', 'MarkerController@store');
+    Route::put('/edit', 'MarkerController@edit');
+    Route::delete('/trash', 'MarkerController@destroy');
+    Route::get('/show/{slug}', 'MarkerController@show');
+    Route::post('/restore', 'MarkerController@restoreTrashed');
+    Route::get('/', 'MarkerController@index');
+    Route::get('/trashed', 'MarkerController@trashed');
+    Route::delete('/remove', 'MarkerController@destroyForever');
 });
 
-Route::group(['prefix'=>'favourite'], function(){
-    Route::put('/add/marker','FavouritesController@createMarker');
-    Route::put('/add/tour','FavouritesController@createTour');
-    Route::get('/tours','FavouritesController@tours');
-    Route::get('/markers','FavouritesController@arkers');
-    Route::delete('/remove/marker','FavouritesController@deleteMarker');
-    Route::delete('/remove/tour','FavouritesController@deleteTour');
+Route::group(['prefix' => 'favourite'], function () {
+    Route::put('/add/marker', 'FavouritesController@createMarker');
+    Route::put('/add/tour', 'FavouritesController@createTour');
+    Route::get('/tours', 'FavouritesController@tours');
+    Route::get('/markers', 'FavouritesController@arkers');
+    Route::delete('/remove/marker', 'FavouritesController@deleteMarker');
+    Route::delete('/remove/tour', 'FavouritesController@deleteTour');
 });
+
+//Admin
+
+Route::group(['prefix' => 'admin','middleware' => 'guest:admin'], function () {
+    Route::post('/login', 'Auth\AdminLoginController@login');
+});
+
+Route::group(['prefix' => 'admin','middleware' => 'auth:admin'], function () {
+    Route::post('logout', 'Auth\AdminLoginController@logout');
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+});
+
+Route::get('mapkey/icons', function () {
+    return response()->json(json_decode(file_get_contents(public_path()
+        . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'mapkeyicons.json'),true),200);
+});
+
+
 

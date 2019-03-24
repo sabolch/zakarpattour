@@ -34,9 +34,18 @@ const CartChecked = () => import('~/pages/user/cart/checked').then(m => m.defaul
 const CartHistory = () => import('~/pages/user/cart/history').then(m => m.default || m)
 
 const Favorites = () => import('~/pages/user/favorites').then(m => m.default || m)
-// admin Test
+
+
+// admin pages
 const AdminIndex = () => import('~/pages/admin/index').then(m => m.default || m)
 const AdminLogin = () => import('~/pages/admin/auth/login').then(m => m.default || m)
+const AdminDash = () => import('~/pages/admin/dash').then(m => m.default || m)
+
+const AdminMarker = () => import('~/pages/admin/marker/adminMarkerIndex').then(m => m.default || m)
+const AdminMarkerCategory = () => import('~/pages/admin/marker/adminMarkerCategory').then(m => m.default || m)
+
+const AdminTour = () => import('~/pages/admin/tour/adminTourIndex').then(m => m.default || m)
+const AdminTourCategory = () => import('~/pages/admin/tour/adminTourCategory').then(m => m.default || m)
 
 
 const routes = [
@@ -63,10 +72,6 @@ const routes = [
 
         { path: 'favorites', name: 'user.favorites', component: Favorites },
       ] },
-
-
-
-
   // User login/register/reset
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },
@@ -83,9 +88,18 @@ const routes = [
     ] },
     // {path:'/404', name: '404', component: { template: '<p>Page Not Found</p>'  }}
 
- // Admin test
+
+
+ // Admin pages routes
   { path: '/admin', name: 'admin.index', component: AdminIndex },
-  { path: '/admin/login', name: 'admin.login', component: AdminLogin }
+  { path: '/admin/login', name: 'admin.login', component: AdminLogin },
+  { path: '/admin/dash', name: 'admin.dash', component: AdminDash },
+
+  { path: '/admin/marker', name: 'admin.marker', component: AdminMarker },
+  { path: '/admin/marker/category', name: 'admin.marker.category', component: AdminMarkerCategory},
+
+  { path: '/admin/tour', name: 'admin.tour', component: AdminTour},
+  { path: '/admin/tour/category', name: 'admin.tour.category', component: AdminTourCategory },
 ]
 
 export function createRouter () {

@@ -3,72 +3,78 @@ import Cookies from 'js-cookie'
 
 // state
 export const state = () => ({
-  admin: null,
-  token: null
+    user: null,
+    token: null,
+    SxAr:null
 })
 
 // getters
 export const getters = {
-  admin: state => state.admin,
-  token: state => state.token,
-  check: state => state.admin !== null
+    user: state => state.user,
+    token: state => state.token,
+    check: state => state.user !== null,
+    SxAr: state => state.SxAr
 }
 
 // mutations
 export const mutations = {
-  SET_TOKEN (state, token) {
-    state.token = token
-  },
+    SET_TOKEN (state, token) {
+        state.token = token
+    },
 
-  FETCH_ADMIN_SUCCESS (state, admin) {
-    state.admin = admin
-  },
+    FETCH_USER_SUCCESS (state, user) {
+        state.user = user
+    },
 
-  FETCH_ADMIN_FAILURE (state) {
-    state.token = null
-  },
+    FETCH_ADMIN_ROUTE (state, route) {
+        state.SxAr = route
+    },
 
-  LOGOUT (state) {
-    state.admin = null
-    state.token = null
-  },
+    FETCH_USER_FAILURE (state) {
+        state.token = null
+    },
 
-  UPDATE_ADMIN (state, { admin }) {
-    state.admin = admin
-  }
+    LOGOUT (state) {
+        state.user = null
+        state.token = null
+    },
+
+    UPDATE_USER (state, { user }) {
+        state.user = user
+    }
 }
 
 // actions
 export const actions = {
-  saveToken ({ commit, dispatch }, { token, remember }) {
-    commit('SET_TOKEN', token)
+    saveToken ({ commit, dispatch }, { token, remember }) {
+        commit('SET_TOKEN', token)
+        Cookies.set('admin_token', token, { expires: remember ? 365 : null })
+    },
 
-    Cookies.set('token', token, { expires: remember ? 365 : null })
-  },
+    async fetchUser ({ commit }) {
+        try {
+            const { data } = await axios.get('/admin/user')
+            commit('FETCH_USER_SUCCESS', data)
+        } catch (e) {
+            Cookies.remove('admin_token')
+            commit('FETCH_USER_FAILURE')
+        }
+    },
 
-  async fetchUser ({ commit }) {
-    try {
-      const { data } = await axios.get('/admin')
+    updateUser ({ commit }, payload) {
+        commit('UPDATE_USER', payload)
+    },
 
-      commit('FETCH_ADMIN_SUCCESS', data)
-    } catch (e) {
-      Cookies.remove('token')
+    updateRoute ({ commit }, payload) {
+        commit('FETCH_ADMIN_ROUTE', payload)
+    },
 
-      commit('FETCH_ADMIN_FAILURE')
-    }
-  },
+    async logout ({ commit }) {
+        try {
+            await axios.post('/admin/logout')
+        } catch (e) { }
 
-  updateUser ({ commit }, payload) {
-    commit('UPDATE_ADMIN', payload)
-  },
-
-  async logout ({ commit }) {
-    try {
-      await axios.post('/logout')
-    } catch (e) { }
-
-    Cookies.remove('token')
-
-    commit('LOGOUT')
-  },
+        Cookies.remove('admin_token')
+        commit('LOGOUT')
+    },
 }

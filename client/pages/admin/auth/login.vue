@@ -7,7 +7,7 @@
                         <v-card class="elevation-1 pa-3">
                             <v-card-text class="text-xs-center">
                                 <div class="layout column align-center">
-                                    <img src="/images/logo.png" alt="Vue Material Admin" width="320" height="240">
+                                    <img src="/images/logo.png" alt="Vue Material Admin"  height="180">
                                     <h1 class="flex my-4 primary--text">Admin Login</h1>
                                 </div>
                                 <v-form>
@@ -24,21 +24,14 @@
                                             label="Password"
                                             v-model="form.password">
                                     </v-text-field>
-                                    <vue-recaptcha
-                                            ref="recaptcha"
-                                            :sitekey="sitekey"
-                                            @verify="onCaptchaVerified"
-                                            @expired="onCaptchaExpired"
-                                            id="g-recaptcha"
-                                    ></vue-recaptcha>
+                                    <recaptcha/>
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn
-                                        :disabled="form.recaptchaToken.length < 1"
                                         color="primary"
-                                        @click="login"
+                                        @click="onSubmit"
                                         :loading="form.busy"
                                 >Login</v-btn>
                             </v-card-actions>
@@ -56,31 +49,44 @@
 
     export default {
         layout: 'simple',
-        // middleware:'admin',
+        middleware:'admin-route',
         name: "login",
         components: {VueRecaptcha},
         data: () => ({
             showPassword: false,
-            sitekey:'6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2',
+            remember:false,
 
             form: new Form({
-                email: '',
-                password: '',
+                email: 'admin@app.com',
+                password: 'windows7',
                 recaptchaToken: ''
             })
         }),
         async mounted() {
-            this.$refs.recaptcha.sitekey = '6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2'
+            await this.$recaptcha.init()
         },
         methods: {
-            login() {
-               this.form.busy = true
-            },
-            onCaptchaVerified: function (recaptchaToken) {
-                this.form.recaptchaToken = recaptchaToken
-            },
-            onCaptchaExpired: function () {
-                this.$refs.recaptcha.reset()
+            async onSubmit() {
+                try {
+                    // this.form.recaptchaToken = await this.$recaptcha.getResponse()
+                    // Submit the form.
+                    const {data} = await this.form.post('/admin/login')
+
+                    // Save the token.
+                    this.$store.dispatch('admin/saveToken', {
+                        token: data.token,
+                        remember: this.remember
+                    })
+
+                    // Fetch the user.
+                    await this.$store.dispatch('admin/fetchUser')
+
+                    // Redirect home.
+                    this.$router.push({name: 'admin.dash'})
+
+                } catch (error) {
+                    console.log('Login error:', error)
+                }
             }
         }
     }
@@ -95,7 +101,7 @@
         content: "";
         z-index: 0;
     }
-    #g-recaptcha div{
+    .g-recaptcha div{
         margin: auto !important;
     }
 </style>

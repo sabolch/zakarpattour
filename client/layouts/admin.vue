@@ -1,157 +1,283 @@
 <template>
-    <v-navigation-drawer
-            id="app-drawer"
-            v-model="inputValue"
-            app
-            dark
-            floating
-            persistent
-            mobile-break-point="991"
-            width="260"
-    >
-        <v-img
-                :src="image"
-                height="100%"
+    <v-app id="sandbox"  :dark="dark" v-scroll="onScroll">
+        <v-navigation-drawer
+                v-model="primaryDrawer.model"
+                :permanent="primaryDrawer.type === 'permanent'"
+                :temporary="primaryDrawer.type === 'temporary'"
+                :clipped="primaryDrawer.clipped"
+                :floating="primaryDrawer.floating"
+                :mini-variant="primaryDrawer.mini"
+                absolute
+                overflow
+                hide-overlay
+                app
         >
-            <v-layout
-                    class="fill-height"
-                    tag="v-list"
-                    column
-            >
-                <v-list-tile avatar>
-                    <v-list-tile-avatar
-                            color="white"
-                    >
-                        <v-img
-                                :src="logo"
-                                height="34"
-                                contain
-                        />
+            <v-list class="pa-1 indigo darken-2" dark >
+                <v-list-tile v-if="primaryDrawer.mini" @click.stop="primaryDrawer.mini = !primaryDrawer.mini">
+                    <v-list-tile-action>
+                        <v-icon>chevron_right</v-icon>
+                    </v-list-tile-action>
+                </v-list-tile>
+
+
+                <v-list-tile avatar tag="div">
+                    <v-list-tile-avatar>
+                        <v-icon medium>dashboard</v-icon>
                     </v-list-tile-avatar>
-                    <v-list-tile-title class="title">
-                        Vuetify MD
-                    </v-list-tile-title>
+
+                    <v-list-tile-content>
+                        <v-list-tile-title>Dashboard</v-list-tile-title>
+                    </v-list-tile-content>
+
+                    <v-list-tile-action>
+                        <v-btn icon @click.stop="primaryDrawer.mini = !primaryDrawer.mini">
+                            <v-icon>chevron_left</v-icon>
+                        </v-btn>
+                    </v-list-tile-action>
                 </v-list-tile>
-                <v-divider/>
+
+            </v-list>
+
+
+            <v-list class="pt-0" dense>
+                <v-divider light></v-divider>
+
                 <v-list-tile
-                        v-if="responsive"
-                >
-                    <v-text-field
-                            class="purple-input search-input"
-                            label="Search..."
-                            color="purple"
-                    />
-                </v-list-tile>
-                <v-list-tile
-                        v-for="(link, i) in links"
-                        :key="i"
-                        :to="link.to"
-                        :active-class="color"
-                        avatar
-                        class="v-list-item"
+                        v-for="item in items"
+                        :key="item.title"
+                        :to="{name:item.href}"
                 >
                     <v-list-tile-action>
-                        <v-icon>{{ link.icon }}</v-icon>
+                        <v-icon>{{ item.icon }}</v-icon>
                     </v-list-tile-action>
-                    <v-list-tile-title
-                            v-text="link.text"
-                    />
+
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                    </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile
-                        disabled
-                        active-class="primary"
-                        class="v-list-item v-list__tile--buy"
-                        to="/upgrade"
-                >
-                    <v-list-tile-action>
-                        <v-icon>mdi-package-up</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-title class="font-weight-light">
-                        Upgrade To PRO
-                    </v-list-tile-title>
-                </v-list-tile>
-            </v-layout>
-        </v-img>
-    </v-navigation-drawer>
+            </v-list>
+        </v-navigation-drawer>
+        <v-toolbar :clipped-left="primaryDrawer.clipped" app dark absolute color="indigo">
+            <v-toolbar-side-icon
+                    v-if="primaryDrawer.type !== 'permanent'"
+                    @click.stop="primaryDrawer.model = !primaryDrawer.model"
+            ></v-toolbar-side-icon>
+            <v-toolbar-title>ZakarpatTour</v-toolbar-title>
+
+            <v-spacer></v-spacer>
+
+            <v-btn icon @click="handleFullScreen()">
+                <v-icon>fullscreen</v-icon>
+            </v-btn>
+
+            <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
+                <v-btn icon flat slot="activator">
+                    <v-badge color="red" overlap>
+                        <span slot="badge">3</span>
+                        <v-icon medium>notifications</v-icon>
+                    </v-badge>
+                </v-btn>
+                <v-card class="elevation-0">
+                    <v-toolbar card dense color="transparent">
+                        <v-toolbar-title><h4>Notification</h4></v-toolbar-title>
+                    </v-toolbar>
+                    <v-divider></v-divider>
+                    <v-card-text class="pa-0">
+                        <v-list two-line class="pa-0">
+                            <template v-for="(item, index) in items">
+                                <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
+                                <v-divider v-else-if="item.divider" :key="index"></v-divider>
+                                <v-list-tile :to="{name:'admin.marker.category'}" avatar v-else :key="item.title">
+                                    <v-list-tile-avatar :color="item.color">
+                                        <v-icon dark>{{item.icon}}</v-icon>
+                                    </v-list-tile-avatar>
+                                    <v-list-tile-content>
+                                        <v-list-tile-sub-title v-html="item.title"></v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                    <v-list-tile-action class="caption">
+                                        {{item.timeLabel}}
+                                    </v-list-tile-action>
+                                </v-list-tile>
+                            </template>
+                        </v-list>
+                        <v-divider></v-divider>
+                        <v-btn block flat class="ma-0">All</v-btn>
+                        <v-divider></v-divider>
+                    </v-card-text>
+                </v-card>
+            </v-menu>
+
+
+            <v-menu offset-y origin="center center" :nudge-bottom="14" transition="scale-transition">
+                <v-btn icon flat slot="activator">
+                        <v-icon large>account_circle</v-icon>
+                </v-btn>
+                <v-list class="pa-0">
+                    <v-list-tile v-for="(item,index) in itemss"  @click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="index">
+                        <v-list-tile-action v-if="item.icon">
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile ripple="ripple" rel="noopener" :key="'logout'" @click="logout">
+                        <v-list-tile-action>
+                            <v-icon>logout</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Logout</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+
+        </v-toolbar>
+        <v-content>
+            <v-container fluid>
+                <v-layout align-center justify-center>
+                    <v-flex xs12>
+                        <nuxt/>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-content>
+        <v-footer  app color="indigo" dark>
+            <v-flex xs12 class="text-xs-center">
+                   {{ new Date().getFullYear() }} &copy; ZakarpatTour. All rights reserved.
+            </v-flex>
+        </v-footer>
+        <v-fab-transition>
+            <v-btn
+                    v-show="scroll"
+                    fab
+                    bottom
+                    right
+                    color="pink"
+                    dark
+                    fixed
+                    @click="$vuetify.goTo(target, options)"
+            >
+                <v-icon medium>keyboard_arrow_up</v-icon>
+            </v-btn>
+        </v-fab-transition>
+
+
+    </v-app>
 </template>
 
 <script>
-    // Utilities
-    import {
-        mapMutations,
-        mapState
-    } from 'vuex'
-
     export default {
+        middleware:['admin-route','admin'],
         data: () => ({
-            logo: './img/vuetifylogo.png',
-            links: [
+            fav: true,
+            menu: false,
+            message: false,
+            hints: true,
+
+            dark: false,
+
+            scroll:null,
+            offsetTop:0,
+
+            drawers: ['Default (no property)', 'Permanent', 'Temporary'],
+            primaryDrawer: {
+                model: null,
+                type: 'default (no property)',
+                clipped: false,
+                floating: false,
+                mini: false
+            },
+
+            items: [
+                { title: 'Dash', icon: 'dashboard',color:'indigo',href:'admin.dash' },
+                { title: 'Marker', icon: 'dashboard',color:'indigo',href:'admin.marker' },
+                { title: 'Marker Category', icon: 'dashboard',color:'indigo',href:'admin.marker.category' },
+                { title: 'Tour', icon: 'question_answer',color:'red',href:'admin.tour' },
+                { title: 'Tour Category', icon: 'question_answer',color:'red',href:'admin.tour.category' }
+            ],
+
+            itemss: [
                 {
-                    to: '/dashboard',
-                    icon: 'settings',
-                    text: 'Dashboard'
-                },
-                {
-                    to: '/user-profile',
                     icon: 'account_circle',
-                    text: 'User Profile'
+                    href: '#',
+                    title: 'Profile',
+                    click: (e) => {
+                        console.log(e);
+                    }
                 },
                 {
-                    to: '/table-list',
-                    icon: 'mdi-clipboard-outline',
-                    text: 'Table List'
+                    icon: 'settings',
+                    href: '#',
+                    title: 'Settings',
+                    click: (e) => {
+                        console.log(e);
+                    }
                 },
                 {
-                    to: '/typography',
-                    icon: 'mdi-format-font',
-                    text: 'Typography'
-                },
-                {
-                    to: '/icons',
-                    icon: 'mdi-chart-bubble',
-                    text: 'Icons'
-                },
-                {
-                    to: '/maps',
-                    icon: 'mdi-map-marker',
-                    text: 'Maps'
-                },
-                {
-                    to: '/notifications',
-                    icon: 'mdi-bell',
-                    text: 'Notifications'
+                    icon: 'logout',
+                    href: '#',
+                    title: 'Logout',
+                    click: (e) => {
+                        this.logout()
+                    }
                 }
             ],
-            responsive: false
+
+            mini: false,
+            footer: {
+                inset: false
+            }
         }),
+        watch: {
+            offsetTop: function (value) {
+                if (value > 400) {
+                    this.scroll = true;
+                    return;
+                }
+                this.scroll = false;
+            }
+        },
+        methods:{
+            toggleFullScreen()  {
+                let doc = window.document;
+                let docEl = doc.documentElement;
+
+                let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+                let cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+                if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                    requestFullScreen.call(docEl);
+                }
+                else {
+                    cancelFullScreen.call(doc);
+                }
+            },
+            onScroll(e) {
+                this.offsetTop = window.pageYOffset || document.documentElement.scrollTop
+            },
+            handleFullScreen () {
+                this.toggleFullScreen();
+            },
+            handleClick: (e) => {
+                console.log(e);
+            },
+            async logout() {
+                // Log out the user.
+                await this.$store.dispatch('admin/logout')
+                // Redirect to login.
+                this.$router.push({name: 'admin.login'})
+            }
+        },
         computed: {
-            // ...mapState('app', ['image', 'color']),
-            // inputValue: {
-            //     get () {
-            //         return this.$store.state.app.drawer
-            //     },
-            //     set (val) {
-            //         this.setDrawer(val)
-            //     }
-            // },
-            // items () {
-            //     return this.$t('Layout.View.items')
-            // }
-        },
-        mounted () {
-            this.onResponsiveInverted()
-            window.addEventListener('resize', this.onResponsiveInverted)
-        },
-        beforeDestroy () {
-            window.removeEventListener('resize', this.onResponsiveInverted)
-        },
-        methods: {
-            ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
-            onResponsiveInverted () {
-                if (window.innerWidth < 991) {
-                    this.responsive = true
-                } else {
-                    this.responsive = false
+            target() {
+                return 0
+            },
+            options() {
+                return {
+                    duration: 800,
+                    offset: 0,
+                    easing: 'easeInQuint'
                 }
             }
         }
@@ -159,25 +285,9 @@
 </script>
 
 <style lang="scss">
-    #app-drawer {
-        .v-list__tile {
-            border-radius: 4px;
-
-            &--buy {
-                margin-top: auto;
-                margin-bottom: 17px;
-            }
-        }
-
-        .v-image__image--contain {
-            top: 9px;
-            height: 60%;
-        }
-
-        .search-input {
-            margin-bottom: 30px !important;
-            padding-left: 15px;
-            padding-right: 15px;
-        }
+    #sandbox{
+        font-family: "Monospaced";
+        font-weight: lighter;
+        font-size: 16px;
     }
 </style>

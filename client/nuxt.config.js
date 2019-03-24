@@ -57,7 +57,7 @@ module.exports = {
     loading: {color: '#ff000c'},
 
     router: {
-        middleware: ['locale', 'check-auth']
+        middleware: ['locale', 'check-auth','check-admin'],
     },
 
     css: [
@@ -92,6 +92,14 @@ module.exports = {
             lang: 'en',
         }],
         ['@nuxtjs/moment', {locales: ['hu', 'uk', 'en-gb'], defaultLocale: 'en-gb'}],
+    [
+        '@nuxtjs/recaptcha', {
+        /* reCAPTCHA options */
+        hideBadge: false,
+        siteKey:"6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2",
+        version: 3
+    }
+    ]
     ],
 
     build: {

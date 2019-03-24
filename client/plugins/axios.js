@@ -3,63 +3,69 @@ import swal from 'sweetalert2'
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-export default ({ app, store, redirect }) => {
-  axios.defaults.baseURL = process.env.apiUrl
+export default ({app, store, redirect}) => {
+    axios.defaults.baseURL = process.env.apiUrl
 
-  if (process.server) {
-    return
-  }
-
-  // Request interceptor
-  axios.interceptors.request.use(request => {
-    request.baseURL = process.env.apiUrl
-
-    const token = store.getters['auth/token']
-
-    if (token) {
-      request.headers.common['Authorization'] = `Bearer ${token}`
+    if (process.server) {
+        return
     }
 
-    const locale = store.getters['lang/locale']
-    if (locale) {
-      request.headers.common['Accept-Language'] = locale
-    }
+    // Request interceptor
+    axios.interceptors.request.use(request => {
+        request.baseURL = process.env.apiUrl
 
-    return request
-  })
+        const token = store.getters['auth/token']
+        const admin_token = store.getters['admin/token']
+        const admin_route = store.getters['admin/SxAr']
 
-  // Response interceptor
-  axios.interceptors.response.use(response => response, error => {
-    const { status } = error.response || {}
+        if (token && !admin_route) {
+            request.headers.common['Authorization'] = `Bearer ${token}`
+        } else {
+            if(admin_token && admin_route) {
+                request.headers.common['Authorization'] = `Bearer ${admin_token}`
+            }
+        }
 
-    if (status >= 500) {
-      swal({
-        type: 'error',
-        title: app.i18n.t('error_alert_title'),
-        text: app.i18n.t('error_alert_text'),
-        reverseButtons: true,
-        confirmButtonText: app.i18n.t('ok'),
-        cancelButtonText: app.i18n.t('cancel')
-      })
-    }
+        const locale = store.getters['lang/locale']
+        if (locale) {
+            request.headers.common['Accept-Language'] = locale
+        }
 
-    if (status === 401 && store.getters['auth/check']) {
-      swal({
-        type: 'warning',
-        title: app.i18n.t('token_expired_alert_title'),
-        text: app.i18n.t('token_expired_alert_text'),
-        reverseButtons: true,
-        confirmButtonText: app.i18n.t('ok'),
-        cancelButtonText: app.i18n.t('cancel')
-      }).then(() => {
-        store.commit('auth/LOGOUT')
+        return request
+    })
 
-        redirect({ name: 'login' })
-      })
-    }
+    // Response interceptor
+    axios.interceptors.response.use(response => response, error => {
+        const {status} = error.response || {}
 
-    return Promise.reject(error)
-  })
+        if (status >= 500) {
+            swal({
+                type: 'error',
+                title: app.i18n.t('error_alert_title'),
+                text: app.i18n.t('error_alert_text'),
+                reverseButtons: true,
+                confirmButtonText: app.i18n.t('ok'),
+                cancelButtonText: app.i18n.t('cancel')
+            })
+        }
+
+        if (status === 401 && store.getters['auth/check']) {
+            swal({
+                type: 'warning',
+                title: app.i18n.t('token_expired_alert_title'),
+                text: app.i18n.t('token_expired_alert_text'),
+                reverseButtons: true,
+                confirmButtonText: app.i18n.t('ok'),
+                cancelButtonText: app.i18n.t('cancel')
+            }).then(() => {
+                store.commit('auth/LOGOUT')
+
+                redirect({name: 'login'})
+            })
+        }
+
+        return Promise.reject(error)
+    })
 }
 
 
