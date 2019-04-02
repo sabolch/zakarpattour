@@ -179,12 +179,12 @@
         },
 
         async asyncData ({ params, $axios, $router }) {
-            try {
-                let {data} = await  $axios.$get(`/marker/show/${params.slug}`)
-                if (data.success) return {marker: data.data}
-            }catch (e) {
-                $router.push({name:'error'})
-            }
+            // try {
+            //     let {data} = await  $axios.$get(`/marker/show/${params.slug}`)
+            //     if (data.success) return {marker: data.data}
+            // }catch (e) {
+            //     $router.push({name:'error'})
+            // }
         },
 
         data() {

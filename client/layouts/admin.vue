@@ -290,4 +290,17 @@
         font-weight: lighter;
         font-size: 16px;
     }
+    a {
+        text-decoration: none;
+    }
+
+    a:active {
+        background-color: transparent;
+        color: inherit;
+    }
+
+    a:visited {
+        background-color: transparent;
+        color: inherit;
+    }
 </style>

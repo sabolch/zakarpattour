@@ -96,10 +96,10 @@ const routes = [
   { path: '/admin/dash', name: 'admin.dash', component: AdminDash },
 
   { path: '/admin/marker', name: 'admin.marker', component: AdminMarker },
-  { path: '/admin/marker/category', name: 'admin.marker.category', component: AdminMarkerCategory},
+  { path: '/admin/category/marker', name: 'admin.marker.category', component: AdminMarkerCategory},
 
   { path: '/admin/tour', name: 'admin.tour', component: AdminTour},
-  { path: '/admin/tour/category', name: 'admin.tour.category', component: AdminTourCategory },
+  { path: '/admin/category/tour', name: 'admin.tour.category', component: AdminTourCategory },
 ]
 
 export function createRouter () {

@@ -1,4 +1,5 @@
 require('dotenv').config()
+const webpack = require('webpack')
 
 const polyfills = [
     'Promise',
@@ -61,6 +62,8 @@ module.exports = {
     },
 
     css: [
+        'quill/dist/quill.snow.css',
+        'quill/dist/quill.core.css'
         // { src: '~assets/sass/app.scss', lang: 'scss' }
 
     ],
@@ -78,6 +81,7 @@ module.exports = {
         '~plugins/i18n',
         '~plugins/vform',
         '~plugins/axios',
+        { src: '~plugins/quill', ssr: false }
         // '~plugins/fontawesome',
         // '~plugins/nuxt-client-init',
         // { src: '~plugins/bootstrap', ssr: false }
@@ -104,6 +108,12 @@ module.exports = {
 
     build: {
         extractCSS: true,
+        plugins: [
+            new webpack.ProvidePlugin({
+                'window.Quill': 'quill/dist/quill.js',
+                'Quill': 'quill/dist/quill.js'
+            })
+        ]
     }
 
 }
