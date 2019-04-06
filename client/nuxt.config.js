@@ -15,7 +15,6 @@ const polyfills = [
 
 module.exports = {
     mode: 'universal',
-
     srcDir: __dirname,
 
     env: {

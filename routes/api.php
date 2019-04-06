@@ -17,6 +17,9 @@ use Illuminate\Http\Request;
 Route::post('/user/store/avatar', 'UserAvatarController@store');
 Route::get('/user/get/avatar/{user_id}/{size?}', 'UserAvatarController@get');
 
+Route::post('/post/store/image', 'ImagesController@store');
+Route::get('/post/get/image/{name}/{size?}', 'ImagesController@get');
+
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', 'Auth\LoginController@logout');
