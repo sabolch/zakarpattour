@@ -2,20 +2,10 @@
     <div>
     <div class="quill-editor"
          :content="content"
-         @change="onEditorChange($event)"
-         @blur="onEditorBlur($event)"
-         @focus="onEditorFocus($event)"
-         @ready="onEditorReady($event)"
          v-quill:myQuillEditor="editorOption">
     </div>
     <input v-show="false" id="inputUpload" type="file" @change="uploadFunction($event)" accept="image/x-png,image/gif,image/jpeg" >
-        <v-btn
-                dark
-                color="green"
-                @click="onEditorGetContetn"
-        >
-            Save
-        </v-btn>
+        <v-btn @click="onEditorGetContent" :color="saved ? 'orange':'green'" dark><v-icon left dark>{{saved ? 'edit':'save' }}</v-icon>{{ saved ? 'Edit' :'Save' }}</v-btn>
     </div>
 </template>
 
@@ -31,6 +21,7 @@
         },
         data () {
             return {
+                saved:false,
                 apiUrl:'',
                 selectedFile : '',
                 editorOption: {
@@ -51,7 +42,6 @@
                                 [{'color': []}, {'background': []}],
                                 ['clean'],
                                 ['link', 'image', 'video'],
-                                ['showHtml']
                             ],
                             handlers: {
                                 'image': function(){
@@ -71,7 +61,6 @@
                             },
                         }
                     }
-
                 }
             }
         },
@@ -79,17 +68,11 @@
             // console.log('app init, my quill insrance object is:')
         },
         methods: {
-            onEditorGetContetn(){
+            onEditorGetContent(){
                 this.$emit('get-content', this.myQuillEditor.root.innerHTML)
+                this.saved = !this.saved
             },
-            onEditorBlur(editor) {
-            },
-            onEditorFocus(editor) {
-            },
-            onEditorReady(editor) {
-            },
-            onEditorChange({ editor, html, text }) {
-            },
+
             async uploadFunction(e){
                 this.selectedFile = e.target.files[0];
                 let form = new FormData();
@@ -115,9 +98,6 @@
 <style scoped>
     .quill-editor{
         min-height: 200px;
-    }
-    button.ql-showHtml:after{
-        content: "[source]";
     }
     .quill-code {
         border: none;

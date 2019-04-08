@@ -79,12 +79,11 @@ class MarkerController extends Controller
         $marker->lng = $data['lng'];
         $marker->title = $data['title'];
         $marker->save();
+
         // Translate
-        foreach ($data['translation'] as $array){
-            foreach ($array as $locale => $obj){
-                $marker->translateOrNew($locale)->title = $obj['title'];
-                $marker->translateOrNew($locale)->description = $obj['description'];
-            }
+        foreach ($data['translations'] as $array) {
+            $marker->translateOrNew($array['locale'])->title = $array['title'];
+            $marker->translateOrNew($array['locale'])->description = $array['description'];
         }
         $marker->save();
 
@@ -160,11 +159,9 @@ class MarkerController extends Controller
             $marker->title = $data['title'];
             $marker->save();
             // Translate
-            foreach ($data['translation'] as $array){
-                foreach ($array as $locale => $obj){
-                    $marker->translateOrNew($locale)->title = $obj['title'];
-                    $marker->translateOrNew($locale)->description = $obj['description'];
-                }
+            foreach ($data['translations'] as $array) {
+                $marker->translateOrNew($array['locale'])->title = $array['title'];
+                $marker->translateOrNew($array['locale'])->description = $array['description'];
             }
             $marker->save();
 

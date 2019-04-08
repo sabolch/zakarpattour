@@ -1,10 +1,3 @@
-// import Vue from 'vue'
-// import VueQuillEditor from 'vue-quill-editor/dist/ssr'
-//
-// import Quill from 'quill'
-//
-//
-// Vue.use(VueQuillEditor)
 import Vue from 'vue'
 import Quill from 'quill'
 import VueQuillEditor from 'vue-quill-editor/dist/ssr'

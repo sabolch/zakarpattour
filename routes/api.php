@@ -75,6 +75,7 @@ Route::group(['prefix' => 'marker/category'], function () {
     Route::get('/', 'MarkerCategoryController@index');
     Route::get('/trashed', 'MarkerCategoryController@trashed');
     Route::delete('/remove', 'MarkerCategoryController@destroyForever');
+    Route::get('/list', 'MarkerCategoryController@listOfCategories');
 
 });
 //    Marker

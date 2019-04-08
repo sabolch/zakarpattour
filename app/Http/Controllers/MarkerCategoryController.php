@@ -48,7 +48,7 @@ class MarkerCategoryController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => MarkerCategory::select(['marker_categories.id'])
+            'data' => MarkerCategory::select(['marker_categories.id','icon'])
                 ->join('marker_category_translations as t', 'marker_categories.id', '=', 't.marker_category_id')
                 ->groupBy('marker_categories.id')
                 ->get()
