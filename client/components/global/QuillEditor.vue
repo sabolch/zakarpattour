@@ -1,29 +1,40 @@
 <template>
     <div>
+        <!--<div v-html="VQContent"></div>-->
     <div class="quill-editor"
+         v-model="VQContent"
          :content="content"
+         @change="onEditorChange($event)"
          v-quill:myQuillEditor="editorOption">
     </div>
     <input v-show="false" id="inputUpload" type="file" @change="uploadFunction($event)" accept="image/x-png,image/gif,image/jpeg" >
-        <v-btn @click="onEditorGetContent" :color="saved ? 'orange':'green'" dark><v-icon left dark>{{saved ? 'edit':'save' }}</v-icon>{{ saved ? 'Edit' :'Save' }}</v-btn>
     </div>
 </template>
 
 <script>
     export default {
         name: "QuillEditor",
-        props:['content'],
+        props:['value','content'],
         async asyncData ({ $axios }) {
             if ($axios.baseUrl) {
                 return { apiUrl: $axios.baseUrl}
             }
             return {apiUrl:''}
         },
+        watch: {
+            VQContent: {
+                handler: function(value) {
+                    this.$emit('input', value)
+                }
+            }
+        },
         data () {
             return {
+                alert:true,
                 saved:false,
                 apiUrl:'',
                 selectedFile : '',
+                VQContent:'',
                 editorOption: {
                     modules: {
                         toolbar: {
@@ -65,12 +76,17 @@
             }
         },
         mounted() {
-            // console.log('app init, my quill insrance object is:')
         },
         methods: {
+            onEditorChange({ editor, html, text }) {
+                if(this.saved) {
+                    console.log("message")
+                }
+            },
             onEditorGetContent(){
-                this.$emit('get-content', this.myQuillEditor.root.innerHTML)
-                this.saved = !this.saved
+                let content = this.myQuillEditor.root.innerHTML
+                // console.log(this.myQuillEditor.container.innerHTML)
+                this.$emit('input', content)
             },
 
             async uploadFunction(e){
@@ -89,7 +105,6 @@
                 }).catch(e => {
                     console.log('error');
                 })
-
             }
         }
     }

@@ -51,21 +51,20 @@ class MarkerController extends Controller
     {
         $validator =  Validator::make($request->all(),
             [
-                'category_id'=>'required|integer',
+                'category'=>'required|integer',
                 'lat'=>'required|numeric',
                 'lng'=>'required|numeric',
-                'title'    => 'required',
-                'translation' =>'required',
+                'translations' =>'required',
 
             ],[
-                'category_id.required'=>'Category ID is required',
-                'category_id.integer'=>'Category ID must be integer',
+                'category.required'=>'Category ID is required',
+                'category.integer'=>'Category ID must be integer',
                 'lat.required'=>'Latitude is required',
                 'lng.required'=>'Longitude is required',
                 'lat.numeric'=>'Latitude must be numeric',
                 'lng.numeric'=>'Longitude must be numeric',
                 'title.required'=>'Title array is required!',
-                'translation.required'=>'Translation is required!'
+                'translations.required'=>'Translation is required!'
             ]);
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
@@ -74,10 +73,11 @@ class MarkerController extends Controller
         $data = $validator->valid();
 
         $marker = new Marker();
-        $marker->marker_category_id = $data['category_id'];
+        $marker->marker_category_id = $data['category'];
         $marker->lat = $data['lat'];
         $marker->lng = $data['lng'];
-        $marker->title = $data['title'];
+        $marker->title = $data['translations'][0]['title'];
+        $marker->description = $data['translations'][0]['description'];
         $marker->save();
 
         // Translate
@@ -86,12 +86,11 @@ class MarkerController extends Controller
             $marker->translateOrNew($array['locale'])->description = $array['description'];
         }
         $marker->save();
-
+//
         return response()->json([
             'success'=>true,
             'data'=> $marker,
         ],201);
-
     }
 
     /**
@@ -126,24 +125,20 @@ class MarkerController extends Controller
     {
         $validator =  Validator::make($request->all(),
             [
-                'id'=>'required|integer',
-                'category_id'=>'required|integer',
+                'category'=>'required|integer',
                 'lat'=>'required|numeric',
                 'lng'=>'required|numeric',
-                'title'    => 'required',
-                'translation' =>'required',
+                'translations' =>'required',
 
             ],[
-                'id.required'=>'ID is required',
-                'id.integer'=>'ID must be integer',
-                'category_id.required'=>'Category ID is required',
-                'category_id.integer'=>'Category ID must be integer',
+                'category.required'=>'Category ID is required',
+                'category.integer'=>'Category ID must be integer',
                 'lat.required'=>'Latitude is required',
                 'lng.required'=>'Longitude is required',
                 'lat.numeric'=>'Latitude must be numeric',
                 'lng.numeric'=>'Longitude must be numeric',
                 'title.required'=>'Title array is required!',
-                'translation.required'=>'Translation is required!'
+                'translations.required'=>'Translation is required!'
             ]);
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);

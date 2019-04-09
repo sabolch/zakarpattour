@@ -116,12 +116,12 @@
                                 {{ item.locale.toUpperCase() }}
                             </v-tab>
                             <v-tab-item
-                                    v-for="item in form.translations"
+                                    v-for="(item,index) in form.translations"
                                     :key="item.locale"
                             >
                                 <v-card flat>
                                     <v-card-text>
-                                        <quill-editor @get-content="getEditorContent"></quill-editor>
+                                        <quill-editor ref="QuillEditors" v-model="item.description" @get-content="getEditorContent"></quill-editor>
                                     </v-card-text>
                                 </v-card>
                             </v-tab-item>
@@ -139,6 +139,22 @@
                     </v-stepper-content>
                 </v-stepper>
             </v-flex>
+
+            <v-snackbar
+                    v-model="snackbar.status"
+                    :color="snackbar.color"
+                    :timeout="4000"
+            >
+                {{ snackbar.message }}
+                <v-btn
+                        dark
+                        flat
+                        @click="snackbar.status = false"
+                >
+                    Close
+                </v-btn>
+            </v-snackbar>
+
         </v-layout>
     </v-container>
 </template>
@@ -167,6 +183,12 @@
         },
         data() {
             return {
+                snackbar:{
+                    status:false,
+                    timeout:4000,
+                    color:'success',
+                    message:'',
+                },
                 e6: 1,
                 categories: [],
                 tabs: null,
@@ -174,7 +196,7 @@
                 mapMarker: {},
                 toogleMapStyle: false,
                 form: new Form({
-                    id: '',
+                    id: -1,
                     category: '',
                     lat: 0,
                     lng: 0,
@@ -201,7 +223,6 @@
                 position: {lat: 48, lng: 22.5},
                 draggable: true
             });
-            this.createMarker
             this.searchBox(this.map)
 
             let self = this;
@@ -230,7 +251,6 @@
             getEditorContent(e) {
                 console.log("Parent log : " + e)
             },
-
             styleHandler() {
                 let mystyle = this.toogleMapStyle ? this.$store.state.gMapStyles.showLabels : this.$store.state.gMapStyles.hideLabels;
                 this.map.set('styles', mystyle);
@@ -302,12 +322,31 @@
                 return item.name.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
             autoValue(value) {
-                return value.value
+                return value.id
             },
 
             async store() {
                 console.log(this.form)
-                const {data} = await this.form.put('marker/category/store')
+                let url = 'marker/store'
+                if(this.form.id > 0) url = 'marker/edit'
+                await this.form.put(url).then((data)=>{
+                    console.log(data.data)
+                    this.form.id = data.data.data.id
+                    this.snackbar={
+                        status:true,
+                        timeout:4000,
+                        color:'success',
+                        message:'Successfully saved!',
+                    }
+                }).catch((e)=>{
+                    this.snackbar={
+                            status:true,
+                            timeout:4000,
+                            color:'error',
+                            message:'Not saved! Try again later! More info in console ..',
+                    }
+                    console.log(e)
+                })
             },
         }
     }
