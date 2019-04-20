@@ -241,8 +241,8 @@
         },
         async asyncData ({ params, $axios, $router }) {
             try {
-                let {data} = await  $axios.$get(`/tour/show/${params.slug}`)
-                if (data.success) return {tour: data.data}
+                // let {data} = await  $axios.$get(`/tour/show/${params.slug}`)
+                // if (data.success) return {tour: data.data}
             }catch (e) {
                 $router.push({name:'error'})
             }
