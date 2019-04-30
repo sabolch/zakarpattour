@@ -12,7 +12,7 @@
                             <v-form @submit.prevent="login()" @keydown="form.onKeydown($event)">
                                 <v-text-field v-model="form.email" prepend-icon="person" name="login" label="Login"
                                               type="text"
-                                :error-messages="ErrList"
+                                              :error-messages="ErrList"
                                 ></v-text-field>
                                 <v-text-field v-model="form.password" id="password" prepend-icon="lock" name="password"
                                               label="Password"
@@ -21,13 +21,11 @@
                                               @click:append="showPassword = !showPassword"
                                 ></v-text-field>
 
-                                <vue-recaptcha
-                                        ref="recaptcha"
-                                        sitekey="6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2"
-                                        @verify="onCaptchaVerified"
-                                        @expired="onCaptchaExpired"
-                                        class="g-recaptcha"
-                                ></vue-recaptcha>
+                                <recaptcha
+                                        @error="onError"
+                                        @success="onSuccess"
+                                />
+
                             </v-form>
                             <v-flex xs12>
                                 <v-layout row>
@@ -59,7 +57,6 @@
                                         </v-flex>
                                         <v-flex class="text-xs-right">
                                             <v-btn
-                                                    :disabled="form.recaptchaToken.length < 1"
                                                     color="primary"
                                                     @click="login"
                                                     :loading="form.busy"
@@ -80,35 +77,41 @@
 </template>
 <script>
     import Form from 'vform'
-    import VueRecaptcha from "vue-recaptcha"
 
     export default {
         middleware: 'loggedIn',
         head() {
             return {title: this.$t('login')}
         },
-        components: {VueRecaptcha},
         data: () => ({
             expand: false,
-            showPassword:false,
+            showPassword: false,
             form: new Form({
                 email: '',
                 password: '',
-                recaptchaToken:''
+                recaptchaToken: ''
             }),
             remember: false,
-            ErrList:null
+            ErrList: null
         }),
         mounted() {
             this.expand = true
             if (this.$store.state.auth.loggedIn) {
-                this.$router.push({ name: 'settings.profile' })
+                this.$router.push({name: 'settings.profile'})
             }
         },
         methods: {
+            onSuccess(token) {
+                console.log('Succeeded:', token)
+            },
+            onError(error) {
+                console.log('ReCaptcha erorr:', error)
+            },
+
             async login() {
-                try{
+                try {
                     this.ErrList = []
+                    this.form.recaptchaToken = await this.$recaptcha.getResponse()
                     // Submit the form.
                     const {data} = await this.form.post('/login')
 
@@ -124,18 +127,11 @@
                     // Redirect home.
                     // this.$router.go(-1)
                     this.$router.push({name: 'settings.profile'})
-                }catch (e) {
+                } catch (e) {
                     this.ErrList.push(e.response.data.message)
                 }
-                this.$refs.recaptcha.reset()
+                // this.$refs.recaptcha.reset()
 
-            },
-
-            onCaptchaVerified: function (recaptchaToken) {
-                this.form.recaptchaToken = recaptchaToken
-            },
-            onCaptchaExpired: function () {
-                this.$refs.recaptcha.reset()
             }
         }
     }

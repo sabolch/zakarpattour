@@ -62,8 +62,7 @@
                 recaptchaToken: ''
             })
         }),
-        async mounted() {
-            await this.$recaptcha.init()
+         mounted() {
         },
         methods: {
             async onSubmit() {

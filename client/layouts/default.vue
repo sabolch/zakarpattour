@@ -96,7 +96,6 @@
                         </v-list-tile-content>
                     </v-list-tile>
                 </div>
-
             </v-list>
         </v-navigation-drawer>
 
@@ -136,7 +135,7 @@
                     offset-y
             >
                 <v-btn slot="activator" icon>
-                    <v-icon medium>translate</v-icon>
+                    <span :class="['flag-icon','flag-icon-gb','flag-language']"/>
                 </v-btn>
 
                 <v-list>
@@ -291,6 +290,9 @@
     .v-dialog {
         text-align: center;
         box-shadow: none;
+    }
+    .flag-language{
+        font-size: 20px;
     }
 
 </style>

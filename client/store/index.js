@@ -18,8 +18,6 @@ export const actions = {
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
     }
-
-
   },
 
   nuxtClientInit ({ commit }) {
@@ -37,8 +35,6 @@ export const actions = {
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
     }
-
-
   }
 }
 

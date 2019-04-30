@@ -57,7 +57,7 @@ module.exports = {
     loading: {color: '#ff000c'},
 
     router: {
-        middleware: ['locale', 'check-auth','check-admin'],
+        middleware: ['locale', 'check-auth', 'check-admin'],
     },
 
     css: [
@@ -80,7 +80,7 @@ module.exports = {
         '~plugins/i18n',
         '~plugins/vform',
         '~plugins/axios',
-        { src: '~plugins/quill', ssr: false }
+        {src: '~plugins/quill', ssr: false}
         // '~plugins/fontawesome',
         // '~plugins/nuxt-client-init',
         // { src: '~plugins/bootstrap', ssr: false }
@@ -95,14 +95,14 @@ module.exports = {
             lang: 'en',
         }],
         ['@nuxtjs/moment', {locales: ['hu', 'uk', 'en-gb'], defaultLocale: 'en-gb'}],
-    [
-        '@nuxtjs/recaptcha', {
-        /* reCAPTCHA options */
-        hideBadge: false,
-        siteKey:"6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2",
-        version: 3
-    }
-    ]
+        ['@nuxtjs/recaptcha', {
+            /* reCAPTCHA options */
+            hideBadge: false,
+            siteKey: "6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2",
+            // siteKey: "6LdjB6EUAAAAAFY48-prG10DoKwLG4iDitlJBwBx",
+            version: 2
+        }
+        ]
     ],
 
     build: {

@@ -4,7 +4,7 @@
       <v-flex sm10 xs8 md4>
         <v-card dark class="text-xs-center red lighten-3" style="padding:10%; border-radius:2px">
           <v-icon size="140">error</v-icon>
-          <h1>404</h1>
+          <h1 class="error-title">404</h1>
           <h2>Sorry, page not found</h2>
          <v-btn class="mt-4" medium outline :to="{name: 'welcome'}">Go Home</v-btn>
         </v-card>
@@ -14,7 +14,7 @@
 </template>
 
 <style>
-  h1 {
+  .error-title h1 {
     font-size: 100px;
     line-height: 100px;
     font-weight: 700;
