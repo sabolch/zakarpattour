@@ -22,6 +22,10 @@ class OAuthController extends Controller
     {
         config([
             'services.github.redirect' => route('oauth.callback', 'github'),
+            'services.google.redirect' => route('oauth.callback', 'google'),
+            'services.facebook.redirect' => route('oauth.callback', 'facebook'),
+            'services.twitter.redirect' => route('oauth.callback', 'twitter'),
+            'services.instagram.redirect' => route('oauth.callback', 'instagram'),
         ]);
     }
 
@@ -79,10 +83,10 @@ class OAuthController extends Controller
 
             return $oauthProvider->user;
         }
-
-        if (User::where('email', $user->getEmail())->exists()) {
-            throw new EmailTakenException;
-        }
+//         If email is unique
+//        if (User::where('email', $user->getEmail())->exists()) {
+//            throw new EmailTakenException;
+//        }
 
         return $this->createUser($provider, $user);
     }
@@ -94,8 +98,15 @@ class OAuthController extends Controller
      */
     protected function createUser($provider, $sUser)
     {
+        if ($sUser->getNickname())
+            $name = $sUser->getNickname();
+        elseif ($sUser->getName())
+            $name = $sUser->getName();
+        else
+            $name = 'UserName';
+
         $user = User::create([
-            'name' => $sUser->getName(),
+            'name' => $name,
             'email' => $sUser->getEmail(),
         ]);
 

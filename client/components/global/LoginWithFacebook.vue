@@ -1,18 +1,18 @@
 <template>
-  <v-btn icon class="black--text" @click="login">
-    <v-icon medium>sb-github</v-icon>
+  <v-btn icon class="blue--text text--darken-4" @click="login">
+    <v-icon medium>sb-facebook</v-icon>
   </v-btn>
 
 </template>
 
 <script>
 export default {
-  name: 'LoginWithGithub',
+  name: 'LoginWithFacebook',
 
   computed: {
-    githubAuth: () => 'https://github.com/login/oauth/authorize',
+    githubAuth: () => 'https://www.facebook.com/dialog/oauth',
     // githubAuth: () => process.env.githubAuth,
-    url: () => `${process.env.apiUrl}/oauth/github`
+    url: () => `${process.env.apiUrl}/oauth/facebook`
   },
 
   mounted () {
@@ -28,7 +28,7 @@ export default {
       const newWindow = openWindow('', this.$t('login'))
 
       const url = await this.$store.dispatch('auth/fetchOauthUrl', {
-        provider: 'github'
+        provider: 'facebook'
       })
 
       newWindow.location.href = url

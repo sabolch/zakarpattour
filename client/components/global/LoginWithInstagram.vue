@@ -1,18 +1,18 @@
 <template>
-  <v-btn icon class="black--text" @click="login">
-    <v-icon medium>sb-github</v-icon>
+  <v-btn icon class="purple--text" @click="login">
+    <v-icon medium>sb-instagram</v-icon>
   </v-btn>
 
 </template>
 
 <script>
 export default {
-  name: 'LoginWithGithub',
+  name: 'LoginWithInstagram',
 
   computed: {
-    githubAuth: () => 'https://github.com/login/oauth/authorize',
+    githubAuth: () => 'https://api.instagram.com/oauth/authorize',
     // githubAuth: () => process.env.githubAuth,
-    url: () => `${process.env.apiUrl}/oauth/github`
+    url: () => `${process.env.apiUrl}/oauth/instagram`
   },
 
   mounted () {
@@ -28,7 +28,7 @@ export default {
       const newWindow = openWindow('', this.$t('login'))
 
       const url = await this.$store.dispatch('auth/fetchOauthUrl', {
-        provider: 'github'
+        provider: 'instagram'
       })
 
       newWindow.location.href = url

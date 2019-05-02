@@ -1,18 +1,18 @@
 <template>
-  <v-btn icon class="black--text" @click="login">
-    <v-icon medium>sb-github</v-icon>
+  <v-btn icon class="red--text text--darken-1" @click="login">
+    <v-icon medium>sb-f-google</v-icon>
   </v-btn>
 
 </template>
 
 <script>
 export default {
-  name: 'LoginWithGithub',
+  name: 'LoginWithGoogle',
 
   computed: {
-    githubAuth: () => 'https://github.com/login/oauth/authorize',
+    githubAuth: () => 'https://www.googleapis.com/auth',
     // githubAuth: () => process.env.githubAuth,
-    url: () => `${process.env.apiUrl}/oauth/github`
+    url: () => `${process.env.apiUrl}/oauth/google`
   },
 
   mounted () {
@@ -28,7 +28,7 @@ export default {
       const newWindow = openWindow('', this.$t('login'))
 
       const url = await this.$store.dispatch('auth/fetchOauthUrl', {
-        provider: 'github'
+        provider: 'google'
       })
 
       newWindow.location.href = url

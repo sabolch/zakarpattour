@@ -52,6 +52,7 @@
                                 >
                                     {{ ErrorsObj.recaptchaToken[0] }}
                                 </v-alert>
+                                <no-ssr>
                                 <vue-recaptcha
                                         ref="recaptcha"
                                         @verify="onCaptchaVerified"
@@ -59,6 +60,7 @@
                                         class="g-recaptcha"
                                         sitekey="6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2"
                                 ></vue-recaptcha>
+                                </no-ssr>
                             </v-form>
                         </v-card-text>
                         <v-card-actions class="mt-2 pt-0">
