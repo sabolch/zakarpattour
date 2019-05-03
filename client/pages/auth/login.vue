@@ -44,11 +44,11 @@
                                 <v-flex xs12>
                                     <v-layout row wrap>
                                         <v-flex ml-2>
-                                             <login-with-facebook/>
-                                             <login-with-twitter/>
-                                             <login-with-instagram/>
-                                             <login-with-google/>
-                                            <login-with-github/>
+                                             <social-login provider="facebook"/>
+                                             <!--<social-login provider="twitter"/>-->
+                                             <!--<social-login provider="instagram"/>-->
+                                             <social-login provider="google"/>
+                                             <social-login provider="github"/>
 
                                         </v-flex>
                                         <v-flex class="text-xs-right">
@@ -73,8 +73,10 @@
 </template>
 <script>
     import Form from 'vform'
+    import SocialLogin from "../../components/global/SocialLogin";
 
     export default {
+        components: {SocialLogin},
         middleware: 'loggedIn',
         head() {
             return {title: this.$t('login')}

@@ -21,7 +21,13 @@ module.exports = {
         apiUrl: process.env.APP_URL || 'http://localhost:8000',
         appName: process.env.APP_NAME || 'Zakarpattour',
         appLocale: process.env.APP_LOCALE || 'en',
-        githubAuth: !!process.env.GITHUB_CLIENT_ID
+
+        // Socials
+        githubAuth: !!process.env.GITHUB_CLIENT_ID,
+        facebookAuth: !!process.env.FACEBOOK_CLIENT_ID,
+        googleAuth: !!process.env.GOOGLE_CLIENT_ID,
+        twitterAuth: !!process.env.TWITTER_CLIENT_ID,
+        instagramAuth: !!process.env.INSTAGRAM_CLIENT_ID
     },
     head: {
         title: process.env.APP_NAME,
