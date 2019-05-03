@@ -37,6 +37,9 @@ class OAuthController extends Controller
      */
     public function redirectToProvider($provider)
     {
+        if($provider == 'twitter'){
+            return Socialite::driver('twitter')->redirect()->getTargetUrl();
+        }
         return [
             'url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl(),
         ];

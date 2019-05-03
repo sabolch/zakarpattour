@@ -21,8 +21,8 @@ class ProfileController extends Controller
 
         $this->validate($request, [
             'name' => 'required',
-            'telephone' => 'required|numeric',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'telephone' => 'numeric|nullable',
+            'email' => 'required|email',
         ]);
         User::where('id', $user->id)->update($request->only('name', 'email', 'telephone'));
         return tap($user)->update($request->only('email'));

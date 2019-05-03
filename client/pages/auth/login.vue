@@ -49,7 +49,6 @@
                                              <!--<social-login provider="instagram"/>-->
                                              <social-login provider="google"/>
                                              <social-login provider="github"/>
-
                                         </v-flex>
                                         <v-flex class="text-xs-right">
                                             <v-btn

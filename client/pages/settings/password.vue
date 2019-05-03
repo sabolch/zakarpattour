@@ -55,6 +55,12 @@
         },
 
         data: () => ({
+            infoSnackbar:{
+                active:false,
+                timeout:3000,
+                success:true
+            },
+
             form: new Form({
                 password: '',
                 password_confirmation: ''

@@ -97,6 +97,23 @@
                 </v-container>
             </v-form>
         </v-card>
+
+        <v-snackbar
+                v-model="infoSnackbar.active"
+                :timeout="infoSnackbar.timeout"
+                :color="infoSnackbar.success ? 'success' : 'error'"
+                top
+                >
+            {{ infoSnackbar.success ? 'Successfully saved' : 'Somethings went wrong :( Try again later'}}
+            <v-btn
+                    flat
+                    dark
+                    @click="infoSnackbar.active = false"
+            >
+                <v-icon>close</v-icon>
+            </v-btn>
+        </v-snackbar>
+
     </v-flex>
 </template>
 
@@ -117,6 +134,12 @@
             tile: true,
             size: 140,
             changeActive: false,
+
+            infoSnackbar:{
+                active:false,
+                timeout:3000,
+                success:true
+            },
 
             title: "Image Upload",
             dialog: false,
@@ -158,22 +181,33 @@
                 try{
                     const { data } = await this.form.patch('/settings/profile')
                     this.$store.dispatch('auth/updateUser', { user: data })
+                    this.infoSnackbar.success = true
+                    this.infoSnackbar.active = true
                 }catch (e) {
                     this.formErrors = e.response.data.errors
+                    this.infoSnackbar.success = false
+                    this.infoSnackbar.active = true
                     setTimeout(()=>{
                         this.formErrors = {}
                     },6000);
                 }
             },
             async updateAvatare(image) {
-                const foobar = await this.$axios.$post('/user/store/avatar', this.formData, {
-                        headers: {
-                            'accept': 'application/json',
-                            'Accept-Language': 'en-US,en;q=0.8',
-                            'Content-Type': `multipart/form-data; boundary=${this.formData._boundary}`,
+                try {
+                    const foobar = await this.$axios.$post('/user/store/avatar', this.formData, {
+                            headers: {
+                                'accept': 'application/json',
+                                'Accept-Language': 'en-US,en;q=0.8',
+                                'Content-Type': `multipart/form-data; boundary=${this.formData._boundary}`,
+                            }
                         }
-                    }
-                )
+                    )
+                    this.infoSnackbar.success = true
+                    this.infoSnackbar.active = true
+                }catch (e) {
+                    this.infoSnackbar.success = false
+                    this.infoSnackbar.active = true
+                }
             },
             pickFile() {
                 this.$refs.image.click()

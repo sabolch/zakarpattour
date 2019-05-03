@@ -73,6 +73,24 @@
                 </v-container>
             </v-form>
         </v-card>
+
+
+        <v-snackbar
+                v-model="infoSnackbar.active"
+                :timeout="infoSnackbar.timeout"
+                :color="infoSnackbar.success ? 'success' : 'error'"
+                top
+        >
+            {{ infoSnackbar.success ? 'Successfully saved' : 'Somethings went wrong :( Try again later'}}
+            <v-btn
+                    flat
+                    dark
+                    @click="infoSnackbar.active = false"
+            >
+                <v-icon>close</v-icon>
+            </v-btn>
+        </v-snackbar>
+
     </v-flex>
 </template>
 
@@ -94,6 +112,12 @@
             show2: false,
             show3: false,
 
+            infoSnackbar:{
+                active:false,
+                timeout:3000,
+                success:true
+            },
+
             form: new Form({
                 oldPassword: '',
                 password: '',
@@ -107,8 +131,12 @@
                 try {
                     await this.form.patch('/settings/password')
                     this.form.reset()
+                    this.infoSnackbar.success = true
+                    this.infoSnackbar.active = true
                 } catch (e) {
-                    console.log(e.response)
+                    // console.log(e.response)
+                    this.infoSnackbar.success = false
+                    this.infoSnackbar.active = true
                 }
             },
             async destroy() {
@@ -118,7 +146,9 @@
                     // Redirect to login.
                     this.$router.push({name: 'login'})
                 } catch (e) {
-                    console.log(e.response)
+                    // console.log(e.response)
+                    this.infoSnackbar.success = false
+                    this.infoSnackbar.active = true
                 }
             }
         }
