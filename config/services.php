@@ -57,4 +57,10 @@ return [
         'client_secret' => env('TWITTER_CLIENT_SECRET'),
     ],
 
+//     google recapcha
+    'recaptcha' => [
+        'url' => env('G_RECAPTCHA_VERIFY_URL'),
+        'secret_key' => env('G_RECAPTCHA_SECRET')
+    ]
+
 ];

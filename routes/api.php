@@ -89,7 +89,7 @@ Route::group(['prefix' => 'marker'], function () {
     Route::get('/trashed', 'MarkerController@trashed');
     Route::delete('/remove', 'MarkerController@destroyForever');
 });
-
+// Favourite
 Route::group(['prefix' => 'favourite'], function () {
     Route::put('/add/marker', 'FavouritesController@createMarker');
     Route::put('/add/tour', 'FavouritesController@createTour');
@@ -97,6 +97,15 @@ Route::group(['prefix' => 'favourite'], function () {
     Route::get('/markers', 'FavouritesController@arkers');
     Route::delete('/remove/marker', 'FavouritesController@deleteMarker');
     Route::delete('/remove/tour', 'FavouritesController@deleteTour');
+});
+
+// Contact us
+Route::group(['prefix' => 'contact'], function () {
+    Route::put('/store', 'MarkerController@store');
+    Route::delete('/trash', 'MarkerController@delete');
+    Route::get('/', 'MarkerController@index');
+    Route::get('/archive', 'MarkerController@archive');
+    Route::post('/check', 'MarkerController@check');
 });
 
 //Admin

@@ -71,7 +71,6 @@
                                                            right
                                                            @click="sendMail"
                                                            :loading="form.busy"
-                                                           :disabled="!form.busy"
                                                     >Send Email
                                                     </v-btn>
                                                 </v-form>
@@ -125,9 +124,16 @@
         },
         methods: {
             async sendMail() {
-                this.form.recaptchaToken = await this.$recaptcha.getResponse()
-                // Send mail
-                console.log('Hello');
+                try{
+                    this.form.recaptchaToken = await this.$recaptcha.getResponse()
+
+                    await this.form.put('/contact/store')
+
+                    this.form.reset()
+                }catch (e) {
+                    console.log(e)
+                }
+
             },
 
             setLanguage(locale) {

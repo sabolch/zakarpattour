@@ -36,9 +36,9 @@ class LoginController extends Controller
         if(strlen($g_token) > 0) {
             // create https client for check the token
             $client = new Client();
-            $response = $client->post("https://www.google.com/recaptcha/api/siteverify", [
+            $response = $client->post(config('services.recaptcha.url'), [
                 'form_params' => array(
-                    'secret' => '6LfeIXYUAAAAADT7qhrqb5jNZVBh1qTcJ4uau2Oj',
+                    'secret' => config('services.recaptcha.secret_key'),
                     'response' => $g_token
                 )
             ]);

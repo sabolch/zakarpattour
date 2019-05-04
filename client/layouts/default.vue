@@ -135,7 +135,7 @@
                     offset-y
             >
                 <v-btn slot="activator" icon>
-                    <span :class="['flag-icon','flag-icon-gb','flag-language']"/>
+                    <span :class="['lang-icon','flag-icon','flag-icon-'+ getLang, 'flag-language']" />
                 </v-btn>
 
                 <v-list>
@@ -248,6 +248,16 @@
         computed: {
             target() {
                 return 0
+            },
+            getLang() {
+              switch (this.$i18n.locale) {
+                  case 'hu':
+                      return 'hu'
+                  case  'uk':
+                      return 'ua'
+                  default:
+                      return 'gb'
+              }
             },
             options() {
                 return {

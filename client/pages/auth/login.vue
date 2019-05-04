@@ -99,7 +99,8 @@
         },
         methods: {
             onError(error) {
-                console.log('ReCaptcha erorr:', error)
+                // console.log('ReCaptcha erorr:', error)
+                this.ErrList.push(error)
             },
             async login() {
                 try {
@@ -121,7 +122,9 @@
                     // this.$router.go(-1)
                     this.$router.push({name: 'settings.profile'})
                 } catch (e) {
-                    this.ErrList.push(e.response.data.message)
+                    if(e.response){
+                        this.ErrList.push(e.response.data.message)
+                    }
                 }
                 // this.$refs.recaptcha.reset()
 

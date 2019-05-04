@@ -10,8 +10,18 @@
             </v-toolbar>
             <v-card-text class="mb-0 pb-0">
               <v-form @submit.prevent="send" @keydown="form.onKeydown($event)">
-                <alert-success :form="form" :message="status"/>
-                <v-text-field v-model="form.email" prepend-icon="mail" name="email" label="Email"
+                <v-alert
+                        :value="alert.status"
+                        :type="alert.type"
+                >
+                  {{ alert.status }}
+                </v-alert>
+                <v-text-field v-model="form.email" prepend-icon="mail" name="email"
+                              v-validate="'required|email|max:60'"
+                              :error-messages="errors.collect('email')"
+                              data-vv-name="email"
+                              clearable
+                              label="Email"
                               type="text"></v-text-field>
                         </v-form>
             </v-card-text>
@@ -42,6 +52,8 @@
 
 <script>
 import Form from 'vform'
+import hu from 'vee-validate/dist/locale/hu';
+import uk from 'vee-validate/dist/locale/uk';
 
 export default {
   head () {
@@ -50,7 +62,11 @@ export default {
 
   data: () => ({
     expand:false,
-    status: '',
+    alert:{
+      status: '',
+      type:'success',
+      timeout:6000,
+    },
     form: new Form({
       email: ''
     })
@@ -58,15 +74,49 @@ export default {
 
   methods: {
     async send () {
-      const { data } = await this.form.post('/password/email')
-
-      this.status = data.status
-
-      this.form.reset()
+      try{
+        const { data } = await this.form.post('/password/email')
+        this.alert.type = 'success'
+        this.alert.status = data.status
+        setTimeout(()=>{
+          this.alert.status = ''
+        },this.alert.timeout)
+        this.form.reset()
+      }catch (e) {
+        this.alert.type = 'error'
+        this.alert.status = 'Somethings went wrong! :( Be sure the email address already registered'
+        setTimeout(()=>{
+          this.alert.status = ''
+        },this.alert.timeout)
+        // console.log(e)
+      }
+    },
+    setLanguage(locale) {
+      switch (locale) {
+        case 'en':
+          this.$validator.localize(locale)
+          break
+        case 'uk':
+          this.$validator.localize(locale, uk)
+          break
+        case 'hu':
+          this.$validator.localize(locale, hu)
+          break
+      }
+    },
+  },
+  watch: {
+    '$nuxt.$i18n.locale': {
+      handler(value) {
+        this.setLanguage($nuxt.$i18n.locale)
+      },
+      deep: true
     }
   },
-  mounted () {
+  mounted() {
+    this.setLanguage($nuxt.$i18n.locale)
     this.expand = true
-  }
+  },
+
 }
 </script>

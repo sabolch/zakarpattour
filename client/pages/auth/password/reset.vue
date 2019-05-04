@@ -1,83 +1,137 @@
 <template>
-  <div class="row">
-    <div class="col-lg-8 m-auto">
-      <card :title="$t('reset_password')">
-        <form @submit.prevent="reset" @keydown="form.onKeydown($event)">
-          <alert-success :form="form" :message="status"/>
+    <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+            <v-flex xs12 sm8 md4>
+                <v-slide-y-transition>
+                    <v-card class="elevation-12" v-show="expand">
+                        <v-toolbar color="primary">
+                            <v-toolbar-title class="white--text">{{$t('reset_password')}}</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
+                        <v-card-text class="mb-0 pb-0">
+                            <v-form @submit.prevent="reset" @keydown="form.onKeydown($event)">
+                                <v-alert
+                                        :value="alert.status"
+                                        :type="alert.type"
+                                >
+                                    {{ alert.status }}
+                                </v-alert>
+                                <alert-success :form="form" :message="status"/>
 
-          <!-- Email -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email"
-                     class="form-control" readonly>
-              <has-error :form="form" field="email"/>
-            </div>
-          </div>
+                                <v-text-field v-model="form.email" prepend-icon="mail" name="email"
+                                              v-validate="'required|email|max:60'"
+                                              :error-messages="errors.collect('email')"
+                                              data-vv-name="email"
+                                              disabled
+                                              label="Email"
+                                              type="text"></v-text-field>
+                                <v-text-field v-model="form.password" id="password" prepend-icon="lock" name="password"
+                                              ref="password"
+                                              label="Password"
+                                              :type="showPassword ? 'text' : 'password'"
+                                              :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                                              @click:append="showPassword = !showPassword"
+                                              v-validate="'required|min:7|max:15'"
+                                              :error-messages="errors.collect('password')"
+                                              data-vv-name="password"
 
-          <!-- Password -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password" name="password"
-                     class="form-control">
-              <has-error :form="form" field="password"/>
-            </div>
-          </div>
+                                ></v-text-field>
+                                <v-text-field v-model="form.password_confirmation" id="password_confirmation"
+                                              prepend-icon="repeat" name="password_confirmation"
+                                              label="Password Confirmation"
+                                              :type="showConfPassword ? 'text' : 'password'"
+                                              :append-icon="showConfPassword ? 'visibility_off' : 'visibility'"
+                                              @click:append="showConfPassword = !showConfPassword"
+                                              v-validate="'confirmed:password'"
+                                              :error-messages="errors.collect('password_confirmation')"
+                                              data-vv-name="password_confirmation"
+                                ></v-text-field>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions class="mt-0 pt-0">
+                            <v-layout row wrap>
 
-          <!-- Password Confirmation -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('confirm_password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" type="password" name="password_confirmation"
-                     class="form-control">
-              <has-error :form="form" field="password_confirmation"/>
-            </div>
-          </div>
+                                <v-flex xs12>
+                                    <v-layout row wrap>
+                                        <v-flex class="text-xs-right">
+                                            <v-btn
+                                                    color="primary"
+                                                    @click="reset"
+                                                    :loading="form.busy"
+                                            >
+                                                {{ $t('reset_password') }}
+                                            </v-btn>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-flex>
+                            </v-layout>
+                        </v-card-actions>
+                    </v-card>
+                </v-slide-y-transition>
+            </v-flex>
+        </v-layout>
+    </v-container>
 
-          <!-- Submit Button -->
-          <div class="form-group row">
-            <div class="col-md-9 ml-md-auto">
-              <v-button :loading="form.busy">{{ $t('reset_password') }}</v-button>
-            </div>
-          </div>
-        </form>
-      </card>
-    </div>
-  </div>
+
 </template>
 
 <script>
-import Form from 'vform'
+    import Form from 'vform'
 
-export default {
-  head () {
-    return { title: this.$t('reset_password') }
-  },
+    export default {
+        head() {
+            return {title: this.$t('reset_password')}
+        },
 
-  data: () => ({
-    status: '',
-    form: new Form({
-      token: '',
-      email: '',
-      password: '',
-      password_confirmation: ''
-    })
-  }),
+        data: () => ({
+            expand:true,
+            status: '',
+            showPassword:false,
+            showConfPassword:false,
+            alert:{
+                status: '',
+                type:'success',
+                timeout:6000,
+            },
 
-  created () {
-    this.form.email = this.$route.query.email
-    this.form.token = this.$route.params.token
-  },
+            form: new Form({
+                token: '',
+                email: '',
+                password: '',
+                password_confirmation: ''
+            })
+        }),
 
-  methods: {
-    async reset () {
-      const { data } = await this.form.post('/password/reset')
+        created() {
+            this.form.email = this.$route.query.email
+            this.form.token = this.$route.params.token
+        },
 
-      this.status = data.status
+        methods: {
+            async reset() {
 
-      this.form.reset()
+                try{
+                    const {data} = await this.form.post('/password/reset')
+
+                    this.status = data.status
+                    this.form.reset()
+
+                    this.alert.type = 'success'
+                    this.alert.status = data.status
+                    setTimeout(()=>{
+                        this.alert.status = ''
+                    },this.alert.timeout)
+                    this.form.reset()
+                }catch (e) {
+                    this.alert.type = 'error'
+                    this.alert.status = 'Somethings went wrong! :( Be sure the access token is valid'
+                    setTimeout(()=>{
+                        this.alert.status = ''
+                    },this.alert.timeout)
+                    // console.log(e)
+                }
+
+            }
+        }
     }
-  }
-}
 </script>
