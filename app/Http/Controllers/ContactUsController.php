@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ContactUsResource;
 use App\Models\ContactUs;
-use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use GuzzleHttp\Client;
 
 class ContactUsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['admin'])->except('store');
-        $this->user = auth()->user();
+//        $this->middleware(['auth:admin'])->except('store','index');
     }
 
     /**
@@ -24,7 +25,7 @@ class ContactUsController extends Controller
     public function index()
     {
         $search_query = Input::has('q') ? Input::get('q') : false;
-        $per_page = Input::has('limit') ? Input::get('limit') : 10;
+        $per_page = Input::has('per_page') ? Input::get('per_page') : 10;
         $order_by = Input::has('order') ? Input::get('order') : ['created_at','desc'];
 
         return  ContactUsResource::collection(ContactUs::pagination($search_query, $order_by,$per_page));
@@ -33,7 +34,7 @@ class ContactUsController extends Controller
     public function archive()
     {
         $search_query = Input::has('q') ? Input::get('q') : false;
-        $per_page = Input::has('limit') ? Input::get('limit') : 10;
+        $per_page = Input::has('per_page') ? Input::get('per_page') : 10;
         $order_by = Input::has('order') ? Input::get('order') : ['created_at','desc'];
 
         return  ContactUsResource::collection(ContactUs::archivePagination($search_query, $order_by,$per_page));
@@ -48,6 +49,7 @@ class ContactUsController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(),
             [
                 'name' => 'required',
@@ -64,9 +66,8 @@ class ContactUsController extends Controller
                 'message.required' => 'Message is required',
                 'recaptchaToken.required' => 'RecaptchaToken is required!',
             ]);
-
         $g_token = $request->input('recaptchaToken');
-        // create https client for check the token
+//         create https client for check the token
         $client = new Client();
         $response = $client->post(config('services.recaptcha.url'), [
             'form_params' => array(
@@ -82,7 +83,6 @@ class ContactUsController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-
         $data = $validator->valid();
 
         $message = new ContactUs();
@@ -96,7 +96,7 @@ class ContactUsController extends Controller
 
         return response()->json([
             'success' => true,
-//            'data'=> $message,
+            'data'=> config('services.recaptcha.secret_key'),
         ], 201);
     }
 

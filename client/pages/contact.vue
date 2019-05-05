@@ -82,6 +82,22 @@
                         </v-container>
                     </v-card>
                 </v-slide-y-transition>
+
+                <v-snackbar
+                        v-model="infoSnackbar.active"
+                        :timeout="infoSnackbar.timeout"
+                        :color="infoSnackbar.success ? 'success' : 'error'"
+                        bottom
+                >
+                    {{ infoSnackbar.success ? 'Message sent successfully' : 'Somethings went wrong :( Try again later'}}
+                    <v-btn
+                            flat
+                            dark
+                            @click="infoSnackbar.active = false"
+                    >
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                </v-snackbar>
             </v-flex>
         </v-layout>
     </v-container>
@@ -107,6 +123,11 @@
                 message: '',
                 recaptchaToken:''
             }),
+            infoSnackbar:{
+                active:false,
+                timeout:3000,
+                success:true
+            },
             remember: false,
         }),
         watch: {
@@ -125,13 +146,20 @@
         methods: {
             async sendMail() {
                 try{
+
                     this.form.recaptchaToken = await this.$recaptcha.getResponse()
 
                     await this.form.put('/contact/store')
 
                     this.form.reset()
+                    this.errors.clear()
+
+                    this.infoSnackbar.success = true
+                    this.infoSnackbar.active = true
+
                 }catch (e) {
-                    console.log(e)
+                    this.infoSnackbar.success = false
+                    this.infoSnackbar.active = true
                 }
 
             },

@@ -14,7 +14,7 @@ class ContactUs extends Model
     {
         if ($search_query) {
             return ContactUs::where('checked', false)
-                ->where('title', 'LIKE', '%' . $search_query . '%')
+                ->where('name', 'LIKE', '%' . $search_query . '%')
                 ->orderBy($order_by[0], $order_by[1])
                 ->paginate($per_page);
         }
@@ -27,7 +27,7 @@ class ContactUs extends Model
     {
         if ($search_query) {
             return ContactUs::where('checked', true)
-                ->where('title', 'LIKE', '%' . $search_query . '%')
+                ->where('name', 'LIKE', '%' . $search_query . '%')
                 ->orderBy($order_by[0], $order_by[1])
                 ->paginate($per_page);
         }

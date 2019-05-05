@@ -47,6 +47,8 @@ const AdminMarkerCategory = () => import('~/pages/admin/marker/adminMarkerCatego
 const AdminTour = () => import('~/pages/admin/tour/adminTourIndex').then(m => m.default || m)
 const AdminTourCategory = () => import('~/pages/admin/tour/adminTourCategory').then(m => m.default || m)
 
+const NotificationsMessage = () => import('~/pages/admin/notifications/contactUsMessage').then(m => m.default || m)
+
 
 const routes = [
 
@@ -100,6 +102,8 @@ const routes = [
 
   { path: '/admin/tour', name: 'admin.tour', component: AdminTour},
   { path: '/admin/category/tour', name: 'admin.tour.category', component: AdminTourCategory },
+
+  { path: '/admin/notifications/message', name: 'admin.notifications.message', component: NotificationsMessage },
 ]
 
 export function createRouter () {

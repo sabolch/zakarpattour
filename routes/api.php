@@ -101,11 +101,11 @@ Route::group(['prefix' => 'favourite'], function () {
 
 // Contact us
 Route::group(['prefix' => 'contact'], function () {
-    Route::put('/store', 'MarkerController@store');
-    Route::delete('/trash', 'MarkerController@delete');
-    Route::get('/', 'MarkerController@index');
-    Route::get('/archive', 'MarkerController@archive');
-    Route::post('/check', 'MarkerController@check');
+    Route::put('/store', 'ContactUsController@store');
+    Route::delete('/trash', 'ContactUsController@delete');
+    Route::get('/', 'ContactUsController@index');
+    Route::get('/archive', 'ContactUsController@archive');
+    Route::post('/check', 'ContactUsController@check');
 });
 
 //Admin
