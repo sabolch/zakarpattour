@@ -7,8 +7,10 @@ use App\Models\ContactUs;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Client;
+use Snowfire\Beautymail\Beautymail;
 
 class ContactUsController extends Controller
 {
@@ -190,5 +192,53 @@ class ContactUsController extends Controller
     public function destroy(Request $request)
     {
         //
+    }
+
+    public function reply(Request $request){
+//        try{
+            $validator = Validator::make($request->all(),
+                [
+                    'to' => 'required|email',
+                    'from' => 'required|email',
+                    'toName' => 'required',
+                    'subject' => 'required',
+                    'question' => 'required',
+                    'message' => 'required',
+
+                ], [
+                    'to.required' => 'To is required',
+                    'to.email' => 'To must be a valid email',
+                    'from.required' => 'From is required',
+                    'from.email' => 'From must be a valid email',
+                    'toName.required' => 'toName is required',
+                    'subject.required' => 'Subject is required',
+                    'question.required' => 'Question is required',
+                    'message.required' => 'Message is required',
+                ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+            $data = $validator->valid();
+
+            $beautymail = app()->make(Beautymail::class);
+            $beautymail->send('emails.reply', ['data'=>$data['message'],'name'=>$data['toName'],'question'=>$data['question']], function ($message) use ($data) {
+                $message
+                    ->from($data['from'])
+                    ->to($data['to'], $data['toName'])
+                    ->subject( config('app.name') . ' - ' .  $data['subject'] );
+            });
+//
+//            Mail::send('emails.reply', ['data'=>$data['message'],'name'=>$data['toName']], function ($message) use ($data) {
+//                $message->from($data['from'], config('app.name'));
+//                $message->to($data['to'])->subject($data['subject']);
+//            });
+
+            return response()->json(['success' => true], 200);
+
+//        }catch (\Exception $e){
+//            return response()->json(['success' => false], 400);
+//        }
+
     }
 }

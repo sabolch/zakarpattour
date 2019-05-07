@@ -6,6 +6,67 @@
     "about": "About Us",
     "contact": "Contact"
   },
+
+  "index": {
+    "title": "Transcarpathian tours",
+    "subtitle": "Sights, natural and historical monuments!",
+    "tiles": [
+      "Landscape","Buildings","Hotels","Culinary","Tours","Local activity"
+    ],
+    "subtitles": {
+      "recommended_slights": "Recommended slights",
+      "recommended_tours": "Recommended tours",
+      "popular_slights": "Popular slights",
+      "popular_tours": "Popular tours"
+    }
+  },
+
+  "contact_us": {
+    "title":"Contact Us"
+  },
+
+  "form": {
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+
+    "search" : "Search",
+    "sort_by": "Sort By",
+    "category": "Category",
+    "select": "Select",
+
+    "data_panel":{
+      "hint": "Filtering options",
+      "title": "Filtering results",
+      "rate": "Rate",
+      "price": "Price",
+      "start_date": "Start date",
+      "end_date": "End date"
+    }
+  },
+
+  "btns": {
+    "read_more" : "Read more",
+    "all" : "All",
+    "send": "Send",
+    "cancel": "Cancel"
+  },
+
+
+  "footer": {
+    "tiles": [
+      {"title": "Great programs","text": "You can choose from 7,000+ sights, tours and activities"},
+      {"title": "Booking","text": "Avoid queuing and book your programs"},
+      {"title": "Discover","text": "Transcarpathia has diverse natural features and history"}
+    ],
+    "title": "TouristRoutes. All rights reserved."
+  },
+
+  "errors": {
+    "something": "Something goes wrong :("
+  },
+
   "ok": "Ok",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",

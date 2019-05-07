@@ -11,8 +11,8 @@
                     Pages
                 </v-subheader>
                 <v-divider/>
-                <template v-for="item in items">
-                    <v-list-tile  exact :key="item.text" :to="{name: `${item.href}`}">
+                <template>
+                    <v-list-tile v-for="item in items" :key="item.text" exact :to="{name: `${item.href}`}" >
                         <v-list-tile-action  >
                             <v-icon class="icon-fix" medium>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
@@ -57,8 +57,8 @@
                     <span class="hidden-sm-and-down">{{ appName }}</span>
                 </router-link>
             </v-toolbar-title>
-            <v-toolbar-items class="hidden-sm-and-down"  v-for="item in items" >
-                <v-btn :key="item.text" :to="{name: `${item.href}`}" exact flat> {{ $t(item.text) }}</v-btn>
+            <v-toolbar-items class="hidden-sm-and-down" >
+                <v-btn v-for="(item,key) in items" :key="key" :to="{name: `${item.href}`}" exact flat> {{ $t(item.text) }}</v-btn>
             </v-toolbar-items>
             <v-spacer/>
             <v-btn icon :to="{name: 'user.favorites'}">

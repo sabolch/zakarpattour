@@ -214,12 +214,65 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn outline color="green darken-1" flat @click="showdialog = false">Reply</v-btn>
+                    <v-btn outline color="green darken-1" flat @click="openReplyDialog">Reply</v-btn>
                     <v-btn outline color="blue darken-1" flat @click="showdialog = false">Close</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
         <!--end showMessage dialog-->
+
+        <!--replydialog dialog-->
+        <v-dialog v-model="replydialog" persistent max-width="600px">
+            <v-card>
+                <v-card-title>
+                    <v-layout justify-center pa-0 ma-0>
+                        <v-flex xs12 class="headline">
+                            <v-card dark class="pa-3" color="primary">Reply to user message</v-card>
+                        </v-flex>
+                    </v-layout>
+                </v-card-title>
+                <v-card-text>
+                    <v-container grid-list-md pa-0 ma-0>
+                        <v-layout wrap class="text-xs-justify">
+                            <v-flex xs12>
+                                <v-text-field
+                                        :value="replyForm.to"
+                                        label="From"
+                                        readonly
+                                ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12>
+                                <v-textarea
+                                        readonly
+                                        box
+                                        label="Message"
+                                        :value="form.message"
+                                ></v-textarea>
+                            </v-flex>
+                            <v-flex xs12>
+                                <v-text-field
+                                        v-model="replyForm.subject"
+                                        label="Reply subject"
+                                ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12>
+                                <v-textarea
+                                        v-model="replyForm.message"
+                                        box
+                                        label="Reply to message"
+                                ></v-textarea>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn outline color="red darken-1" :loading="replyForm.busy" flat @click="replyToMessage">Send</v-btn>
+                    <v-btn outline color="blue darken-1" flat @click="replydialog = false">Close</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <!--end replydialog dialog-->
     </v-container>
 </template>
 
@@ -266,6 +319,8 @@
                 checkdialog:false,
                 showdialog: false,
 
+                replydialog:false,
+
                 formObj: {
                     id: '',
                     name: '',
@@ -277,6 +332,15 @@
                     name: '',
                     subject:'',
                     message:'',
+                }),
+
+                replyForm : new Form({
+                    from:'admin@zakarpattour.com',
+                    to:'',
+                    toName:'',
+                    question:'',
+                    subject:'',
+                    message:''
                 }),
 
                 headers: [
@@ -340,6 +404,25 @@
                 this.checkdialog = false
             },
 
+            async replyToMessage(){
+                try{
+                    console.log(this.replyForm)
+                   const {data} = await this.replyForm.post('contact/reply')
+
+                    this.replyForm = new Form({
+                        from:'admin@zakarpattour.com',
+                        to:'',
+                        toName:'',
+                        subject:'',
+                        question:'',
+                        message:''
+                    })
+                    this.replydialog = false
+                }catch (e) {
+                    console.log(e)
+                }
+            },
+
             doPaginate() {
                 if (this.page == 1) this.responseMessage()
                 this.page = 1
@@ -374,6 +457,15 @@
             trashing(item) {
                 this.form = new Form(item)
                 this.dialog = true
+            },
+
+
+            openReplyDialog(){
+                this.replyForm.to = this.form.email
+                this.replyForm.toName = this.form.name
+                this.replyForm.question = this.form.message
+
+                this.replydialog = true
             }
         },
     }

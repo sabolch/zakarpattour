@@ -168,7 +168,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 //        Image
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+        // Beautymail emails
+        Snowfire\Beautymail\BeautymailServiceProvider::class,
     ],
 
     /*

@@ -6,6 +6,34 @@
     "about": "Rólunk",
     "contact": "Kapcsolat"
   },
+  "index": {
+    "title": "Kárpátaljai utazások",
+    "subtitle": "Látnivalók, természeti és történelmi emlékművek!",
+    "tiles": [
+      "Táj","Épületek","Szállodák","Kulinária","Utazások","Programok"
+    ],
+    "subtitles": {
+      "recommended_slights": "Kiemelt úti célok",
+      "recommended_tours": "Kiemelt túrák",
+      "popular_slights": "Népszerű úti célok",
+      "popular_tours": "Népszerű túrák"
+    }
+  },
+
+  "btns": {
+    "read_more" : "Olvass tovább",
+    "all" : "Mind"
+  },
+
+  "footer": {
+    "tiles": [
+      {"title": "Nagyszerű programok","text": "7 000+ látnivaló, túra és tevékenység közül választhat"},
+      {"title": "Foglaljon","text": "Kerülje el a sorban állást, és foglalja le programjait"},
+      {"title": "Fedezze fel","text": "Kárpátalja sokszínű természeti adotságait és történetét"}
+    ],
+    "title": "TouristRoutes. Minden jog fenntartva."
+  },
+
   "paralax": {
     "main": "Kárpátaljai utazások",
     "subtitle": "Визначні пам'ятки, природні та історичні пам'ятки!"

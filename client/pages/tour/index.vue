@@ -19,7 +19,7 @@
                                             outline
                                             v-model="Fsearch"
                                             clearable
-                                            label="Search ..."
+                                            :label="` ${$t('form.search')}..`"
                                             type="text"
                                             @keyup="keyupHandle"
 
@@ -32,7 +32,7 @@
                                             <v-icon slot="activator">
                                                 mdi-help-circle-outline
                                             </v-icon>
-                                            Search
+                                            $t('form.search')
                                         </v-tooltip>
                                         <v-fade-transition slot="append">
                                             <v-progress-circular
@@ -51,7 +51,7 @@
                                 </v-flex>
                                 <v-flex xs10 md10 lg4>
                                     <v-select
-                                            label="Sort By"
+                                            :label="$t('form.sort_by')"
                                             prepend-inner-icon="filter_list"
                                             :items="['All','Title']"
                                             outline
@@ -60,9 +60,12 @@
                                 </v-flex>
                                 <v-spacer class="hidden-md-and-down"></v-spacer>
                                 <v-flex xs2 md1 class="mb-4">
-                                    <v-btn flat outline @click="filters = !filters" active-class="">
-                                        <v-icon>tune</v-icon>
-                                    </v-btn>
+                                    <v-tooltip bottom>
+                                        <v-btn   slot="activator" flat outline @click="filters = !filters" active-class="">
+                                            <v-icon>tune</v-icon>
+                                        </v-btn>
+                                        <span>{{$t('form.data_panel.hint')}}</span>
+                                    </v-tooltip>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -118,7 +121,8 @@
                             <v-btn flat class="blue--text"
                                    :to="{name:'tour.show',params: {slug:item}}"
                                    outline
-                            >Read More
+                            >
+                                {{$t('btns.read_more')}}
                             </v-btn>
                         </v-card-actions>
 
@@ -155,7 +159,7 @@
                             <v-subheader class="font-weight-black headline text-xs-center">Filtering results
                             </v-subheader>
                             <v-divider></v-divider>
-                            <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Price</v-subheader>
+                            <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.price')}}</v-subheader>
                             <v-layout row pa-2>
                                 <v-flex shrink xs2>
                                     <v-text-field
@@ -190,7 +194,7 @@
                         </v-flex>
 
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Rate</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.rate')}}</v-subheader>
                         <v-layout row pa-2>
                             <v-flex shrink xs2>
                                 <v-text-field
@@ -223,7 +227,7 @@
                         </v-layout>
 
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Start date</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.start_date')}}</v-subheader>
                         <v-flex xs12>
                             <v-dialog
                                     ref="dialog1"
@@ -237,20 +241,19 @@
                                         slot="activator"
                                         class="mx-3"
                                         v-model="date"
-                                        label="Picker start date"
                                         prepend-inner-icon="event"
                                         readonly
                                 ></v-text-field>
                                 <v-date-picker v-model="date" :locale="$i18n.locale" scrollable>
                                     <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                                    <v-btn flat color="primary" @click="modal = false">{{ $t('btns.cancel') }}</v-btn>
                                     <v-btn flat color="primary" @click="$refs.dialog1.save(date)">OK</v-btn>
                                 </v-date-picker>
                             </v-dialog>
                         </v-flex>
 
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">End date</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{ $t('form.data_panel.end_date') }}</v-subheader>
                         <v-flex xs12>
                             <v-dialog
                                     ref="dialog"
@@ -264,13 +267,12 @@
                                         slot="activator"
                                         class="mx-3"
                                         v-model="date2"
-                                        label="Picker start date"
                                         prepend-inner-icon="event"
                                         readonly
                                 ></v-text-field>
                                 <v-date-picker v-model="date2" :locale="$i18n.locale" scrollable>
                                     <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
+                                    <v-btn flat color="primary" @click="modal2 = false">{{ $t('btns.cancel') }}</v-btn>
                                     <v-btn flat color="primary" @click="$refs.dialog.save(date2)">OK</v-btn>
                                 </v-date-picker>
                             </v-dialog>
@@ -282,7 +284,7 @@
                             <v-combobox
                                     v-model="types"
                                     :items="typeItems"
-                                    label="Select"
+                                    :label="$t('form.select')"
                                     hide-selected
                                     chips
                                     clearable
@@ -307,7 +309,7 @@
                         </v-flex>
 
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Sights</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('navbar.sights')}}</v-subheader>
                         <v-flex xs12>
                             <v-autocomplete
                                     v-model="select"
@@ -349,7 +351,7 @@
                     <v-flex>
                         <div class="display-1 font-weight-black">
                             <p class="display-3 font-weight-black">404</p>
-                            Something goes wrong :(
+                            {{ $t('errors.something') }}
                         </div>
                     </v-flex>
                 </v-layout>

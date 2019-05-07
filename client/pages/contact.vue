@@ -11,7 +11,7 @@
                                         <v-layout align-center ma-0 pa-0 class="text-xs-center">
                                             <v-flex xs12 justify-center>
                                                 <v-icon color="primary" size="300">contact_mail</v-icon>
-                                                <p class="display-2 font-weight-bold text--accent-4">Contact US</p>
+                                                <p class="display-2 font-weight-bold text--accent-4">{{$t('contact_us.title')}}</p>
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -25,7 +25,7 @@
                                                     <v-text-field
                                                             :counter="10"
                                                             box
-                                                            label="Name"
+                                                            :label="$t('form.name')"
                                                             required
                                                             v-model="form.name"
                                                             v-validate="'required|min:4|max:10'"
@@ -36,7 +36,7 @@
                                                     <v-text-field
                                                             :counter="40"
                                                             box
-                                                            label="Email"
+                                                            :label="$t('form.email')"
                                                             required
                                                             v-model="form.email"
                                                             clearable
@@ -47,7 +47,7 @@
                                                     <v-text-field
                                                             :counter="30"
                                                             box
-                                                            label="Subject"
+                                                            :label="$t('form.subject')"
                                                             required
                                                             v-model="form.subject"
                                                             clearable
@@ -58,7 +58,7 @@
                                                     <v-textarea
                                                             :counter="300"
                                                             box
-                                                            label="Message"
+                                                            :label="$t('form.message')"
                                                             v-model="form.message"
                                                             clearable
                                                             v-validate="'required|min:10|max:300'"
@@ -71,7 +71,8 @@
                                                            right
                                                            @click="sendMail"
                                                            :loading="form.busy"
-                                                    >Send Email
+                                                    >
+                                                        {{$t('btns.send')}}
                                                     </v-btn>
                                                 </v-form>
                                             </v-flex>

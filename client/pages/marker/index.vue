@@ -19,7 +19,7 @@
                                             outline
                                             v-model="Fsearch"
                                             clearable
-                                            label="Search ..."
+                                            :label="` ${$t('form.search')}..`"
                                             type="text"
                                             @keyup="keyupHandle"
 
@@ -32,7 +32,7 @@
                                             <v-icon slot="activator">
                                                 mdi-help-circle-outline
                                             </v-icon>
-                                            Search
+                                            $t('form.search')
                                         </v-tooltip>
                                         <v-fade-transition slot="append">
                                             <v-progress-circular
@@ -51,7 +51,7 @@
                                 </v-flex>
                                 <v-flex xs10 md10 lg4>
                                     <v-select
-                                            label="Sort By"
+                                            :label="$t('form.sort_by')"
                                             prepend-inner-icon="filter_list"
                                             :items="sortByItems"
                                             item-text="name"
@@ -62,19 +62,18 @@
                                 <v-spacer class="hidden-md-and-down"></v-spacer>
                                 <v-flex xs2 md1 class="mb-4">
                                     <v-tooltip bottom>
-
-                                    <v-btn   slot="activator" flat outline @click="filters = !filters" active-class="">
-
-                                        <v-icon>tune</v-icon>
-                                    </v-btn>
-                                        <span>{{$t('marker_filtering')}}</span>
+                                        <v-btn slot="activator" flat outline @click="filters = !filters"
+                                               active-class="">
+                                            <v-icon>tune</v-icon>
+                                        </v-btn>
+                                        <span>{{$t('form.data_panel.hint')}}</span>
                                     </v-tooltip>
                                 </v-flex>
                             </v-layout>
                         </v-container>
                     </v-card>
                 </v-flex>
-                <v-flex v-for="item in 4" :key="item" xs12 md6 lg3>
+                <v-flex v-for="item in 12" :key="item" xs12 md6 lg3>
                     <v-card class="my-1">
                         <v-img
                                 :src="'/images/Munkacs_vara.jpg'"
@@ -124,7 +123,8 @@
                             <v-btn flat class="blue--text"
                                    :to="{name:'sight.show',params: {slug:item}}"
                                    outline
-                            >Read More
+                            >
+                                {{$t('btns.read_more')}}
                             </v-btn>
                         </v-card-actions>
 
@@ -158,12 +158,15 @@
                 >
                     <v-list class="pa-1">
                         <v-flex>
-                            <v-subheader class="font-weight-black headline text-xs-center">Filtering results
+                            <v-subheader class="font-weight-black headline text-xs-center">
+                                {{ $t('form.data_panel.title') }}
                             </v-subheader>
                         </v-flex>
 
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Rate</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{
+                            $t('form.data_panel.rate') }}
+                        </v-subheader>
                         <v-layout row pa-2>
                             <v-flex shrink xs2>
                                 <v-text-field
@@ -196,12 +199,13 @@
                         </v-layout>
 
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Category</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{ $t('form.category') }}
+                        </v-subheader>
                         <v-flex xs12>
                             <v-combobox
                                     v-model="types"
                                     :items="typeItems"
-                                    label="Select"
+                                    :label="$t('form.select')"
                                     hide-selected
                                     chips
                                     clearable
@@ -225,7 +229,7 @@
                             </v-combobox>
                         </v-flex>
 
-                      </v-list>
+                    </v-list>
                 </v-navigation-drawer>
             </v-layout>
 
@@ -236,7 +240,7 @@
                     <v-flex>
                         <div class="display-1 font-weight-black">
                             <p class="display-3 font-weight-black">404</p>
-                            Something goes wrong :(
+                            {{ $t('errors.something') }}
                         </div>
                     </v-flex>
                 </v-layout>

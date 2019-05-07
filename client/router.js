@@ -5,7 +5,7 @@ import { scrollBehavior } from '~/utils'
 Vue.use(Router)
 
 const Home = () => import('~/pages/home').then(m => m.default || m)
-const Welcome = () => import('~/pages/FrontPage').then(m => m.default || m)
+const Welcome = () => import('~/pages/index').then(m => m.default || m)
 
 const Login = () => import('~/pages/auth/login').then(m => m.default || m)
 const Register = () => import('~/pages/auth/register').then(m => m.default || m)

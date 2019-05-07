@@ -106,6 +106,7 @@ Route::group(['prefix' => 'contact'], function () {
     Route::get('/', 'ContactUsController@index');
     Route::get('/archive', 'ContactUsController@archive');
     Route::post('/check', 'ContactUsController@check');
+    Route::post('/reply', 'ContactUsController@reply');
 });
 
 //Admin
