@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?4ct79g');
-  src:  url('fonts/icomoon.eot?4ct79g#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?4ct79g') format('truetype'),
-    url('fonts/icomoon.woff?4ct79g') format('woff'),
-    url('fonts/icomoon.svg?4ct79g#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ivlaye');
+  src:  url('fonts/icomoon.eot?ivlaye#iefix') format('embedded-opentype'),
+  url('fonts/icomoon.ttf?ivlaye') format('truetype'),
+  url('fonts/icomoon.woff?ivlaye') format('woff'),
+  url('fonts/icomoon.svg?ivlaye#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,15 +24,68 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.sb-facebook:before {
-  content: "\e900";
-}
+
+
 .sb-google:before {
-  content: "\e901";
+  content: "\ea88";
+}
+.sb-facebook:before {
+  content: "\ea91";
 }
 .sb-instagram:before {
-  content: "\e902";
+  content: "\ea92";
 }
 .sb-twitter:before {
-  content: "\e903";
+  content: "\ea96";
+}
+.sb-vk:before {
+  content: "\ea98";
+}
+.sb-github:before {
+  content: "\eab0";
+}
+.sb-windows:before {
+  content: "\eac2";
+}
+.sb-linkedin:before {
+  content: "\eaca";
+}
+.sb-stackoverflow:before {
+  content: "\ead0";
+}
+.sb-pinterest:before {
+  content: "\ead1";
+}
+
+.flag-icon-background {
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+.flag-icon {
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  width: 1.33333333em;
+  line-height: 1em;
+}
+.flag-icon:before {
+  content: "\00a0";
+}
+.flag-icon{
+  width: 1em;
+}
+
+.flag-icon-gb {
+  background-image: url(../flags/gb.svg);
+}
+
+.flag-icon-hu {
+  background-image: url(../flags/hu.svg);
+}
+
+.flag-icon-ua {
+  background-image: url(../flags/ua.svg);
 }

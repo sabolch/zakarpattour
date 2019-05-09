@@ -75,7 +75,7 @@
                     offset-y
             >
                 <v-btn slot="activator" icon>
-                    <span :class="['lang-icon','flag-icon','flag-icon-'+ getLang, 'flag-language']" />
+                    <v-icon class="flag-language flag-icon ">{{ `flag-icon-${getLang}` }}</v-icon>
                 </v-btn>
 
                 <v-list>
@@ -84,8 +84,10 @@
                             :key="i"
                             @click="changeLanguage(item)"
                     >
-                        <v-list-tile-title><span :class="['flag-icon','flag-icon-'+ (item == 'en' ? 'gb' : item)]"/> {{
-                            item.toUpperCase() }}
+                        <v-list-tile-title>
+                            <v-icon class="flag-icon ">{{ `flag-icon-${item}` }}</v-icon>
+
+                            {{item.toUpperCase() }}
                         </v-list-tile-title>
                     </v-list-tile>
                 </v-list>
@@ -196,7 +198,7 @@
                   case  'uk':
                       return 'ua'
                   default:
-                      return 'gb'
+                      return 'en'
               }
             },
             options() {
@@ -242,7 +244,6 @@
         box-shadow: none;
     }
     .flag-language{
-        font-size: 20px;
+        font-size: 30px;
     }
-
 </style>

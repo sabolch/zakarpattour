@@ -21,6 +21,8 @@ module.exports = {
         apiUrl: process.env.APP_URL || 'http://localhost:8000',
         appName: process.env.APP_NAME || 'Zakarpattour',
         appLocale: process.env.APP_LOCALE || 'en',
+        mapApiKey: process.env.GOOGLE_MAP_API_KEY || 'AIzaSyBZcUbHJ5REVnm-q98yKqSmpbWkKtmLSuE',
+        recaptchaKey: process.env.GOOGLE_RECAPTCHA_PUBLIC_KEY || '6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2',
 
         // Socials
         githubAuth: !!process.env.GITHUB_CLIENT_ID,
@@ -39,7 +41,7 @@ module.exports = {
                 content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui'
             },
             {name: 'mobile-web-app-capable', content: 'yes'},
-            {hid: 'description', name: 'description', content: 'Nuxt.js project'}
+            {hid: 'description', name: 'description', content: 'Zakarpattour'}
         ],
         link: [
             {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
@@ -52,12 +54,7 @@ module.exports = {
             {rel: 'stylesheet', href: '/css/sbicon.min.css'},
         ],
 
-        script: [
-            {src: `https://cdn.polyfill.io/v2/polyfill.min.js?features=${polyfills.join(',')}`},
-            {src: `/js/markerclusterer.js`},
-            {src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBZcUbHJ5REVnm-q98yKqSmpbWkKtmLSuE&libraries=places`},
-            {src: `https://www.google.com/recaptcha/api.js`, render: `explicit`, async: true, defer: true},
-        ]
+
     },
 
     loading: {color: '#ff000c'},
@@ -67,8 +64,8 @@ module.exports = {
     },
 
     css: [
-        'quill/dist/quill.snow.css',
-        'quill/dist/quill.core.css'
+        // 'quill/dist/quill.snow.css',
+        // 'quill/dist/quill.core.css'
         // { src: '~assets/sass/app.scss', lang: 'scss' }
 
     ],
@@ -104,8 +101,7 @@ module.exports = {
         ['@nuxtjs/recaptcha', {
             /* reCAPTCHA options */
             hideBadge: false,
-            siteKey: "6LfeIXYUAAAAACI0h2MIPpDZiJ9a-uAZwrVMsxJ2",
-            // siteKey: "6LdjB6EUAAAAAFY48-prG10DoKwLG4iDitlJBwBx",
+            siteKey: process.env.GOOGLE_RECAPTCHA_PUBLIC_KEY,
             version: 2
         }
         ]

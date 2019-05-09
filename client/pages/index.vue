@@ -11,11 +11,19 @@
 
                     <v-layout
                             align-center
-                            column
                             justify-center
+                            class="text-xs-center"
                     >
-                        <h1 class="display-3 font-weight-light mb-3">{{ $t('index.title') }}</h1>
-                        <h4 class="title">{{ $t('index.subtitle') }}</h4>
+                        <v-flex>
+                            <v-layout row wrap>
+                                <v-flex xs12 :class="[{'display-1': breakpoint},'pa-2',{'display-3': !breakpoint}]">
+                                    {{ $t('index.title') }}
+                                </v-flex>
+                                <v-flex xs12 :class="[{'subheading': breakpoint},'pa-2',{'title': !breakpoint}]">
+                                    {{ $t('index.subtitle') }}
+                                </v-flex>
+                            </v-layout>
+                        </v-flex>
                     </v-layout>
                     <v-layout
                             align-top
@@ -31,8 +39,8 @@
                     <v-layout row wrap>
                         <v-flex xs4 md2 v-for="(tile,index) in tiles" :key="tile.icon">
                             <v-card dark :color="tile.color" class="text-xs-center pa-2">
-                                <v-icon size="50">{{ tile.icon }}</v-icon>
-                                <p class="title mt-2">{{ $t(`index.tiles[${index}]`) }}</p>
+                                <v-icon :size="breakpoint ? 40 : 50">{{ tile.icon }}</v-icon><br>
+                                <div :class="[{'subtitle': breakpoint},'mt-2 mb-2',{'title': !breakpoint}]">{{ $t(`index.tiles[${index}]`) }}</div>
                             </v-card>
                         </v-flex>
                     </v-layout>
@@ -43,7 +51,7 @@
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold headline">{{ $t('index.subtitles.recommended_slights')
+                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.recommended_slights')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'sights'}" outline>
@@ -53,7 +61,8 @@
                         </v-container>
                     </v-card>
                 </v-flex>
-                <v-flex v-for="(item,index) in posts.recommended_slights" :key="`${item.image}-${index}-o`" xs12 md6 lg3>
+                <v-flex v-for="(item,index) in posts.recommended_slights" :key="`${item.image}-${index}-o`" xs12 md6
+                        lg3>
                     <v-card class="my-1">
                         <v-img
                                 :src="item.image"
@@ -127,7 +136,7 @@
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold headline">{{ $t('index.subtitles.recommended_tours')
+                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.recommended_tours')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'tours'}" outline>
@@ -219,7 +228,7 @@
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold headline">{{ $t('index.subtitles.popular_slights')
+                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.popular_slights')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'sights'}" outline>
@@ -309,7 +318,7 @@
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold headline">{{ $t('index.subtitles.popular_tours')
+                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.popular_tours')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'tours'}" outline>
@@ -385,7 +394,7 @@
                     <v-card dark class="text-xs-center indigo darken-4">
                         <v-flex xs12 pb-5 pt-5>
                             <v-layout row wrap justify-center>
-                                <v-flex xs3 v-for="(item,index) in footer" :key="item.icon">
+                                <v-flex xs12 md3 v-for="(item,index) in footer" :key="item.icon">
                                     <v-container fluid fill-height>
                                         <v-layout column>
                                             <v-flex xs12 align-center>
@@ -397,7 +406,7 @@
                                                 </v-card-text>
                                             </v-flex>
                                         </v-layout>
-                                        <v-divider v-if="item.divider" :vertical="true"></v-divider>
+                                        <v-divider class="hidden-md-and-down" v-if="item.divider" :vertical="true"></v-divider>
                                     </v-container>
                                 </v-flex>
                             </v-layout>
@@ -445,39 +454,41 @@
                 {icon: "shopping_cart", divider: true},
                 {icon: "explore", divider: false},
             ],
-            posts:{
-                recommended_slights : [
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'}
+            posts: {
+                recommended_slights: [
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'}
                 ],
-                recommended_tours : [
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'}
+                recommended_tours: [
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'}
                 ],
-                popular_slights : [
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'}
+                popular_slights: [
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'}
                 ],
-                popular_tours : [
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'},
-                    {image:'/images/Munkacs_vara.jpg'}
+                popular_tours: [
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'},
+                    {image: '/images/Munkacs_vara.jpg'}
                 ]
 
             }
 
         }),
-        //
-        // computed: mapGetters({
-        //     user: 'auth/user'
-        // }),
+
+        computed: {
+            breakpoint() {
+                return this.$vuetify.breakpoint.xs
+            }
+        },
         mounted() {
             window.$nuxt.$moment.locale('uk');
             this.datetime = window.$nuxt.$moment().locale(this.$i18n.locale).format('ll')
@@ -487,14 +498,7 @@
                 this.datetime = window.$nuxt.$moment().locale(value).format('ll')
             }
         },
-        methods: {
-            // async logout() {
-            //     // Log out the user.
-            //     await this.$store.dispatch('auth/logout')
-            //     // Redirect to login.
-            //     this.$router.push({name: 'login'})
-            // }
-        }
+        methods: {}
     }
 </script>
 <style lang="css">

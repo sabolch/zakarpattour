@@ -177,6 +177,11 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
+        head: {
+            script: [
+                {src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAP_API_KEY}&libraries=places`,body: true},
+            ]
+        },
 
         async asyncData ({ params, $axios, $router }) {
             // try {

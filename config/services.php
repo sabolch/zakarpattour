@@ -59,8 +59,8 @@ return [
 
 //     google recapcha
     'recaptcha' => [
-        'url' => env('G_RECAPTCHA_VERIFY_URL'),
-        'secret_key' => env('G_RECAPTCHA_SECRET')
+        'url' => env('GOOGLE_RECAPTCHA_URL'),
+        'secret_key' => env('GOOGLE_RECAPTCHA_SECRET_KEY')
     ]
 
 ];

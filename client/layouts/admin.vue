@@ -12,21 +12,20 @@
                 hide-overlay
                 app
         >
-            <v-list class="pa-1 indigo darken-2" dark >
+            <v-list class="pa-1">
                 <v-list-tile v-if="primaryDrawer.mini" @click.stop="primaryDrawer.mini = !primaryDrawer.mini">
                     <v-list-tile-action>
                         <v-icon>chevron_right</v-icon>
                     </v-list-tile-action>
                 </v-list-tile>
 
-
                 <v-list-tile avatar tag="div">
                     <v-list-tile-avatar>
-                        <v-icon medium>dashboard</v-icon>
+                        <img src="https://randomuser.me/api/portraits/men/85.jpg">
                     </v-list-tile-avatar>
 
                     <v-list-tile-content>
-                        <v-list-tile-title>Dashboard</v-list-tile-title>
+                        <v-list-tile-title>John Leider</v-list-tile-title>
                     </v-list-tile-content>
 
                     <v-list-tile-action>
@@ -35,26 +34,68 @@
                         </v-btn>
                     </v-list-tile-action>
                 </v-list-tile>
-
             </v-list>
 
+            <v-list dense>
 
-            <v-list class="pt-0" dense>
-                <v-divider light></v-divider>
+                <template v-for="item in items">
+                    <v-layout
+                            row
+                            v-if="item.heading"
+                            align-center
+                            :key="item.heading"
+                    >
+                        <v-flex xs6>
+                            <v-subheader v-if="item.heading">
+                                {{ item.heading }}
+                            </v-subheader>
+                        </v-flex>
+                        <v-flex xs6 class="text-xs-center">
+                            <a href="#!" class="body-2 black--text">EDIT</a>
+                        </v-flex>
+                    </v-layout>
+                    <v-list-group
+                            v-else-if="item.children"
+                            v-model="item.model"
+                            :key="item.text"
+                            :prepend-icon="item.model ? item.icon : item['icon-alt']"
+                            append-icon=""
+                    >
+                        <v-list-tile slot="activator">
+                            <v-list-tile-content>
+                                <v-list-tile-title>
+                                    {{ item.text }}
+                                </v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
 
-                <v-list-tile
-                        v-for="item in items"
-                        :key="item.title"
-                        :to="{name:item.href}"
-                >
-                    <v-list-tile-action>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-tile-action>
-
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+                        <v-list-tile
+                                v-for="(child, i) in item.children"
+                                :key="i"
+                                @click=""
+                                :to="{name: child.href}"
+                        >
+                            <v-list-tile-action v-if="child.icon">
+                                <v-icon>{{ child.icon }}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>
+                                    {{ child.text }}
+                                </v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </v-list-group>
+                    <v-list-tile v-else @click="" :key="item.text" :to="{name: item.href}">
+                        <v-list-tile-action >
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                {{ item.text }}
+                            </v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </template>
             </v-list>
         </v-navigation-drawer>
         <v-toolbar :clipped-left="primaryDrawer.clipped" app dark absolute color="indigo">
@@ -184,17 +225,46 @@
             primaryDrawer: {
                 model: null,
                 type: 'default (no property)',
-                clipped: false,
+                clipped: true,
                 floating: false,
                 mini: false
             },
 
             items: [
-                { title: 'Dash', icon: 'dashboard',color:'indigo',href:'admin.dash' },
-                { title: 'Marker', icon: 'dashboard',color:'indigo',href:'admin.marker' },
-                { title: 'Marker Category', icon: 'dashboard',color:'indigo',href:'admin.marker.category' },
-                { title: 'Tour', icon: 'question_answer',color:'red',href:'admin.tour' },
-                { title: 'Tour Category', icon: 'question_answer',color:'red',href:'admin.tour.category' }
+                { text: 'Dashboard', icon: 'dashboard',href:'admin.dash' },
+                {
+                    icon: 'keyboard_arrow_up',
+                    'icon-alt': 'location_on',
+                    text: 'Sight',
+                    model: false,
+                    children: [
+                        { icon: 'category', text: 'Category', href:'admin.marker.category' },
+                        { icon: 'add', text: 'Create', href:'admin.marker' },
+                        { icon: 'location_on', text: 'Sights', href:'admin.marker.category' },
+                    ]
+                },
+                {
+                    icon: 'keyboard_arrow_up',
+                    'icon-alt': 'timeline',
+                    text: 'Tour',
+                    model: false,
+                    children: [
+                        { icon: 'category', text: 'Category', href:'admin.tour.category' },
+                        { icon: 'add', text: 'Create', href:'admin.tour' },
+                        { icon: 'timeline', text: 'Tours', href:'admin.tour.category' },
+                    ]
+                },
+
+                {
+                    icon: 'keyboard_arrow_up',
+                    'icon-alt': 'notifications',
+                    text: 'Notifications',
+                    model: true,
+                    children: [
+                        { icon: 'markunread', text: 'Contact Us', href:'admin.notifications.message' },
+                    ]
+                },
+
             ],
 
             itemss: [
