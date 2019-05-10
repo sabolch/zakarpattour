@@ -102,7 +102,7 @@ class MarkerController extends Controller
     public function show($slug)
     {
         try{
-            $marker = Marker::findBySlugOrFail($slug)->with('category')->first();
+            $marker = Marker::whereSlug($slug)->with('category')->first();
             return response()->json([
                 'success'=>true,
                 'data'=> $marker
@@ -148,7 +148,7 @@ class MarkerController extends Controller
 
         try{
             $marker = Marker::findOrFail($data['id']);
-            $marker->marker_category_id = $data['category_id'];
+            $marker->marker_category_id = $data['category'];
             $marker->lat = $data['lat'];
             $marker->lng = $data['lng'];
             $marker->title = $data['title'];

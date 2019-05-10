@@ -238,9 +238,9 @@
                     text: 'Sight',
                     model: false,
                     children: [
-                        { icon: 'category', text: 'Category', href:'admin.marker.category' },
+                        { icon: 'category', text: 'Categorys', href:'admin.marker.category' },
                         { icon: 'add', text: 'Create', href:'admin.marker' },
-                        { icon: 'location_on', text: 'Sights', href:'admin.marker.category' },
+                        { icon: 'location_on', text: 'Sights', href:'admin.marker.list' },
                     ]
                 },
                 {
@@ -249,9 +249,9 @@
                     text: 'Tour',
                     model: false,
                     children: [
-                        { icon: 'category', text: 'Category', href:'admin.tour.category' },
+                        { icon: 'category', text: 'Categorys', href:'admin.tour.category' },
                         { icon: 'add', text: 'Create', href:'admin.tour' },
-                        { icon: 'timeline', text: 'Tours', href:'admin.tour.category' },
+                        { icon: 'timeline', text: 'Tours', href:'admin.tour.list' },
                     ]
                 },
 

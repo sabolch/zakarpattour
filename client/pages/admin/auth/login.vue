@@ -49,7 +49,7 @@
 
     export default {
         layout: 'simple',
-        middleware:'admin-route',
+        middleware:['admin-route','adminLoggedIn'],
         name: "login",
         components: {VueRecaptcha},
         data: () => ({
@@ -63,6 +63,9 @@
             })
         }),
          mounted() {
+             if (this.$store.state.auth.loggedIn) {
+                 this.$router.push({name: 'settings.profile'})
+             }
         },
         methods: {
             async onSubmit() {

@@ -1,12 +1,11 @@
 <template>
     <div>
-        <!--<div v-html="VQContent"></div>-->
-    <div class="quill-editor"
-         v-model="VQContent"
-         :content="content"
-         @change="onEditorChange($event)"
-         v-quill:myQuillEditor="editorOption">
-    </div>
+        <div class="quill-editor"
+             @change="onEditorChange($event)"
+             :content="content"
+             v-quill:myQuillEditor="editorOption">
+        </div>
+
     <input v-show="false" id="inputUpload" type="file" @change="uploadFunction($event)" accept="image/x-png,image/gif,image/jpeg" >
     </div>
 </template>
@@ -22,16 +21,14 @@
             return {apiUrl:''}
         },
         watch: {
-            VQContent: {
-                handler: function(value) {
-                    this.$emit('input', value)
-                }
-            }
+            // VQContent: {
+            //     handler: function(value) {
+            //         this.$emit('input', value)
+            //     }
+            // }
         },
         data () {
             return {
-                alert:true,
-                saved:false,
                 apiUrl:'',
                 selectedFile : '',
                 VQContent:'',
@@ -76,17 +73,14 @@
             }
         },
         mounted() {
+
         },
         methods: {
             onEditorChange({ editor, html, text }) {
-                if(this.saved) {
-                    console.log("message")
-                }
+                this.$emit('input', this.myQuillEditor.root.innerHTML)
             },
             onEditorGetContent(){
-                let content = this.myQuillEditor.root.innerHTML
-                // console.log(this.myQuillEditor.container.innerHTML)
-                this.$emit('input', content)
+                this.$emit('input', this.myQuillEditor.root.innerHTML)
             },
 
             async uploadFunction(e){
@@ -131,3 +125,4 @@
     }
 
 </style>
+

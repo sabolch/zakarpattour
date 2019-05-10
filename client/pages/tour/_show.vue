@@ -239,6 +239,9 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
+        head: {
+
+        },
         async asyncData ({ params, $axios, $router }) {
             try {
                 // let {data} = await  $axios.$get(`/tour/show/${params.slug}`)

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 
+
 class TourCategoryController extends Controller
 {
     public function __construct()
@@ -47,9 +48,9 @@ class TourCategoryController extends Controller
     {
         return response()->json([
             'success'=> true,
-            'data' =>  TourCategory::select(['marker_categories.id'])
-                ->join('marker_category_translations as t', 'marker_categories.id', '=', 't.marker_category_id')
-                ->groupBy('marker_categories.id')
+            'data' =>  TourCategory::select(['tour_categories.id'])
+                ->join('tour_category_translations as t', 'tour_categories.id', '=', 't.tour_category_id')
+                ->groupBy('tour_categories.id')
                 ->get()
         ],200);
     }

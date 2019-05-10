@@ -31,7 +31,7 @@
                         </v-container>
 
 
-                        <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
+                        <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
                     </v-stepper-content>
 
                     <v-stepper-step editable :complete="e6 > 2" step="2">Title & category
@@ -81,7 +81,7 @@
                             >
                                                 <span style="color:blue;font-size: 28px;" class="v-icon mki"
                                                       :class="`mki-${item.icon}`"></span>
-                                <span>&nbsp;&nbsp; {{ item.name }}</span>
+                                <span>&nbsp;&nbsp; {{ item.translations.find(obj => obj.locale ===  getLocal).name }}</span>
                             </template>
 
                             <template slot="item"
@@ -89,12 +89,12 @@
                             >
                                             <span style="color:blue;font-size: 28px;" class="v-icon mki"
                                                   :class="`mki-${item.icon}`"></span>
-                                <span>&nbsp;&nbsp;{{ item.name }}</span>
+                                <span>&nbsp;&nbsp;{{ item.translations.find(obj => obj.locale ===  getLocal).name  }}</span>
                             </template>
 
                         </v-autocomplete>
-                        <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
-                        <v-btn @click="e6 = e6-1" flat>Back</v-btn>
+                        <v-btn color="primary" @click="e6 = 3">{{$t('btns.continue')}}</v-btn>
+                        <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
                     <v-stepper-step editable :complete="e6 > 3" step="3">Description
@@ -121,13 +121,13 @@
                             >
                                 <v-card flat>
                                     <v-card-text>
-                                        <quill-editor ref="QuillEditors" v-model="item.description" @get-content="getEditorContent"></quill-editor>
+                                        <quill-editor :content="item.description" v-model="item.description"></quill-editor>
                                     </v-card-text>
                                 </v-card>
                             </v-tab-item>
                         </v-tabs>
-                        <v-btn color="primary" @click="e6 = 4">Continue</v-btn>
-                        <v-btn @click="e6 = e6-1" flat>Back</v-btn>
+                        <v-btn color="primary" @click="e6 = 4">{{$t('btns.continue')}}</v-btn>
+                        <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
                     <v-stepper-step step="4">Also done!
@@ -135,7 +135,7 @@
                     </v-stepper-step>
                     <v-stepper-content step="4">
                         <v-btn dark color="green" :loading="form.busy" @click="store">Save</v-btn>
-                        <v-btn dark color="orange" @click="e6 = e6-1">Back</v-btn>
+                        <v-btn dark color="orange" @click="e6 = e6-1">{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
                 </v-stepper>
             </v-flex>
@@ -145,13 +145,13 @@
                     :color="snackbar.color"
                     :timeout="4000"
             >
-                {{ snackbar.message }}
+                {{ $t(snackbar.message) }}
                 <v-btn
                         dark
                         flat
                         @click="snackbar.status = false"
                 >
-                    Close
+                    {{$t('btns.close')}}
                 </v-btn>
             </v-snackbar>
 
@@ -164,18 +164,20 @@
 
     export default {
         name: "adminMarkerIndex",
-        // components: {QuillEditor},
         layout: "admin",
         head() {
             return {
                 title: this.$t('navbar.home'),
             }
         },
-        async asyncData({$axios, $router}) {
+        validate({params}) {
+            return /^[a-zA-Z0-9._-]+$/.test(params.slug)
+        },
+        async asyncData({ params, $axios, $router}) {
             try {
                 let categories = await $axios.get('marker/category/list')
                 return {
-                    categories: categories.data.data
+                    categories:categories.data.data
                 }
             } catch (e) {
                 $router.push({name: 'error'})
@@ -201,16 +203,17 @@
                     lat: 0,
                     lng: 0,
                     translations: [
-                        {locale: 'en', title: '', description: ''},
-                        {locale: 'hu', title: '', description: ''},
-                        {locale: 'ua', title: '', description: ''},
+                        {locale: 'en', title: '', description: 'test'},
+                        {locale: 'hu', title: '', description: 'test'},
+                        {locale: 'ua', title: '', description: 'tes'},
                     ],
                 }),
+                formData:null
             }
         },
-        mounted() {
-            console.log(this.categories)
-            this.map = new google.maps.Map(document.getElementById('gmap_container'), {
+       async  mounted() {
+
+           this.map = new google.maps.Map(document.getElementById('gmap_container'), {
                 center: {lat: 48.496582, lng: 23.5212107},
                 zoom: 8.7,
                 minZoom: 8,
@@ -225,7 +228,16 @@
             });
             this.searchBox(this.map)
 
-            let self = this;
+           // Load data
+           this.formData = await this.$axios.get(`marker/show/${this.$route.params.slug}`)
+           if(this.formData){
+               this.form = new Form(this.formData.data.data)
+               this.form.category = this.form.marker_category_id
+               this.mapMarker.set('position',new google.maps.LatLng(this.form.lat, this.form.lng))
+           }
+           this.formData = null
+
+           let self = this;
             if (google && google.maps) {
                 var boundaries = new google.maps.FusionTablesLayer({
                     query: {
@@ -247,10 +259,8 @@
                 })
             }
         },
+
         methods: {
-            getEditorContent(e) {
-                console.log("Parent log : " + e)
-            },
             styleHandler() {
                 let mystyle = this.toogleMapStyle ? this.$store.state.gMapStyles.showLabels : this.$store.state.gMapStyles.hideLabels;
                 this.map.set('styles', mystyle);
@@ -318,6 +328,7 @@
                     map.fitBounds(bounds);
                 });
             },
+
             autoFilter(item, queryText, itemText) {
                 return item.name.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
@@ -336,18 +347,23 @@
                         status:true,
                         timeout:4000,
                         color:'success',
-                        message:'Successfully saved!',
+                        message:'messages.saved',
                     }
                 }).catch((e)=>{
                     this.snackbar={
                             status:true,
                             timeout:4000,
                             color:'error',
-                            message:'Not saved! Try again later! More info in console ..',
+                            message:'messages.not_saved',
                     }
                     console.log(e)
                 })
             },
+        },
+        computed:{
+            getLocal(){
+                return this.$i18n.locale
+            }
         }
     }
 </script>

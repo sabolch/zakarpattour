@@ -14,7 +14,7 @@
                                     wrap
                                     align-center
                             >
-                                <v-flex xs12 md12 lg5 class="mr-2 ">
+                                <v-flex xs12 md12 lg5 class="mr-2">
                                     <v-text-field
                                             outline
                                             v-model="Fsearch"
@@ -49,7 +49,7 @@
                                         </v-fade-transition>
                                     </v-text-field>
                                 </v-flex>
-                                <v-flex xs10 md10 lg4>
+                                <v-flex xs8 md10 lg4>
                                     <v-select
                                             :label="$t('form.sort_by')"
                                             prepend-inner-icon="filter_list"
@@ -152,7 +152,6 @@
                         absolute
                         temporary
                         right
-                        width="400"
                 >
                     <v-list class="pa-1">
                         <v-flex>

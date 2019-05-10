@@ -42,9 +42,11 @@ const AdminLogin = () => import('~/pages/admin/auth/login').then(m => m.default 
 const AdminDash = () => import('~/pages/admin/dash').then(m => m.default || m)
 
 const AdminMarker = () => import('~/pages/admin/marker/adminMarkerIndex').then(m => m.default || m)
+const AdminMarkerList = () => import('~/pages/admin/marker/adminMarkerList').then(m => m.default || m)
 const AdminMarkerCategory = () => import('~/pages/admin/marker/adminMarkerCategory').then(m => m.default || m)
 
 const AdminTour = () => import('~/pages/admin/tour/adminTourIndex').then(m => m.default || m)
+const AdminTourList = () => import('~/pages/admin/tour/adminTourList').then(m => m.default || m)
 const AdminTourCategory = () => import('~/pages/admin/tour/adminTourCategory').then(m => m.default || m)
 
 const NotificationsMessage = () => import('~/pages/admin/notifications/contactUsMessage').then(m => m.default || m)
@@ -97,10 +99,12 @@ const routes = [
   { path: '/admin/login', name: 'admin.login', component: AdminLogin },
   { path: '/admin/dash', name: 'admin.dash', component: AdminDash },
 
-  { path: '/admin/marker', name: 'admin.marker', component: AdminMarker },
+  { path: '/admin/marker/:slug?', name: 'admin.marker', component: AdminMarker },
+  { path: '/admin/markers', name: 'admin.marker.list', component: AdminMarkerList },
   { path: '/admin/category/marker', name: 'admin.marker.category', component: AdminMarkerCategory},
 
-  { path: '/admin/tour', name: 'admin.tour', component: AdminTour},
+  { path: '/admin/tour/:slug?', name: 'admin.tour', component: AdminTour},
+  { path: '/admin/tours', name: 'admin.tour.list', component: AdminTourList},
   { path: '/admin/category/tour', name: 'admin.tour.category', component: AdminTourCategory },
 
   { path: '/admin/notifications/message', name: 'admin.notifications.message', component: NotificationsMessage },

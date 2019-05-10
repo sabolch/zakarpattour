@@ -1,7 +1,7 @@
 <template>
-    <v-container pa-0 ma-0 fluid fill-height class="contact-bg">
+    <v-container pa-1 fluid fill-height class="contact-bg">
         <v-layout row wrap justify-center align-center>
-            <v-flex xs8>
+            <v-flex xs12 md8>
                 <v-slide-y-transition>
                     <v-card class="contact-card" v-show="expand">
                         <v-container fill-height align-center>
@@ -10,17 +10,17 @@
                                     <v-container fill-height ma-0 pa-0>
                                         <v-layout align-center ma-0 pa-0 class="text-xs-center">
                                             <v-flex xs12 justify-center>
-                                                <v-icon color="primary" size="300">contact_mail</v-icon>
-                                                <p class="display-2 font-weight-bold text--accent-4">{{$t('contact_us.title')}}</p>
+                                                <v-icon color="primary" :size="breakpoint ? 150 : 300">contact_mail</v-icon>
+                                                <p class="font-weight-bold text--accent-4" :class="[{'headline': breakpoint},{'display-2': !breakpoint}]">{{$t('contact_us.title')}}</p>
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
                                 </v-flex>
-                                <v-flex xs12 md6 pa-0 ma-0>
+                                <v-flex xs12 md6>
                                     <v-container fill-height ma-0 pa-0>
-                                        <v-layout row wrap align-center ma-0 pa-0 justify-center>
-                                            <v-flex pa-3 ma-0 xs10>
-                                                <v-form ma-0 pa-0 @submit.prevent="sendMail"
+                                        <v-layout row wrap align-center  justify-center>
+                                            <v-flex  xs12 md10>
+                                                <v-form @submit.prevent="sendMail"
                                                         @keydown="form.onKeydown($event)">
                                                     <v-text-field
                                                             :counter="10"
@@ -112,7 +112,7 @@
         name: "contact",
         head() {
             return {
-                title: 'Contact',
+                title: this.$t('navbar.contact'),
             }
         },
         data: () => ({
@@ -140,14 +140,12 @@
             }
         },
         async mounted() {
-            await this.$recaptcha.init()
             this.setLanguage($nuxt.$i18n.locale)
             this.expand = true
         },
         methods: {
             async sendMail() {
                 try{
-
                     this.form.recaptchaToken = await this.$recaptcha.getResponse()
 
                     await this.form.put('/contact/store')
@@ -177,6 +175,11 @@
                         this.$validator.localize(locale, hu)
                         break
                 }
+            }
+        },
+        computed: {
+            breakpoint() {
+                return this.$vuetify.breakpoint.xs
             }
         },
     }

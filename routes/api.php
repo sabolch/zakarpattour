@@ -54,16 +54,16 @@ Route::group(['prefix' => 'tour/category'], function () {
     Route::get('/', 'TourCategoryController@index');
     Route::get('/trashed', 'TourCategoryController@trashed');
     Route::delete('/remove', 'TourCategoryController@destroyForever');
+    Route::get('/list', 'TourCategoryController@listOfCategories');
 });
 //    Tours
 Route::group(['prefix' => 'tour'], function () {
-    Route::put('/store', 'TourCategoryController@store');
-    Route::put('/edit', 'TourCategoryController@edit');
-    Route::delete('/delete', 'TourCategoryController@destroy');
-    Route::post('/show', 'TourCategoryController@show');
-    Route::post('/trashed', 'TourCategoryController@trashed');
-    Route::get('/', 'TourCategoryController@index');
-    Route::get('/list', 'TourCategoryController@listOfCategories');
+    Route::put('/store', 'TourController@store');
+    Route::put('/edit', 'TourController@edit');
+    Route::delete('/delete', 'TourController@destroy');
+    Route::get('/show/{slug}', 'TourController@show');
+    Route::post('/trashed', 'TourController@trashed');
+    Route::get('/', 'TourController@index');
 });
 //    Marker Category
 Route::group(['prefix' => 'marker/category'], function () {

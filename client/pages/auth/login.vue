@@ -93,9 +93,6 @@
         }),
         mounted() {
             this.expand = true
-            if (this.$store.state.auth.loggedIn) {
-                this.$router.push({name: 'settings.profile'})
-            }
         },
         methods: {
             onError(error) {

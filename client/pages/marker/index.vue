@@ -49,7 +49,7 @@
                                         </v-fade-transition>
                                     </v-text-field>
                                 </v-flex>
-                                <v-flex xs10 md10 lg4>
+                                <v-flex xs8 md10 lg4>
                                     <v-select
                                             :label="$t('form.sort_by')"
                                             prepend-inner-icon="filter_list"
@@ -152,9 +152,7 @@
                         :disable-resize-watcher="true"
                         :hide-overlay="true"
                         absolute
-                        temporary
                         right
-                        width="400"
                 >
                     <v-list class="pa-1">
                         <v-flex>

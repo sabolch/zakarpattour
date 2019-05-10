@@ -45,14 +45,16 @@ module.exports = {
         ],
         link: [
             {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
-            {
-                rel: 'stylesheet',
-                href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'
-            },
-            {rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.css'},
+            // {
+            //     rel: 'stylesheet',
+            //     href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'
+            // },
             {rel: 'stylesheet', href: '/css/mapicons.min.css'},
             {rel: 'stylesheet', href: '/css/sbicon.min.css'},
         ],
+        script: [{
+            src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAP_API_KEY}&libraries=places`,
+        }],
 
 
     },
@@ -64,8 +66,8 @@ module.exports = {
     },
 
     css: [
-        // 'quill/dist/quill.snow.css',
-        // 'quill/dist/quill.core.css'
+        'quill/dist/quill.snow.css',
+        'quill/dist/quill.core.css'
         // { src: '~assets/sass/app.scss', lang: 'scss' }
 
     ],

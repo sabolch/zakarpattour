@@ -40,53 +40,48 @@ class Tour extends Model
 
     public static function pagination($active = true, $search_query = null, $category, $order_by, $per_page)
     {
-        if ($search_query) {
+        if($search_query){
             return Tour::when($category, function ($q) use ($category) {
-                return $q->whereIn('tour_category_id', $category);
-            })
-                ->where('active', $active)
-                ->select(['tours.*', 't.title'])
-                ->join('tour_translations as t', 'tours.id', '=', 't.tour_id')
+                return $q->whereIn('tour_category_id', $category);})
+                ->select(['tours.*','t.title'])
+                ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
                 ->groupBy('tours.id')
-                ->where('title', 'LIKE', '%' . $search_query . '%')
+                ->where('title','LIKE', '%'.$search_query.'%')
                 ->with('category')
-                ->orderBy($order_by[0], $order_by[1])
+                ->orderBy( $order_by[0], $order_by[1])
                 ->paginate($per_page);
         }
         return Tour::when($category, function ($q) use ($category) {
-            return $q->whereIn('tour_category_id', $category);
-        })
-            ->where('active', $active)
-            ->select(['tours.*', 't.title'])
-            ->join('tour_translations as t', 'tours.id', '=', 't.tour_id')
+            return $q->whereIn('tour_category_id', $category);})
+            ->select(['tours.*','t.title'])
+            ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
             ->groupBy('tours.id')
             ->with('category')
-            ->orderBy($order_by[0], $order_by[1])
+            ->orderBy( $order_by[0], $order_by[1])
             ->paginate($per_page);
     }
 
     public static function paginateTrashed($search_query = null, $category, $order_by, $per_page)
     {
-        if ($search_query) {
+        if($search_query){
             return Tour::onlyTrashed()
-                ->select(['tours.*', 't.title'])
-                ->join('tour_translations as t', 'tours.id', '=', 't.tour_id')
+                ->select(['tours.*','t.title'])
+                ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
                 ->groupBy('tours.id')
-                ->whereIn('tour_category_id', $category)
-                ->where('title', 'LIKE', '%' . $search_query . '%')
+                ->whereIn('tour_category_id',$category)
+                ->where('title','LIKE', '%'.$search_query.'%')
                 ->with('category')
-                ->orderBy($order_by[0], $order_by[1])
+                ->orderBy( $order_by[0], $order_by[1])
                 ->paginate($per_page);
         }
         return Tour::onlyTrashed()
             ->when($category, function ($q) use ($category) {
-                return $q->whereIn('tour_category_id', $category);
-            })
-            ->select(['tours.*', 't.title'])
-            ->join('tour_translations as t', 'tours.id', '=', 't.tour_id')
+                return $q->whereIn('tour_category_id', $category);})
+            ->select(['tours.*','t.title'])
+            ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
             ->groupBy('tours.id')
             ->with('category')
-            ->orderBy($order_by[0], $order_by[1])
+            ->orderBy( $order_by[0], $order_by[1])
             ->paginate($per_page);
     }
 }
