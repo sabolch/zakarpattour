@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\FavouriteMarkers;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -84,5 +85,12 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function favouriteMarkers(){
+        return $this->belongsToMany('App\Models\Marker','favourite_markers');
+    }
+    public function favouriteTours(){
+        return $this->belongsToMany('App\Models\Tour','favourite_tours');
     }
 }

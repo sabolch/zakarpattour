@@ -12,9 +12,5 @@ class FavouriteMarkers extends Model
      use SoftDeletes;
     protected $table = "favourite_markers";
 
-    public function user(){
-        return $this->belongsTo(User::class,'user_id','id');
-    }
-
 
 }

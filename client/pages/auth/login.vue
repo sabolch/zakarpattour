@@ -122,6 +122,7 @@
                     if(e.response){
                         this.ErrList.push(e.response.data.message)
                     }
+                    this.form.reset()
                 }
                 // this.$refs.recaptcha.reset()
 

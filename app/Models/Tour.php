@@ -33,6 +33,10 @@ class Tour extends Model
         ];
     }
 
+    public function favourites(){
+        return $this->belongsToMany('App\User','favourite_tours');
+    }
+
     public function category()
     {
         return $this->belongsTo(TourCategory::class, 'tour_category_id', 'id');

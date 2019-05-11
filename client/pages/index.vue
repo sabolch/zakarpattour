@@ -83,9 +83,7 @@
                             <v-card-actions>
                                 <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
                                 <v-spacer></v-spacer>
-                                <v-btn dark color="indigo" small fab>
-                                    <v-icon>favorite</v-icon>
-                                </v-btn>
+                                <btn-favorite type="sight" :itemID="0"></btn-favorite>
                             </v-card-actions>
                         </v-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
@@ -169,9 +167,7 @@
                             <v-card-actions>
                                 <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
                                 <v-spacer></v-spacer>
-                                <v-btn dark color="indigo" small fab>
-                                    <v-icon>favorite</v-icon>
-                                </v-btn>
+                                <btn-favorite  type="tour" :itemID="0"></btn-favorite>
                             </v-card-actions>
                         </v-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
@@ -261,9 +257,7 @@
                             <v-card-actions>
                                 <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
                                 <v-spacer></v-spacer>
-                                <v-btn dark color="indigo" small fab>
-                                    <v-icon>favorite</v-icon>
-                                </v-btn>
+                                <btn-favorite type="sight" :itemID="0"></btn-favorite>
                             </v-card-actions>
                         </v-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
@@ -330,7 +324,7 @@
                 </v-flex>
 
 
-                <v-flex v-for="(item,index) in posts.popular_slights" :key="`${item.image}-${index}`" xs12 md6 lg3>
+                <v-flex v-for="(item,index) in posts.popular_tours" :key="`${item.image}-${index}`" xs12 md6 lg3>
                     <v-card class="my-1">
                         <v-img
                                 :src="item.image"
@@ -351,9 +345,7 @@
                             <v-card-actions>
                                 <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
                                 <v-spacer></v-spacer>
-                                <v-btn dark color="indigo" small fab>
-                                    <v-icon>favorite</v-icon>
-                                </v-btn>
+                                <btn-favorite type="tour" :itemID="0"></btn-favorite>
                             </v-card-actions>
                         </v-img>
                         <v-card-text class="align-center text-xs-justify pa-2">

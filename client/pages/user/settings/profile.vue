@@ -181,6 +181,7 @@
                 try{
                     const { data } = await this.form.patch('/settings/profile')
                     this.$store.dispatch('auth/updateUser', { user: data })
+
                     this.infoSnackbar.success = true
                     this.infoSnackbar.active = true
                 }catch (e) {

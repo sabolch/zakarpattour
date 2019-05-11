@@ -3,31 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\FavouritesResource;
-use App\Models\FavouriteMarkers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 class FavouritesController extends Controller
 {
-    public $user;
 
-    public function __construct()
+
+    public function __construct(Request $request)
     {
-        $this->middleware(['auth','verified']);
-        $this->user = auth()->user();
+
     }
 
-    public function markers(){
+    public function markers(Request $request){
         $pre_page = Input::has('limit') ? Input::get('limit') : 10;
         return FavouritesResource::collection(
-            User::with('favouriteMarkers')->paginate($pre_page)
+            $request->user()->favouriteMarkers()->paginate($pre_page)
         );
+//        return response()->json(['success'=>true,'data'=>$request->user()->favouriteMarkers()->paginate($pre_page)],200);
     }
-    public function tours(){
+
+    public function tours(Request $request){
         $pre_page = Input::has('limit') ? Input::get('limit') : 10;
         return FavouritesResource::collection(
-            User::with('favouriteTours')->paginate($pre_page)
+            $request->user()->favouriteTours()->paginate($pre_page)
     );
     }
 
@@ -42,7 +42,7 @@ class FavouritesController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
         }
-        $this->user->favouriteMarkers()->sync($validator->valid()['id']);
+        $request->user()->favouriteMarkers()->attach($validator->valid()['id']);
         return response()->json(['success'=>true],201);
     }
 //    Add Tour to favourites
@@ -56,7 +56,8 @@ class FavouritesController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
         }
-        $this->user->favouriteTours()->sync($validator->valid()['id']);
+
+        $request->user()->favouriteTours()->attach($validator->valid()['id']);
         return response()->json(['success'=>true],201);
     }
 //    Remove marker from favourites
@@ -70,7 +71,7 @@ class FavouritesController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
         }
-        $this->user->favouriteMarkers()->detach($validator->valid()['id']);
+        $request->user()->favouriteMarkers()->detach($validator->valid()['id']);
         return response()->json(['success'=>true],200);
     }
 //    Remove tour from favourites
@@ -84,7 +85,7 @@ class FavouritesController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
         }
-        $this->user->favouriteTours()->detach($validator->valid()['id']);
+        $request->user()->favouriteTours()->detach($validator->valid()['id']);
         return response()->json(['success'=>true],200);
     }
 

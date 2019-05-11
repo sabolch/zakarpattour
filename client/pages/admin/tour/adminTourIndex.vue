@@ -4,41 +4,10 @@
             <v-flex xs12>
                 <v-stepper v-model="e6" vertical>
                     <v-stepper-step editable :complete="e6 > 1" step="1">
-                        Marker
+                        Tour
                         <small>Select the location</small>
                     </v-stepper-step>
                     <v-stepper-content step="1">
-                        <v-container fluid pa-0 ma-0 pb-2>
-                            <v-text-field label="" id="g-searchbox"></v-text-field>
-                            <v-layout row wrap>
-                                <v-flex m6>
-                                    <v-btn @click="createMarker" color="success">Add Marker</v-btn>
-                                </v-flex>
-                                <v-flex m6>
-                                    <v-switch
-                                            v-model="toogleMapStyle"
-                                            label="Show map labels"
-                                            color="indigo"
-                                            value="indigo"
-                                            hide-details
-                                            @change="styleHandler"
-                                    ></v-switch>
-                                </v-flex>
-                                <v-flex xs12 mt-4>
-                                    <div id="gmap_container"></div>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-
-
-                        <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
-                    </v-stepper-content>
-
-                    <v-stepper-step editable :complete="e6 > 2" step="2">Title & category
-                        <small>Give a title and translate it also set the category</small>
-                    </v-stepper-step>
-
-                    <v-stepper-content step="2">
                         <v-tabs
                                 fixed-tabs
                                 color="primary"
@@ -93,6 +62,86 @@
                             </template>
 
                         </v-autocomplete>
+
+                        <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
+                    </v-stepper-content>
+
+                    <v-stepper-step editable :complete="e6 > 2" step="2">Title & category
+                        <small>Give a title and translate it also set the category</small>
+                    </v-stepper-step>
+
+                    <v-stepper-content step="2">
+                        <v-container fluid pa-0 ma-0 pb-2>
+                            <v-layout row wrap>
+                                <v-flex m6>
+                                    <v-btn  color="success">Add Tour</v-btn>
+                                </v-flex>
+                                <v-flex m6>
+                                    <v-switch
+                                            v-model="toogleMapStyle"
+                                            label="Show map labels"
+                                            color="indigo"
+                                            value="indigo"
+                                            hide-details
+                                            @change="styleHandler"
+                                    ></v-switch>
+                                </v-flex>
+                                <v-flex xs12>
+                                    <v-autocomplete
+                                            v-model="sightSelects"
+                                            :loading="sightLoading"
+                                            :items="sightItems"
+                                            :search-input.sync="sightSearch"
+                                            chips
+                                            clearable
+                                            hide-details
+                                            hide-selected
+                                            item-text="title"
+                                            item-value="id"
+                                            label="Search for a sight.."
+                                            multiple
+                                            single-line
+                                            :disabled="sightLoading"
+                                    >
+                                        <template v-slot:no-data>
+                                            <v-list-tile>
+                                                <v-list-tile-title>
+                                                    Search for sights ..
+                                                </v-list-tile-title>
+                                            </v-list-tile>
+                                        </template>
+                                        <template v-slot:item="{ item }">
+                                            <v-list-tile-avatar
+                                                    color="indigo"
+                                                    class="headline font-weight-light white--text"
+                                            >
+                                                <v-icon dark>place</v-icon>
+                                            </v-list-tile-avatar>
+                                            <v-list-tile-content>
+                                                <v-list-tile-title v-text="titleTrim(item)"></v-list-tile-title>
+                                                <v-list-tile-sub-title v-text="subtitleTrim(item)"></v-list-tile-sub-title>
+                                            </v-list-tile-content>
+                                        </template>
+                                        <template slot="selection" slot-scope="data">
+                                            <v-chip
+                                                    :selected="data.selected.title"
+                                                    close
+                                                    outline
+                                                    color="indigo"
+                                                    @input="removeFromSights(data.item.id)"
+
+                                            >
+                                                <v-icon left>place</v-icon>
+                                                <strong>{{ titleTrim(data.item) }}</strong>&nbsp;
+                                            </v-chip>
+                                        </template>
+                                    </v-autocomplete>
+                                </v-flex>
+                                <v-flex xs12 mt-4>
+                                    <div id="gmap_container"></div>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
                         <v-btn color="primary" @click="e6 = 3">{{$t('btns.continue')}}</v-btn>
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
@@ -195,7 +244,7 @@
                 categories: [],
                 tabs: null,
                 map: {},
-                mapMarker: {},
+                mapTour: {},
                 toogleMapStyle: false,
                 form: new Form({
                     id: -1,
@@ -206,11 +255,39 @@
                         {locale: 'ua', title: '', description: 'tes'},
                     ],
                 }),
-                formData:null
+                formData:null,
+
+                sightLoading: false,
+                sightItems: [],
+                sightSearch: null,
+                sightSelects: null,
+
+                states: [
+                    'Alabama',
+                    'Alaska',
+                    'American Samoa',
+                    'Arizona',
+                    'Arkansas',
+                    'California',
+                    'Colorado',
+                    'Connecticut',
+                    'Delaware',
+                    'District of Columbia',
+                    'Federated States of Micronesia',
+                    'Florida',
+                    'Georgia',
+                    'Guam',
+                    'Hawaii',
+                    'Idaho'
+                ],
+            }
+        },
+        watch: {
+            sightSearch (val) {
+                val &&  this.loadSights()
             }
         },
         async  mounted() {
-
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {
                 center: {lat: 48.496582, lng: 23.5212107},
                 zoom: 8.7,
@@ -219,21 +296,20 @@
                 disableDefaultUI: true
             })
 
-            this.mapMarker = new google.maps.Marker({
+            this.mapTour = new google.maps.Marker({
                 map: this.map,
                 position: {lat: 48, lng: 22.5},
                 draggable: true
             });
-            this.searchBox(this.map)
 
-            // // Load data
-            // this.formData = await this.$axios.get(`tour/show/${this.$route.params.slug}`)
-            // if(this.formData){
-            //     this.form = new Form(this.formData.data.data)
-            //     this.form.category = this.form.tour_category_id
-            //     this.mapMarker.set('position',new google.maps.LatLng(this.form.lat, this.form.lng))
-            // }
-            // this.formData = null
+            // Load data
+            this.formData = await this.$axios.get(`tour/show/${this.$route.params.slug}`)
+            if(this.formData.data.data){
+                this.form = new Form(this.formData.data.data)
+                this.form.category = this.form.tour_category_id
+                this.mapTour.set('position',new google.maps.LatLng(this.form.lat, this.form.lng))
+            }
+            this.formData = null
 
             let self = this;
             if (google && google.maps) {
@@ -259,72 +335,33 @@
         },
 
         methods: {
+
+            async loadSights(){
+                this.sightLoading = true
+                let url = `marker?page=1&per_page=10&q=${this.sightSearch.trim()}`
+                const {data} = await this.$axios.get(url)
+                this.sightItems = data.data.slice(0)
+                this.sightLoading = false
+            },
+
+            async querySelections (v) {
+                clearTimeout(this.timeoutId);
+                this.timeoutId = setTimeout(this.loadSights(v), 700);
+            },
+
+            titleTrim(value){
+                return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title.substr(0,20)
+            },
+            subtitleTrim(value){
+                return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title
+            },
+            removeFromSights(itemID) {
+                this.sightSelects.splice(this.sightSelects.indexOf(itemID), 1);
+            },
+
             styleHandler() {
                 let mystyle = this.toogleMapStyle ? this.$store.state.gMapStyles.showLabels : this.$store.state.gMapStyles.hideLabels;
                 this.map.set('styles', mystyle);
-            },
-            createMarker: function () {
-                if (typeof this.mapMarker.position === 'undefined') {
-                    this.mapMarker = new google.maps.Marker({
-                        map: this.map,
-                        position: this.map.center,
-                        draggable: true
-                    });
-                    return;
-                }
-                this.mapMarker.set('position', this.map.center);
-
-                let self = this;
-                google.maps.event.addListener(this.mapMarker, 'dragend', function (event) {
-                    self.form.lat = event.latLng.lat();
-                    self.form.lng = event.latLng.lng();
-                });
-            },
-
-            searchBox(map) {
-                let input = document.getElementById('g-searchbox');
-                let searchBox = new google.maps.places.SearchBox(input);
-                map.addListener('bounds_changed', function () {
-                    searchBox.setBounds(map.getBounds());
-                });
-                let tours = [];
-                searchBox.addListener('places_changed', function () {
-                    let places = searchBox.getPlaces();
-                    if (places.length == 0) {
-                        return;
-                    }
-                    tours.forEach(function (tour) {
-                        tour.setMap(null);
-                    });
-                    tours = [];
-                    let bounds = new google.maps.LatLngBounds();
-                    places.forEach(function (place) {
-                        if (!place.geometry) {
-                            console.log("Returned place contains no geometry");
-                            return;
-                        }
-                        let icon = {
-                            url: place.icon,
-                            size: new google.maps.Size(71, 71),
-                            origin: new google.maps.Point(0, 0),
-                            anchor: new google.maps.Point(17, 34),
-                            scaledSize: new google.maps.Size(25, 25)
-                        };
-                        tours.push(new google.maps.Marker({
-                            map: map,
-                            icon: icon,
-                            title: place.name,
-                            position: place.geometry.location
-                        }));
-                        if (place.geometry.viewport) {
-                            bounds.union(place.geometry.viewport);
-                        } else {
-                            bounds.extend(place.geometry.location);
-                        }
-                    });
-                    input.value = "";
-                    map.fitBounds(bounds);
-                });
             },
 
             autoFilter(item, queryText, itemText) {

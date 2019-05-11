@@ -33,6 +33,10 @@ class Marker extends Model
         ];
     }
 
+    public function favourites(){
+        return $this->belongsToMany('App\User','favourite_markers');
+    }
+
     public function category(){
         return $this->belongsTo(MarkerCategory::class,'marker_category_id','id');
     }

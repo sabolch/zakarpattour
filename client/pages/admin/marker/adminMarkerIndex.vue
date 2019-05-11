@@ -8,37 +8,8 @@
                         <small>Select the location</small>
                     </v-stepper-step>
                     <v-stepper-content step="1">
-                        <v-container fluid pa-0 ma-0 pb-2>
-                            <v-text-field label="" id="g-searchbox"></v-text-field>
-                            <v-layout row wrap>
-                                <v-flex m6>
-                                    <v-btn @click="createMarker" color="success">Add Marker</v-btn>
-                                </v-flex>
-                                <v-flex m6>
-                                    <v-switch
-                                            v-model="toogleMapStyle"
-                                            label="Show map labels"
-                                            color="indigo"
-                                            value="indigo"
-                                            hide-details
-                                            @change="styleHandler"
-                                    ></v-switch>
-                                </v-flex>
-                                <v-flex xs12 mt-4>
-                                    <div id="gmap_container"></div>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
 
 
-                        <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
-                    </v-stepper-content>
-
-                    <v-stepper-step editable :complete="e6 > 2" step="2">Title & category
-                        <small>Give a title and translate it also set the category</small>
-                    </v-stepper-step>
-
-                    <v-stepper-content step="2">
                         <v-tabs
                                 fixed-tabs
                                 color="primary"
@@ -91,8 +62,37 @@
                                                   :class="`mki-${item.icon}`"></span>
                                 <span>&nbsp;&nbsp;{{ item.translations.find(obj => obj.locale ===  getLocal).name  }}</span>
                             </template>
-
                         </v-autocomplete>
+                        <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
+                    </v-stepper-content>
+
+                    <v-stepper-step editable :complete="e6 > 2" step="2">Title & category
+                        <small>Give a title and translate it also set the category</small>
+                    </v-stepper-step>
+
+                    <v-stepper-content step="2">
+                        <v-container fluid pa-0 ma-0 pb-2>
+                            <v-text-field label="" id="g-searchbox"></v-text-field>
+                            <v-layout row wrap>
+                                <v-flex m6>
+                                    <v-btn @click="createMarker" color="success">Add Marker</v-btn>
+                                </v-flex>
+                                <v-flex m6>
+                                    <v-switch
+                                            v-model="toogleMapStyle"
+                                            label="Show map labels"
+                                            color="indigo"
+                                            value="indigo"
+                                            hide-details
+                                            @change="styleHandler"
+                                    ></v-switch>
+                                </v-flex>
+                                <v-flex xs12 mt-4>
+                                    <div id="gmap_container"></div>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+
                         <v-btn color="primary" @click="e6 = 3">{{$t('btns.continue')}}</v-btn>
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
@@ -230,7 +230,7 @@
 
            // Load data
            this.formData = await this.$axios.get(`marker/show/${this.$route.params.slug}`)
-           if(this.formData){
+           if(this.formData.data.data){
                this.form = new Form(this.formData.data.data)
                this.form.category = this.form.marker_category_id
                this.mapMarker.set('position',new google.maps.LatLng(this.form.lat, this.form.lng))

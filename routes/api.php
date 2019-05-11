@@ -90,11 +90,11 @@ Route::group(['prefix' => 'marker'], function () {
     Route::delete('/remove', 'MarkerController@destroyForever');
 });
 // Favourite
-Route::group(['prefix' => 'favourite'], function () {
+Route::group(['middleware' => 'auth:api','prefix' => 'favourite'], function () {
     Route::put('/add/marker', 'FavouritesController@createMarker');
     Route::put('/add/tour', 'FavouritesController@createTour');
     Route::get('/tours', 'FavouritesController@tours');
-    Route::get('/markers', 'FavouritesController@arkers');
+    Route::get('/markers', 'FavouritesController@markers');
     Route::delete('/remove/marker', 'FavouritesController@deleteMarker');
     Route::delete('/remove/tour', 'FavouritesController@deleteTour');
 });

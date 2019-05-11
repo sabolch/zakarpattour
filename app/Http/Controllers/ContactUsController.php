@@ -14,7 +14,7 @@ use Snowfire\Beautymail\Beautymail;
 
 class ContactUsController extends Controller
 {
-    public function __construct()
+    public function __construct(Request $request)
     {
 //        $this->middleware(['auth:admin'])->except('store','index');
     }
