@@ -7,6 +7,7 @@ use App\Models\Tour;
 use App\Http\Resources\TourResource;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class TourController extends Controller
@@ -22,22 +23,38 @@ class TourController extends Controller
      */
     public function index()
     {
+        if(Input::has('locale')){
+            Session::put('locale',Input::get('locale'));
+        }
+
         $search_query = Input::has('q') ? Input::get('q') : false;
         $per_page = Input::has('limit') ? Input::get('limit') : 10;
-        $category = Input::has('category') ? Input::get('category') : '';
-        $order_by = Input::has('order') ? Input::get('order') : ['created_at','desc'];
+        $category = Input::has('category') ? json_decode(Input::get('category')) : '';
+        $price = Input::has('price') ? json_decode(Input::get('price')) : [10,15000];
+        $sights = Input::has('sights') ? json_decode(Input::get('sights')) : '';
+        $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
-        return  TourResource::collection(Tour::pagination(true,$search_query, $category,$order_by,$per_page));
+        $start_date = Input::has('start_date') ? Input::get('start_date') : date('Y-m-d');
+        $end_date = Input::has('end_date') ? Input::get('end_date') : date('Y-m-d', strtotime('+7 months'));
+
+        return  TourResource::collection(Tour::pagination(true, $search_query,  $category, $sights,$price,
+            $order_by, $start_date, $end_date,$per_page));
     }
 
     public function trashed()
     {
+        if(Input::has('locale')){
+            Session::put('locale',Input::get('locale'));
+        }
+
         $search_query = Input::has('q') ? Input::get('q') : false;
         $per_page = Input::has('limit') ? Input::get('limit') : 10;
-        $category = Input::has('category') ? Input::get('category') : '';
-        $order_by = Input::has('order') ? Input::get('order') : ['created_at','desc'];
+        $category = Input::has('category') ? json_decode(Input::get('category')) : '';
+        $price = Input::has('price') ? json_decode(Input::get('price')) : [10,15000];
+        $sights = Input::has('sights') ? json_decode(Input::get('sights')) : '';
+        $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
-        return  TourResource::collection(Tour::paginateTrashed($search_query, $category,$order_by,$per_page));
+        return  TourResource::collection(Tour::paginateTrashed( $search_query,  $category, $sights,$price, $order_by, $per_page));
 
     }
     /**

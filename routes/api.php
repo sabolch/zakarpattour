@@ -62,7 +62,7 @@ Route::group(['prefix' => 'tour'], function () {
     Route::put('/edit', 'TourController@edit');
     Route::delete('/delete', 'TourController@destroy');
     Route::get('/show/{slug}', 'TourController@show');
-    Route::post('/trashed', 'TourController@trashed');
+    Route::get('/trashed', 'TourController@trashed');
     Route::get('/', 'TourController@index');
 });
 //    Marker Category

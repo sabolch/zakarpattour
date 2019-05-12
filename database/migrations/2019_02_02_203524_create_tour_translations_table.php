@@ -15,7 +15,7 @@ class CreateTourTranslationsTable extends Migration
     {
         Schema::create('tour_translations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('tours_id')->unsigned();
+            $table->integer('tour_id')->unsigned();
             $table->string('locale')->index();
 
             $table->string('title',400);

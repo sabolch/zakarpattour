@@ -50,7 +50,7 @@ class Marker extends Model
                 ->groupBy('markers.id')
                 ->where('title','LIKE', '%'.$search_query.'%')
                 ->with('category')
-                ->orderBy( $order_by[0], $order_by[1])
+                ->orderBy( $order_by,'desc')
                 ->paginate($per_page);
         }
         return Marker::when($category, function ($q) use ($category) {
@@ -59,7 +59,7 @@ class Marker extends Model
             ->join('marker_translations as t', 'markers.id', '=', 't.marker_id')
             ->groupBy('markers.id')
             ->with('category')
-            ->orderBy( $order_by[0], $order_by[1])
+            ->orderBy( $order_by,'desc')
             ->paginate($per_page);
     }
     public static function paginateTrashed($search_query = null,$category,$order_by,$per_page){
@@ -71,7 +71,7 @@ class Marker extends Model
                 ->whereIn('marker_category_id',$category)
                 ->where('title','LIKE', '%'.$search_query.'%')
                 ->with('category')
-                ->orderBy( $order_by[0], $order_by[1])
+                ->orderBy( $order_by,'desc')
                 ->paginate($per_page);
         }
         return Marker::onlyTrashed()
@@ -81,7 +81,7 @@ class Marker extends Model
             ->join('marker_translations as t', 'markers.id', '=', 't.marker_id')
             ->groupBy('markers.id')
             ->with('category')
-            ->orderBy( $order_by[0], $order_by[1])
+            ->orderBy( $order_by,'desc')
             ->paginate($per_page);
     }
 }

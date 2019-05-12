@@ -148,9 +148,7 @@
             ]
 
         }),
-        mounted() {
-            // Vue.i18n.set(this.lang);
-        },
+        mounted() {},
         watch: {
             offsetTop: function (value) {
                 if (value > 500) {

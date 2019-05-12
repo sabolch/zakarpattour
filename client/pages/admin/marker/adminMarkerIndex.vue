@@ -362,7 +362,7 @@
         },
         computed:{
             getLocal(){
-                return this.$i18n.locale
+                return this.$i18n.locale === 'uk' ? 'ua' : this.$i18n.locale
             }
         }
     }

@@ -338,7 +338,7 @@
 
             async loadSights(){
                 this.sightLoading = true
-                let url = `marker?page=1&per_page=10&q=${this.sightSearch.trim()}`
+                let url = `marker?page=1&limit=10&q=${this.sightSearch.trim()}`
                 const {data} = await this.$axios.get(url)
                 this.sightItems = data.data.slice(0)
                 this.sightLoading = false
@@ -397,7 +397,7 @@
         },
         computed:{
             getLocal(){
-                return this.$i18n.locale
+                return this.$i18n.locale === 'uk' ? 'ua' : this.$i18n.locale
             }
         }
     }

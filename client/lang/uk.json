@@ -50,9 +50,17 @@
     "read_more" : "Read more",
     "all" : "All",
     "send": "Send",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close",
+    "continue": "Continue",
+    "back": "Back"
   },
 
+  "messages": {
+    "saved": "Successfully saved!",
+    "not_saved": "Not saved! :( Try again later!",
+    "no_data": " Sorry, nothing to display here :("
+  },
 
   "footer": {
     "tiles": [
@@ -102,16 +110,12 @@
 
   "marker_sort": [
     {
-      "name": "Title ABC",
-      "value": "title-asc"
+      "name": "By date",
+      "value": "created_at"
     },
     {
-      "name": "Title CBA",
-      "value": "title-desc"
-    },
-    {
-      "name": "Best rated first",
-      "value": "rate-desc"
+      "name": "By title",
+      "value": "title"
     }
   ],
   "marker_filtering": "Filtering options"

@@ -33,6 +33,10 @@ class Tour extends Model
         ];
     }
 
+    public function markers(){
+        return $this->belongsToMany('App\Models\Marker','marker_tours');
+    }
+
     public function favourites(){
         return $this->belongsToMany('App\User','favourite_tours');
     }
@@ -42,50 +46,55 @@ class Tour extends Model
         return $this->belongsTo(TourCategory::class, 'tour_category_id', 'id');
     }
 
-    public static function pagination($active = true, $search_query = null, $category, $order_by, $per_page)
+    public static function pagination($active = true, $search_query = null, $category,$sights,$price, $order_by,$start_date, $end_date, $per_page)
     {
-        if($search_query){
-            return Tour::when($category, function ($q) use ($category) {
+
+        return Tour::whereBetween('price',$price)
+            ->where('active',$active)
+//            ->whereBetween('start_date', array($start_date, $end_date))
+            ->whereBetween('end_date', array($start_date, $end_date))
+            // category
+            ->when($category, function ($q) use ($category) {
                 return $q->whereIn('tour_category_id', $category);})
-                ->select(['tours.*','t.title'])
-                ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
-                ->groupBy('tours.id')
-                ->where('title','LIKE', '%'.$search_query.'%')
-                ->with('category')
-                ->orderBy( $order_by[0], $order_by[1])
-                ->paginate($per_page);
-        }
-        return Tour::when($category, function ($q) use ($category) {
-            return $q->whereIn('tour_category_id', $category);})
-            ->select(['tours.*','t.title'])
-            ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
-            ->groupBy('tours.id')
+            // sights
+            ->when($sights, function ($q) use ($sights) {
+                return $q->whereHas('markers', function($q) use ($sights) {
+                    $q->whereIn('marker_id',$sights);
+                });
+            })
+            // search query
+            ->when($search_query, function ($q) use ($search_query) {
+                return $q->whereHas('translations', function($q) use ($search_query) {
+                    $q->where('title','LIKE', '%'.$search_query.'%');
+                });
+            })
             ->with('category')
-            ->orderBy( $order_by[0], $order_by[1])
+            ->orderBy( $order_by,'desc')
             ->paginate($per_page);
     }
 
-    public static function paginateTrashed($search_query = null, $category, $order_by, $per_page)
+    public static function paginateTrashed($search_query = null, $category,$sights,$price, $order_by, $per_page)
     {
-        if($search_query){
-            return Tour::onlyTrashed()
-                ->select(['tours.*','t.title'])
-                ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
-                ->groupBy('tours.id')
-                ->whereIn('tour_category_id',$category)
-                ->where('title','LIKE', '%'.$search_query.'%')
-                ->with('category')
-                ->orderBy( $order_by[0], $order_by[1])
-                ->paginate($per_page);
-        }
         return Tour::onlyTrashed()
+             ->whereBetween('price',$price)
+            // category
             ->when($category, function ($q) use ($category) {
                 return $q->whereIn('tour_category_id', $category);})
-            ->select(['tours.*','t.title'])
-            ->join('tour_translations as t', 'tours.id', '=', 't.tours_id')
-            ->groupBy('tours.id')
+            // sights
+            ->when($sights, function ($q) use ($sights) {
+                return $q->whereHas('markers', function($q) use ($sights) {
+                    $q->whereIn('marker_id',$sights);
+                });
+            })
+            // search query
+            ->when($search_query, function ($q) use ($search_query) {
+                return $q->whereHas('translations', function($q) use ($search_query) {
+                    $q->where('title','LIKE', '%'.$search_query.'%');
+                });
+            })
             ->with('category')
-            ->orderBy( $order_by[0], $order_by[1])
+            ->orderBy( $order_by,'desc')
             ->paginate($per_page);
+
     }
 }

@@ -53,7 +53,6 @@
             user: 'auth/user'
         }),
         mounted(){
-            console.log(this.$store.state.auth.token)
         },
         methods: {
             async addToFavorites() {

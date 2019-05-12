@@ -17,13 +17,14 @@
                                 <v-flex xs12 md12 lg5 class="mr-2 ">
                                     <v-text-field
                                             outline
-                                            v-model="Fsearch"
+                                            v-model="search"
                                             clearable
                                             :label="` ${$t('form.search')}..`"
                                             type="text"
                                             @keyup="keyupHandle"
 
                                             @click:clear="keyupHandle"
+                                            :disabled="loading"
                                     >
                                         <v-tooltip
                                                 slot="prepend"
@@ -51,12 +52,14 @@
                                 </v-flex>
                                 <v-flex xs8 md10 lg4>
                                     <v-select
+                                            v-model="sortBy"
                                             :label="$t('form.sort_by')"
                                             prepend-inner-icon="filter_list"
-                                            :items="sortByItems"
+                                            :items="$t('marker_sort')"
                                             item-text="name"
                                             outline
                                             solo
+                                            :disabled="loading"
                                     ></v-select>
                                 </v-flex>
                                 <v-spacer class="hidden-md-and-down"></v-spacer>
@@ -73,7 +76,29 @@
                         </v-container>
                     </v-card>
                 </v-flex>
-                <v-flex v-for="item in 12" :key="item" xs12 md6 lg3>
+                <v-flex xs12 v-if="sights.length <= 0" >
+                    <v-layout row wrap justify-center>
+                        <v-flex xs12 md10 lg6>
+                            <v-container fluid>
+                                <v-img
+                                        :src="'/images/nodata-found.png'"
+                                        min-height="250"
+                                >
+                                    <v-layout
+                                            slot="placeholder"
+                                            fill-height
+                                            align-center
+                                            justify-center
+                                            ma-0
+                                    >
+                                        <v-progress-circular indeterminate color="grey lighten-5"/>
+                                    </v-layout>
+                                </v-img>
+                            </v-container>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+                <v-flex v-if="sights.length > 0" v-for="item in sights" :key="item.title" xs12 md6 lg3>
                     <v-card class="my-1">
                         <v-img
                                 :src="'/images/Munkacs_vara.jpg'"
@@ -92,15 +117,13 @@
                             </v-layout>
 
                             <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
+                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#{{getCategoryName(item.marker_category_id)}}</span>
                                 <v-spacer></v-spacer>
-                                <v-btn dark color="indigo" small fab>
-                                    <v-icon>favorite</v-icon>
-                                </v-btn>
+                                <btn-favorite type="sight" :itemID="item.id"></btn-favorite>
                             </v-card-actions>
                         </v-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
-                            <h1 class="headline">Lorem ipsum dolor set amit</h1>
+                            <h1 class="headline">{{ getTitle(item.translations) }}</h1>
                             <v-rating
                                     color="blue darken-3"
                                     readonly
@@ -110,18 +133,10 @@
                             ></v-rating>
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn icon class="purple--text">
-                                <v-icon medium>sb-instagram</v-icon>
-                            </v-btn>
-                            <v-btn icon class="light-blue--text">
-                                <v-icon medium>sb-twitter</v-icon>
-                            </v-btn>
-                            <v-btn icon class="blue--text text--darken-4">
-                                <v-icon medium>sb-facebook</v-icon>
-                            </v-btn>
+                            <share-btns></share-btns>
                             <v-spacer/>
                             <v-btn flat class="blue--text"
-                                   :to="{name:'sight.show',params: {slug:item}}"
+                                   :to="{name:'sight.show',params: {slug:item.slug}}"
                                    outline
                             >
                                 {{$t('btns.read_more')}}
@@ -132,7 +147,7 @@
                 </v-flex>
 
 
-                <v-flex xs12>
+                <v-flex xs12 v-if="sights.length > 0">
                     <v-card style="padding:10px">
                         <v-layout justify-center>
                             <v-pagination
@@ -145,7 +160,6 @@
                     </v-card>
                 </v-flex>
 
-
                 <!--Result Filter-->
                 <v-navigation-drawer
                         v-model="filters"
@@ -155,11 +169,22 @@
                         right
                 >
                     <v-list class="pa-1">
-                        <v-flex>
-                            <v-subheader class="font-weight-black headline text-xs-center">
+                        <v-layout row pa-2>
+                            <v-subheader class="font-weight-black headline">
                                 {{ $t('form.data_panel.title') }}
                             </v-subheader>
-                        </v-flex>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                    icon
+                                    small
+                                    fab
+                                    @click="filters = false"
+                            >
+                                <v-icon>
+                                    close
+                                </v-icon>
+                            </v-btn>
+                        </v-layout>
 
                         <v-divider></v-divider>
                         <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{
@@ -200,17 +225,21 @@
                         <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{ $t('form.category') }}
                         </v-subheader>
                         <v-flex xs12>
-                            <v-combobox
+                            <v-autocomplete
                                     v-model="types"
                                     :items="typeItems"
-                                    :label="$t('form.select')"
-                                    hide-selected
-                                    chips
-                                    clearable
                                     multiple
-                                    single-line
-                                    class="mx-3"
+                                    chips
+                                    :disabled="loading"
+                                    hide-selected
+                                    persistent-hint
+                                    :filter="autoFilter"
+                                    :item-value="autoValue"
                             >
+                                <template slot="item" slot-scope="data">
+                                    <v-icon left>label</v-icon>
+                                    {{ getName(data.item.translations) }}
+                                </template>
                                 <template slot="selection" slot-scope="data">
                                     <v-chip
                                             :selected="data.selected"
@@ -221,10 +250,10 @@
 
                                     >
                                         <v-icon left>label</v-icon>
-                                        <strong>{{ data.item }}</strong>&nbsp;
+                                        <strong> {{ getName(data.item.translations) }}</strong>&nbsp;
                                     </v-chip>
                                 </template>
-                            </v-combobox>
+                            </v-autocomplete>
                         </v-flex>
 
                     </v-list>
@@ -248,141 +277,67 @@
     </div>
 </template>
 <script>
+    import BtnFavorite from "../../components/global/btn-favorite";
+    import ShareBtns from "../../components/global/share-btns";
+
     export default {
         name: "markerindex",
-        head() {
-            return {
-                title: 'Sights',
+        components: {ShareBtns, BtnFavorite},
+        async asyncData({params, $axios, $router}) {
+            try {
+                const {data} = await $axios.get('marker?limit=12')
+                return {
+                    sights: data.data,
+                    page :data.meta.current_page,
+                    total : data.meta.last_page
+                }
+            } catch (e) {
+                $router.push({name: 'error'})
             }
         },
+
+        head() {
+            return {
+                title: this.$t('navbar.sights'),
+            }
+        },
+
         data() {
             return {
                 rating: 4,
                 rate: [0, 5],
-                price: [10, 600],
                 filters: false,
 
-
-                date: new Date().toISOString().substr(0, 10),
-                modal: false,
-
-                date2: new Date().toISOString().substr(0, 10),
-                modal2: false,
+                sights: [],
 
                 items: [],
                 search: null,
                 select: null,
-                states: [
-                    'Alabama',
-                    'Alaska',
-                    'American Samoa',
-                    'Arizona',
-                    'Arkansas',
-                    'California',
-                    'Colorado',
-                    'Connecticut',
-                    'Delaware',
-                    'District of Columbia',
-                    'Federated States of Micronesia',
-                    'Florida',
-                    'Georgia',
-                    'Guam',
-                    'Hawaii',
-                    'Idaho',
-                    'Illinois',
-                    'Indiana',
-                    'Iowa',
-                    'Kansas',
-                    'Kentucky',
-                    'Louisiana',
-                    'Maine',
-                    'Marshall Islands',
-                    'Maryland',
-                    'Massachusetts',
-                    'Michigan',
-                    'Minnesota',
-                    'Mississippi',
-                    'Missouri',
-                    'Montana',
-                    'Nebraska',
-                    'Nevada',
-                    'New Hampshire',
-                    'New Jersey',
-                    'New Mexico',
-                    'New York',
-                    'North Carolina',
-                    'North Dakota',
-                    'Northern Mariana Islands',
-                    'Ohio',
-                    'Oklahoma',
-                    'Oregon',
-                    'Palau',
-                    'Pennsylvania',
-                    'Puerto Rico',
-                    'Rhode Island',
-                    'South Carolina',
-                    'South Dakota',
-                    'Tennessee',
-                    'Texas',
-                    'Utah',
-                    'Vermont',
-                    'Virgin Island',
-                    'Virginia',
-                    'Washington',
-                    'West Virginia',
-                    'Wisconsin',
-                    'Wyoming'
-                ],
-
 
                 page: 1,
-                total: 8,
+                total: 1,
                 loading: false,
 
-                Fsearch: '',
 
-                typeItems: ['Test 1', 'Test2', 'Test 1', 'Test2', 'Test 1', 'Test2'],
+                typeItems: [],
                 types: [],
                 typeDelay: {},
 
-                sortByItems: [],
-                SortBy: '',
-
-                markers: [
-                    {
-                        id: 5,
-                        slug: 'Okey fdksl',
-                        translations: [
-                            {
-                                locale: 'en',
-                                title: 'Hello vilag fjdsklfjskld fsdfsd',
-                                description: 'dhsjkvnklsd vndkvskdnjksd bsdjkbfs'
-                            },
-                            {
-                                locale: 'hu',
-                                title: 'Hello vilag fjdsklfjskld fsdfsd',
-                                description: 'dhsjkvnklsd vndkvskdnjksd bsdjkbfs'
-                            },
-                            {
-                                locale: 'ua',
-                                title: 'Hello vilag fjdsklfjskld fsdfsd',
-                                description: 'dhsjkvnklsd vndkvskdnjksd bsdjkbfs'
-                            },
-                        ]
-                    }
-                ],
+                sortBy: null,
             }
         },
-        mounted() {
-            this.sortByItems = $nuxt.$t('marker_sort');
-            console.log(this.sortByItems);
-            // axios.get('/types/all').then((response) => {
-            //     this.typeItems = response.data
-            // });
-            // this.sendRequest();
+        async mounted() {
+            try {
+                const {data} = await this.$axios.get('marker/category')
+                this.typeItems = data.data
+            } catch (e) {
+                console.log('Failed to load categoties')
+            }
+
+
         },
         watch: {
-            types: function () {
+            types: function (v) {
                 clearTimeout(this.typeDelay);
                 this.typeDelay = setTimeout(() => {
                     this.page = 1;
@@ -394,23 +349,22 @@
             },
             search(val) {
                 val && val !== this.select && this.querySelections(val)
+            },
+            sortBy: function () {
+                this.sendRequest();
             }
         },
         methods: {
-            readMore: function (slug) {
-                this.$emit('eventname', {name: 'markercomponent', value: slug});
-                // window.location.href = '/routes/route/' + slug;
-            },
             keyupHandle(event) {
                 clearTimeout(this.timeoutId);
                 if (event.key == 'Enter') {
                     this.page = 1;
-                    this.getDataFromServer();
+                    this.sendRequest();
                     return;
                 }
                 this.timeoutId = setTimeout(() => {
                     this.page = 1;
-                    this.getDataFromServer();
+                    this.sendRequest();
                 }, 700);
             },
             remove(item) {
@@ -418,38 +372,66 @@
                 this.types = [...this.types]
             },
             getDataFromApi(url) {
-                this.loading = true;
-                axios.get(url).then((response) => {
-                    this.loading = false;
-                    this.markers = response.data.data;
-                    this.page = response.data.current_page;
-                    this.total = response.data.last_page;
-                    this.drawMarkers();
-                    console.log(response.data)
+                this.loading = true
+                this.$axios.get(url).then((response) => {
+                    this.sights = response.data.data
+                    this.page = response.data.meta.current_page
+                    this.total = response.data.meta.last_page
+                    this.loading = false
                 }).catch((response) => {
                     this.loading = false
                 });
                 // .finaly(()=>{}) on IE not works
             },
             sendRequest() {
-                this.getDataFromApi(`/markers/map?page=${this.page}&types=${JSON.stringify(this.types)}&per_page=9`);
+                let url = `marker?page=${this.page}&limit=12&category=${JSON.stringify(this.types)}`
+                if (this.search) {
+                    url += `&q=${this.search}`
+                }
+                if (this.order) {
+                    url += `&order=${this.sortBy}`
+                }
+                this.getDataFromApi(url)
+
+            },
+            querySelections(v) {
+                // // Simulated ajax query
+                // this.typeItems = this.typeItems.filter(e => {
+                //     return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+                // })
+            },
+            getCategoryName(id) {
+                if(typeof  this.typeItems.find(obj => obj.id ===  id) == 'undefined')
+                    return 'category'
+
+               return this.typeItems.find(obj => obj.id ===  id)
+                     .translations.find(obj => obj.locale ===  this.getLocal).name
+            },
+            getTitle(item) {
+                return item.find(obj => obj.locale ===  this.getLocal).title
+            },
+            getName(item) {
+                return item.find(obj => obj.locale ===  this.getLocal).name
             },
 
-            querySelections(v) {
-                this.loading = true
-                // Simulated ajax query
-                setTimeout(() => {
-                    this.items = this.states.filter(e => {
-                        return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
-                    })
-                    this.loading = false
-                }, 500)
-            }
+            autoFilter(item, queryText, itemText) {
+                return this.getName(item.translations).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+            },
+            autoValue(value) {
+                return value.id
+            },
         },
-        computed: {}
+        computed: {
+            getLocal(){
+                return this.$i18n.locale === 'uk' ? 'ua' : this.$i18n.locale
+            }
+
+        }
     }
 </script>
 
 <style scoped>
-
+.no-data{
+    width: 100vw !important;
+}
 </style>

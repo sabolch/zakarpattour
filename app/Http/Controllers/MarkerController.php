@@ -7,6 +7,7 @@ use App\Models\Marker;
 use App\Http\Resources\MarkerResource;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -23,20 +24,28 @@ class MarkerController extends Controller
      */
     public function index()
     {
+        if(Input::has('locale')){
+            Session::put('locale',Input::get('locale'));
+        }
+
         $search_query = Input::has('q') ? Input::get('q') : false;
         $per_page = Input::has('limit') ? Input::get('limit') : 10;
-        $category = Input::has('category') ? Input::get('category') : '';
-        $order_by = Input::has('order') ? Input::get('order') : ['created_at','desc'];
+        $category = Input::has('category') ? json_decode(Input::get('category')) : '';
+        $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
         return  MarkerResource::collection(Marker::pagination($search_query, $category,$order_by,$per_page));
     }
 
     public function trashed()
     {
+        if(Input::has('locale')){
+            Session::put('locale',Input::get('locale'));
+        }
+
         $search_query = Input::has('q') ? Input::get('q') : false;
         $per_page = Input::has('limit') ? Input::get('limit') : 10;
-        $category = Input::has('category') ? Input::get('category') : '';
-        $order_by = Input::has('order') ? Input::get('order') : ['created_at','desc'];
+        $category = Input::has('category') ? json_decode(Input::get('category')) : '';
+        $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
         return  MarkerResource::collection(Marker::paginateTrashed($search_query, $category,$order_by,$per_page));
 

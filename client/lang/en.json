@@ -110,16 +110,12 @@
 
   "marker_sort": [
     {
-      "name": "Title ABC",
-      "value": "title-asc"
+      "name": "By date",
+      "value": "created_at"
     },
     {
-      "name": "Title CBA",
-      "value": "title-desc"
-    },
-    {
-      "name": "Best rated first",
-      "value": "rate-desc"
+      "name": "By title",
+      "value": "title"
     }
   ],
   "marker_filtering": "Filtering options"
