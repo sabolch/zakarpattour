@@ -67,7 +67,7 @@
                         <v-img
                                 :src="item.image"
                                 aspect-ratio="1"
-                                height="300px"
+                                height="300"
                                 class="grey lighten-2"
                         >
                             <v-layout
@@ -143,7 +143,7 @@
                         <v-img
                                 :src="item.image"
                                 aspect-ratio="1"
-                                height="300px"
+                                height="300"
                                 class="grey lighten-2"
                         >
                             <v-layout
@@ -233,7 +233,7 @@
                         <v-img
                                 :src="item.image"
                                 aspect-ratio="1"
-                                height="300px"
+                                height="300"
                                 class="grey lighten-2"
                         >
                             <v-layout
@@ -321,7 +321,7 @@
                         <v-img
                                 :src="item.image"
                                 aspect-ratio="1"
-                                height="300px"
+                                height="300"
                                 class="grey lighten-2"
                         >
                             <v-layout

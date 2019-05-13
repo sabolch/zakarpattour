@@ -111,6 +111,7 @@
                 <v-icon>fullscreen</v-icon>
             </v-btn>
 
+
             <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
                 <v-btn icon flat slot="activator">
                     <v-badge color="red" overlap>
@@ -172,7 +173,9 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
-
+            <v-btn icon>
+                <v-icon>more_vert</v-icon>
+            </v-btn>
         </v-toolbar>
         <v-content>
             <v-container fluid>
@@ -234,6 +237,25 @@
                 { text: 'Dashboard', icon: 'dashboard',href:'admin.dash' },
                 {
                     icon: 'keyboard_arrow_up',
+                    'icon-alt': 'notifications_active',
+                    text: 'Notifications',
+                    model: false,
+                    children: [
+                        { icon: 'markunread', text: 'Contact Us', href:'admin.notifications.message' },
+                    ]
+                },
+                {
+                    icon: 'keyboard_arrow_up',
+                    'icon-alt': 'people',
+                    text: 'Users',
+                    model: false,
+                    children: [
+                        { icon: 'build', text: 'Admins', href:'admin.notifications.message' },
+                        { icon: 'persons', text: 'Users', href:'admin.notifications.message' },
+                    ]
+                },
+                {
+                    icon: 'keyboard_arrow_up',
                     'icon-alt': 'location_on',
                     text: 'Sight',
                     model: false,
@@ -254,17 +276,15 @@
                         { icon: 'timeline', text: 'Tours', href:'admin.tour.list' },
                     ]
                 },
-
                 {
                     icon: 'keyboard_arrow_up',
-                    'icon-alt': 'notifications',
-                    text: 'Notifications',
-                    model: true,
+                    'icon-alt': 'pages',
+                    text: 'Pages',
+                    model: false,
                     children: [
-                        { icon: 'markunread', text: 'Contact Us', href:'admin.notifications.message' },
+                        { icon: 'info', text: 'About Us', href:'admin.notifications.message' },
                     ]
                 },
-
             ],
 
             itemss: [
@@ -286,6 +306,14 @@
                 },
                 {
                     icon: 'logout',
+                    href: '#',
+                    title: 'Logout',
+                    click: (e) => {
+                        this.logout()
+                    }
+                },
+                {
+                    icon: 'more_vert',
                     href: '#',
                     title: 'Logout',
                     click: (e) => {

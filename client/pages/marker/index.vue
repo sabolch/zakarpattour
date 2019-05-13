@@ -117,7 +117,7 @@
                             </v-layout>
 
                             <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#{{getCategoryName(item.marker_category_id)}}</span>
+                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#{{getName(item.category.translations)}}</span>
                                 <v-spacer></v-spacer>
                                 <btn-favorite type="sight" :itemID="item.id"></btn-favorite>
                             </v-card-actions>

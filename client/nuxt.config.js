@@ -85,7 +85,7 @@ module.exports = {
         '~plugins/i18n',
         '~plugins/vform',
         '~plugins/axios',
-        {src: '~plugins/quill', ssr: false}
+        {src: '~plugins/quill', ssr: false},
         // '~plugins/fontawesome',
         // '~plugins/nuxt-client-init',
         // { src: '~plugins/bootstrap', ssr: false }
