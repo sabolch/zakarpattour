@@ -1,7 +1,8 @@
-import { Line } from 'vue-chartjs'
+import { Pie } from 'vue-chartjs'
 
 export default {
-    extends: Line,
+    name:'pie-chart',
+    extends: Pie,
     props: ['data', 'options'],
     mounted() {
         this.renderChart(this.data, this.options)

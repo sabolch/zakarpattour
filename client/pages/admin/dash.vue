@@ -1,41 +1,137 @@
 <template>
-    <v-container fluid>
+    <v-container fluid pa-0 ma-0>
         <v-layout row wrap>
-            <v-flex xs12>
-                Logged In to Admin Dash
 
+            <v-flex xs12 class="mb-1 pa-1">
+                <v-card elevation="5">
+                    <v-card-title class="primary white--text title pa-4">
+                        Logged In to Admin Dash
+                    </v-card-title>
+                </v-card>
             </v-flex>
-            <v-flex xs12>
-                <LineChart :data="barChartData" :options="{ maintainAspectRatio: false }" />
+
+            <v-flex sm6 xs12 md3 v-for="item in panels" :key="item.icon" class="pa-1">
+                <mini-statistic :item="item"></mini-statistic>
+            </v-flex>
+
+
+            <v-flex xs12  md6 class="pa-1">
+                <v-card elevation="5">
+                    <v-card-title class="green white--text title">
+                        Logged In to Admin Dash
+                    </v-card-title>
+                    <v-card-text>
+                        <LineChart :data="barChartData" :options="lineChartoptions"/>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12 md6 class="pa-1">
+                <v-card elevation="5">
+                    <v-card-title class="primary white--text title">
+                        Logged In to Admin Dash
+                    </v-card-title>
+                    <v-card-text>
+                        <PieChart :data="pieData" :options="{ maintainAspectRatio: false }"/>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+            <v-flex xs12 md6 class="pa-1">
+                <v-card elevation="5">
+                    <v-card-title class="orange white--text">
+                        Logged In to Admin Dash
+                    </v-card-title>
+                    <v-card-text>
+                        <DoughnutChart :data="pieData" :options="{ maintainAspectRatio: false }"/>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12 md6 class="pa-1">
+                <v-card elevation="5">
+                    <v-card-title class="purple white--text">
+                        Logged In to Admin Dash
+                    </v-card-title>
+                    <v-card-text>
+                        <BarChart :data="barChartData" :options="lineChartoptions"/>
+                    </v-card-text>
+                </v-card>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
 
 <script>
-    import LineChart from "../../components/line-chart";
+    import LineChart from "../../components/chartjs/line-chart";
+    import PieChart from "../../components/chartjs/pie-chart";
+    import DoughnutChart from "../../components/chartjs/doughnut-chart";
+    import BarChart from "../../components/chartjs/bar-chart";
+    import MiniStatistic from "../../components/admin/mini-statistic";
+
     export default {
         name: "dash",
-        components: {LineChart},
-        layout:'admin',
+        components: {MiniStatistic, BarChart, DoughnutChart, PieChart, LineChart},
+        layout: 'admin',
         middleware: 'admin',
-        async asyncData({ env,axios }) {
+        async asyncData({$axios}) {
             return {
                 barChartData: {
                     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                     datasets: [
                         {
                             label: 'Data One',
-                            backgroundColor: '#f87979',
-                            data: [40, 39, 10, 40, 39, 80, 40]
-                        },
+                            backgroundColor: ['rgba(230, 155, 155, 0.5)','rgba(120, 15, 155, 0.5)','rgba(30, 155, 188, 0.5)'],
+                            borderColor:'rgba(230, 155, 155, 1)',
+                            borderWidth:2,
+                            data: [40, 25, 15, 40, 39, 65, 40],
+                            pointBackgroundColor: "#dd5555"
+                        }
+                    ]
+                },
+                pieData: {
+                    labels: ["Green", "Red", "Blue"],
+                    datasets: [
                         {
-                            label: 'Data Two',
-                            backgroundColor: '#f8ff79',
-                            data: [21, 55, 10, 78, 53, 83, 41]
+                            label: "Data One",
+                            backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+                            data: [1, 10, 5]
                         }
                     ]
                 }
+            }
+        },
+        data() {
+            return {
+                compact: false,
+                lineChartoptions:{
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                display:false
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            },
+                            gridLines: {
+                                display:false
+                            }
+                        }]
+                    }
+                },
+                panels:[
+                    {color:'green darken-2',title:'200',icon:'group_add',subTitle:'New Users'},
+                    {color:'purple',title:'350',icon:'share',subTitle:'Shares'},
+                    {color:'blue darken-2',title:'892',icon:'star',subTitle:'Likes'},
+                    {color:'red lighten-2',title:'152',icon:'shopping_cart',subTitle:'Orders'},
+                ]
+            }
+        },
+        computed:{
+            breakpoint() {
+                return this.$vuetify.breakpoint.xs
             }
         }
     }

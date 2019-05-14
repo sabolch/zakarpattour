@@ -251,7 +251,7 @@
                     model: false,
                     children: [
                         { icon: 'build', text: 'Admins', href:'admin.notifications.message' },
-                        { icon: 'persons', text: 'Users', href:'admin.notifications.message' },
+                        { icon: 'people', text: 'Users', href:'admin.notifications.message' },
                     ]
                 },
                 {

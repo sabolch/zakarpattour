@@ -64,28 +64,13 @@
                 <v-flex v-for="(item,index) in posts.recommended_slights" :key="`${item.image}-${index}-o`" xs12 md6
                         lg3>
                     <v-card class="my-1">
-                        <v-img
-                                :src="item.image"
-                                aspect-ratio="1"
-                                height="300"
-                                class="grey lighten-2"
-                        >
-                            <v-layout
-                                    slot="placeholder"
-                                    fill-height
-                                    align-center
-                                    justify-center
-                                    ma-0
-                            >
-                                <v-progress-circular indeterminate color="grey lighten-5"/>
-                            </v-layout>
+                       <lazy-item-img
+                       :itemID="0"
+                       type="sight"
+                       :src="item.image"
+                       category="category"
+                       ></lazy-item-img>
 
-                            <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
-                                <v-spacer></v-spacer>
-                                <btn-favorite type="sight" :itemID="0"></btn-favorite>
-                            </v-card-actions>
-                        </v-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
                             <h1 class="headline">Lorem ipsum dolor set amit</h1>
                             <v-rating
@@ -109,18 +94,10 @@
                     </v-card>
                 </v-flex>
                 <v-flex xs12 pa-1>
-                    <v-parallax
-                            dark
-                            src="/images/bg/bg2.jpg"
-                            height="300"
-                    >
-                        <v-layout fill-height column ma-0>
-                            <v-spacer></v-spacer>
-                            <v-flex class="text-xs-right" shrink>
-                                <h1 class=" text-xs-right title font-weight-bold mb-3">/Долина нарцисів/</h1>
-                            </v-flex>
-                        </v-layout>
-                    </v-parallax>
+                    <lazy-paralax
+                        src="/images/bg/bg2.jpg"
+                        title="Долина нарцисів"
+                    ></lazy-paralax>
                 </v-flex>
                 <v-flex xs12>
                     <v-card>
@@ -140,28 +117,12 @@
 
                 <v-flex v-for="(item,index ) in posts.recommended_tours" :key="index" xs12 md6 lg3>
                     <v-card class="my-1">
-                        <v-img
+                        <lazy-item-img
+                                :itemID="0"
+                                type="tour"
                                 :src="item.image"
-                                aspect-ratio="1"
-                                height="300"
-                                class="grey lighten-2"
-                        >
-                            <v-layout
-                                    slot="placeholder"
-                                    fill-height
-                                    align-center
-                                    justify-center
-                                    ma-0
-                            >
-                                <v-progress-circular indeterminate color="grey lighten-5"/>
-                            </v-layout>
-
-                            <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
-                                <v-spacer></v-spacer>
-                                <btn-favorite  type="tour" :itemID="0"></btn-favorite>
-                            </v-card-actions>
-                        </v-img>
+                                category="category"
+                        ></lazy-item-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
                             <h1 class="headline">Lorem ipsum dolor set amit</h1>
                             <v-rating
@@ -198,18 +159,10 @@
                 </v-flex>
 
                 <v-flex xs12 pa-1>
-                    <v-parallax
-                            dark
+                    <lazy-paralax
                             src="/images/bg/bg3.jpg"
-                            height="300"
-                    >
-                        <v-layout fill-height column ma-0>
-                            <v-spacer></v-spacer>
-                            <v-flex class="text-xs-right" shrink>
-                                <h1 class=" text-xs-right title font-weight-bold mb-3">/Синевир/</h1>
-                            </v-flex>
-                        </v-layout>
-                    </v-parallax>
+                            title="Синевир"
+                    ></lazy-paralax>
                 </v-flex>
 
                 <v-flex xs12>
@@ -230,28 +183,12 @@
 
                 <v-flex v-for="(item,index) in posts.popular_slights" :key="`${index}-${item.image}`" xs12 md6 lg3>
                     <v-card class="my-1">
-                        <v-img
+                        <lazy-item-img
+                                :itemID="0"
+                                type="sight"
                                 :src="item.image"
-                                aspect-ratio="1"
-                                height="300"
-                                class="grey lighten-2"
-                        >
-                            <v-layout
-                                    slot="placeholder"
-                                    fill-height
-                                    align-center
-                                    justify-center
-                                    ma-0
-                            >
-                                <v-progress-circular indeterminate color="grey lighten-5"/>
-                            </v-layout>
-
-                            <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
-                                <v-spacer></v-spacer>
-                                <btn-favorite type="sight" :itemID="0"></btn-favorite>
-                            </v-card-actions>
-                        </v-img>
+                                category="category"
+                        ></lazy-item-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
                             <h1 class="headline">Lorem ipsum dolor set amit</h1>
                             <v-rating
@@ -285,18 +222,11 @@
 
 
                 <v-flex xs12 pa-1>
-                    <v-parallax
-                            dark
+                    <lazy-paralax
                             src="/images/bg/bg4.jpg"
-                            height="300"
-                    >
-                        <v-layout fill-height column ma-0>
-                            <v-spacer></v-spacer>
-                            <v-flex class="text-xs-right" shrink>
-                                <h1 class=" text-xs-right title font-weight-bold mb-3">/Сакури Ужгород/</h1>
-                            </v-flex>
-                        </v-layout>
-                    </v-parallax>
+                            title="Сакури Ужгород"
+                    ></lazy-paralax>
+
                 </v-flex>
 
 
@@ -318,28 +248,12 @@
 
                 <v-flex v-for="(item,index) in posts.popular_tours" :key="`${item.image}-${index}`" xs12 md6 lg3>
                     <v-card class="my-1">
-                        <v-img
+                        <lazy-item-img
+                                :itemID="0"
+                                type="tour"
                                 :src="item.image"
-                                aspect-ratio="1"
-                                height="300"
-                                class="grey lighten-2"
-                        >
-                            <v-layout
-                                    slot="placeholder"
-                                    fill-height
-                                    align-center
-                                    justify-center
-                                    ma-0
-                            >
-                                <v-progress-circular indeterminate color="grey lighten-5"/>
-                            </v-layout>
-
-                            <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#category</span>
-                                <v-spacer></v-spacer>
-                                <btn-favorite type="tour" :itemID="0"></btn-favorite>
-                            </v-card-actions>
-                        </v-img>
+                                category="category"
+                        ></lazy-item-img>
                         <v-card-text class="align-center text-xs-justify pa-2">
                             <h1 class="headline">Lorem ipsum dolor set amit</h1>
                             <v-rating
@@ -410,6 +324,8 @@
 
 <script>
     import {mapGetters} from 'vuex'
+    import LazyParalax from "../components/lazy-load/lazy-paralax";
+    import LazyItemImg from "../components/lazy-load/lazy-item-img";
 
     export default {
         name: 'indexpage',
@@ -418,7 +334,7 @@
                 title: this.$t("index.title")
             }
         },
-        components: {},
+        components: {LazyItemImg, LazyParalax},
 
         data: () => ({
             appName: process.env.appName,
