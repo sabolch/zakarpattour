@@ -69,6 +69,7 @@ class Tour extends Model
                 });
             })
             ->with('category')
+            ->with('markers')
             ->orderBy( $order_by,'desc')
             ->paginate($per_page);
     }

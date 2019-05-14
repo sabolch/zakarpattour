@@ -98,52 +98,10 @@
                         </v-flex>
                     </v-layout>
                 </v-flex>
-                <v-flex v-if="sights.length > 0" v-for="item in sights" :key="item.title" xs12 md6 lg3>
-                    <v-card class="my-1">
-                        <v-img
-                                :src="'/images/Munkacs_vara.jpg'"
-                                aspect-ratio="1"
-                                height="300px"
-                                class="grey lighten-2"
-                        >
-                            <v-layout
-                                    slot="placeholder"
-                                    fill-height
-                                    align-center
-                                    justify-center
-                                    ma-0
-                            >
-                                <v-progress-circular indeterminate color="grey lighten-5"/>
-                            </v-layout>
-
-                            <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#{{getName(item.category.translations)}}</span>
-                                <v-spacer></v-spacer>
-                                <btn-favorite type="sight" :itemID="item.id"></btn-favorite>
-                            </v-card-actions>
-                        </v-img>
-                        <v-card-text class="align-center text-xs-justify pa-2">
-                            <h1 class="headline">{{ getTitle(item.translations) }}</h1>
-                            <v-rating
-                                    color="blue darken-3"
-                                    readonly
-                                    background-color="grey darken-1"
-                                    medium
-                                    v-model="rating"
-                            ></v-rating>
-                        </v-card-text>
-                        <v-card-actions>
-                            <share-btns></share-btns>
-                            <v-spacer/>
-                            <v-btn flat class="blue--text"
-                                   :to="{name:'sight.show',params: {slug:item.slug}}"
-                                   outline
-                            >
-                                {{$t('btns.read_more')}}
-                            </v-btn>
-                        </v-card-actions>
-
-                    </v-card>
+                <v-flex v-if="sights.length > 0" v-for="item in sights" :key="item.slug" xs12 md6 lg3>
+                    <sight-post
+                    :item="item"
+                    ></sight-post>
                 </v-flex>
 
 
@@ -279,10 +237,11 @@
 <script>
     import BtnFavorite from "../../components/global/btn-favorite";
     import ShareBtns from "../../components/global/share-btns";
+    import SightPost from "../../components/posts/sight-post";
 
     export default {
         name: "markerindex",
-        components: {ShareBtns, BtnFavorite},
+        components: {SightPost, ShareBtns, BtnFavorite},
         async asyncData({params, $axios, $router}) {
             try {
                 const {data} = await $axios.get('marker?limit=12')

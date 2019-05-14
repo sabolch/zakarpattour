@@ -116,46 +116,9 @@
 
 
                 <v-flex v-for="(item,index ) in posts.recommended_tours" :key="index" xs12 md6 lg3>
-                    <v-card class="my-1">
-                        <lazy-item-img
-                                :itemID="0"
-                                type="tour"
-                                :src="item.image"
-                                category="category"
-                        ></lazy-item-img>
-                        <v-card-text class="align-center text-xs-justify pa-2">
-                            <h1 class="headline">Lorem ipsum dolor set amit</h1>
-                            <v-rating
-                                    color="blue darken-3"
-                                    readonly
-                                    background-color="grey darken-1"
-                                    medium
-                                    v-model="rating"
-                            ></v-rating>
-                            <v-chip v-for="i in 3" :key="i" color="blue darken-4" outline>
-                                <v-icon left>location_on</v-icon>
-                                Location {{i}}
-                            </v-chip>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn icon class="purple--text">
-                                <v-icon medium>sb-instagram</v-icon>
-                            </v-btn>
-                            <v-btn icon class="light-blue--text">
-                                <v-icon medium>sb-twitter</v-icon>
-                            </v-btn>
-                            <v-btn icon class="blue--text text--darken-4">
-                                <v-icon medium>sb-facebook</v-icon>
-                            </v-btn>
-                            <v-spacer/>
-                            <v-btn flat class="blue--text"
-                                   @click="readMore(item.slug)"
-                                   outline
-                            > {{ $t('btns.read_more') }}
-                            </v-btn>
-                        </v-card-actions>
-
-                    </v-card>
+                        <tour-post
+                            :item="item"
+                        ></tour-post>
                 </v-flex>
 
                 <v-flex xs12 pa-1>
@@ -247,46 +210,9 @@
 
 
                 <v-flex v-for="(item,index) in posts.popular_tours" :key="`${item.image}-${index}`" xs12 md6 lg3>
-                    <v-card class="my-1">
-                        <lazy-item-img
-                                :itemID="0"
-                                type="tour"
-                                :src="item.image"
-                                category="category"
-                        ></lazy-item-img>
-                        <v-card-text class="align-center text-xs-justify pa-2">
-                            <h1 class="headline">Lorem ipsum dolor set amit</h1>
-                            <v-rating
-                                    color="blue darken-3"
-                                    readonly
-                                    background-color="grey darken-1"
-                                    medium
-                                    v-model="rating"
-                            ></v-rating>
-                            <v-chip v-for="i in 3" :key="i" color="blue darken-4" outline>
-                                <v-icon left>location_on</v-icon>
-                                Location {{i}}
-                            </v-chip>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn icon class="purple--text">
-                                <v-icon medium>sb-instagram</v-icon>
-                            </v-btn>
-                            <v-btn icon class="light-blue--text">
-                                <v-icon medium>sb-twitter</v-icon>
-                            </v-btn>
-                            <v-btn icon class="blue--text text--darken-4">
-                                <v-icon medium>sb-facebook</v-icon>
-                            </v-btn>
-                            <v-spacer/>
-                            <v-btn flat class="blue--text"
-                                   @click="readMore(item.slug)"
-                                   outline
-                            > {{ $t('btns.read_more') }}
-                            </v-btn>
-                        </v-card-actions>
-
-                    </v-card>
+                    <tour-post
+                            :item="item"
+                    ></tour-post>
                 </v-flex>
                 <v-flex xs12>
                     <v-card dark class="text-xs-center indigo darken-4">
@@ -326,6 +252,7 @@
     import {mapGetters} from 'vuex'
     import LazyParalax from "../components/lazy-load/lazy-paralax";
     import LazyItemImg from "../components/lazy-load/lazy-item-img";
+    import TourPost from "../components/posts/tour-post";
 
     export default {
         name: 'indexpage',
@@ -334,7 +261,7 @@
                 title: this.$t("index.title")
             }
         },
-        components: {LazyItemImg, LazyParalax},
+        components: {TourPost, LazyItemImg, LazyParalax},
 
         data: () => ({
             appName: process.env.appName,
