@@ -112,6 +112,9 @@ class MarkerController extends Controller
     {
         try{
             $marker = Marker::whereSlug($slug)->with('category')->first();
+
+            $marker->increment('views');
+
             return response()->json([
                 'success'=>true,
                 'data'=> $marker

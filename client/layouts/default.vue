@@ -173,7 +173,7 @@
                         this.setLocale('en')
                         break
                     case 'ua':
-                        this.setLocale('uk')
+                        this.setLocale('ua')
                         break
                     case 'hu':
                         this.setLocale('hu')
@@ -193,7 +193,7 @@
               switch (this.$i18n.locale) {
                   case 'hu':
                       return 'hu'
-                  case  'uk':
+                  case  'ua':
                       return 'ua'
                   default:
                       return 'en'

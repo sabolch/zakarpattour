@@ -239,15 +239,17 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
-        head: {
-
+        head() {
+            return {
+                title: this.$t('navbar.home'),
+            }
         },
-        async asyncData ({ params, $axios, $router }) {
+        async asyncData ({ params, $axios,redirect }) {
             try {
-                // let {data} = await  $axios.$get(`/tour/show/${params.slug}`)
+                let {data} = await  $axios.$get(`/tour/show/${params.slug}`)
                 // if (data.success) return {tour: data.data}
             }catch (e) {
-                $router.push({name:'error'})
+                redirect('/error')
             }
         },
         data() {
@@ -364,8 +366,6 @@
             },
 
             generateMarkers:function () {
-                let labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
                 let locations = [
                     {lat: 48.496582, lng: 23.5212107}
                 ];

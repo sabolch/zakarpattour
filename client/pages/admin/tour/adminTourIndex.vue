@@ -3,9 +3,9 @@
         <v-layout row wrap>
             <v-flex xs12>
                 <v-stepper v-model="e6" vertical>
-                    <v-stepper-step editable :complete="e6 > 1" step="1">
+                    <v-stepper-step editable :complete="e6 > 1" step="1" color="green">
                         Tour
-                        <small>Select the location</small>
+                        <small>Title & category</small>
                     </v-stepper-step>
                     <v-stepper-content step="1">
                         <v-tabs
@@ -43,65 +43,105 @@
                                 label="Select category"
                                 persistent-hint
                                 :filter="autoFilter"
-                                :item-value="autoValue"
                         >
                             <template slot="selection"
                                       slot-scope="{ item, index }"
                             >
-                                                <span style="color:blue;font-size: 28px;" class="v-icon mki"
-                                                      :class="`mki-${item.icon}`"></span>
+                                <v-icon color="primary">label</v-icon>
                                 <span>&nbsp;&nbsp; {{ item.translations.find(obj => obj.locale ===  getLocal).name }}</span>
                             </template>
 
                             <template slot="item"
                                       slot-scope="{ item, index }"
                             >
-                                            <span style="color:blue;font-size: 28px;" class="v-icon mki"
-                                                  :class="`mki-${item.icon}`"></span>
+                                <v-icon color="primary">label</v-icon>
                                 <span>&nbsp;&nbsp;{{ item.translations.find(obj => obj.locale ===  getLocal).name }}</span>
                             </template>
 
                         </v-autocomplete>
 
+
+                        <v-flex xs12>
+                            <v-dialog
+                                    ref="dialog1"
+                                    v-model="modal"
+                                    :return-value.sync="form.start_date"
+                                    persistent
+                                    lazy
+                                    full-width
+                            >
+                                <v-text-field
+                                        :label="$t('form.data_panel.start_date')"
+                                        slot="activator"
+                                        class="mx-3"
+                                        v-model="form.start_date"
+                                        prepend-inner-icon="event"
+                                        readonly
+                                ></v-text-field>
+                                <v-date-picker :disabled="loading" v-model="form.start_date" :locale="$i18n.locale"
+                                               scrollable>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="modal = false">{{ $t('btns.cancel') }}</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.dialog1.save(form.start_date)">OK</v-btn>
+                                </v-date-picker>
+                            </v-dialog>
+                        </v-flex>
+
+                        <v-flex xs12>
+                            <v-dialog
+                                    ref="dialog"
+                                    v-model="modal2"
+                                    :return-value.sync="form.end_date"
+                                    persistent
+                                    lazy
+                                    full-width
+                            >
+                                <v-text-field
+                                        :label="$t('form.data_panel.end_date')"
+                                        slot="activator"
+                                        class="mx-3"
+                                        v-model="form.end_date"
+                                        prepend-inner-icon="event"
+                                        readonly
+                                ></v-text-field>
+                                <v-date-picker :disabled="loading" v-model="form.end_date" :locale="$i18n.locale"
+                                               scrollable>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="modal2 = false">{{ $t('btns.cancel') }}</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.dialog.save(form.end_date)">OK</v-btn>
+                                </v-date-picker>
+                            </v-dialog>
+                        </v-flex>
+
+
                         <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step editable :complete="e6 > 2" step="2">Title & category
+                    <v-stepper-step editable :complete="e6 > 2" step="2" color="purple">Title & category
                         <small>Give a title and translate it also set the category</small>
                     </v-stepper-step>
 
                     <v-stepper-content step="2">
                         <v-container fluid pa-0 ma-0 pb-2>
                             <v-layout row wrap>
-                                <v-flex m6>
-                                    <v-btn  color="success">Add Tour</v-btn>
-                                </v-flex>
-                                <v-flex m6>
-                                    <v-switch
-                                            v-model="toogleMapStyle"
-                                            label="Show map labels"
-                                            color="indigo"
-                                            value="indigo"
-                                            hide-details
-                                            @change="styleHandler"
-                                    ></v-switch>
-                                </v-flex>
+
                                 <v-flex xs12>
                                     <v-autocomplete
-                                            v-model="sightSelects"
-                                            :loading="sightLoading"
-                                            :items="sightItems"
+                                            class="pl-3 pr-3"
+                                            v-model="selectedSights"
+                                            :loading="loading"
+                                            :items="sights"
                                             :search-input.sync="sightSearch"
                                             chips
                                             clearable
                                             hide-details
                                             hide-selected
                                             item-text="title"
-                                            item-value="id"
                                             label="Search for a sight.."
                                             multiple
                                             single-line
-                                            :disabled="sightLoading"
+                                            :disabled="loading"
+                                            return-object
                                     >
                                         <template v-slot:no-data>
                                             <v-list-tile>
@@ -119,7 +159,8 @@
                                             </v-list-tile-avatar>
                                             <v-list-tile-content>
                                                 <v-list-tile-title v-text="titleTrim(item)"></v-list-tile-title>
-                                                <v-list-tile-sub-title v-text="subtitleTrim(item)"></v-list-tile-sub-title>
+                                                <v-list-tile-sub-title
+                                                        v-text="subtitleTrim(item)"></v-list-tile-sub-title>
                                             </v-list-tile-content>
                                         </template>
                                         <template slot="selection" slot-scope="data">
@@ -137,8 +178,125 @@
                                         </template>
                                     </v-autocomplete>
                                 </v-flex>
-                                <v-flex xs12 mt-4>
-                                    <div id="gmap_container"></div>
+
+
+                                <v-flex xs12 mt-4 mb-4>
+                                    <v-btn
+                                            @click="TESTCOPY"
+                                    >
+                                    Copy direction
+                                    </v-btn>
+                                    <v-btn
+                                            @click="TESTDRAW"
+                                    >
+                                    Disply direction
+                                    </v-btn>
+                                    <!--<div id="gmap_container"></div>-->
+                                    <v-expansion-panel focusable>
+                                        <v-expansion-panel-content
+                                                v-for="(item,i) in selectedSights"
+                                                :key="selectedSights.slug"
+                                        >
+                                            <template v-slot:header>
+                                                <div>{{(i+1)}}. <v-icon small color="primary">location_on</v-icon> {{ getTitle(item)}}</div>
+                                            </template>
+                                            <v-card>
+                                                <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+                                            </v-card>
+                                        </v-expansion-panel-content>
+                                    </v-expansion-panel>
+                                </v-flex>
+
+                                <v-flex xs12>
+                                    <v-card>
+                                        <v-navigation-drawer
+                                                :right="right"
+                                                hide-overlay
+                                                absolute
+                                                stateless
+                                                v-model="showmenu"
+                                                v-show="showmenu"
+                                                id="map_drawer"
+                                        >
+                                            <v-list dense>
+                                                <v-list-tile
+                                                        @click="showmenu = false"
+                                                >
+                                                    <v-list-tile-action>
+                                                        <v-icon v-if="!right">arrow_back</v-icon>
+                                                        <v-icon v-else>arrow_forward</v-icon>
+                                                    </v-list-tile-action>
+
+                                                    <v-list-tile-content>
+                                                        <v-list-tile-title>Hide</v-list-tile-title>
+                                                    </v-list-tile-content>
+
+                                                </v-list-tile>
+                                                <v-alert
+                                                        v-model="alert"
+                                                        dismissible
+                                                        type="error"
+                                                >
+                                                    Opps no directions available.
+                                                </v-alert>
+                                                <v-flex xs12 d-flex style="margin: 5px;">
+                                                    <v-select
+                                                            :items="travelModes"
+                                                            label="Traveling mode"
+                                                            v-model="travelMode"
+                                                    ></v-select>
+                                                </v-flex>
+                                                <div id="d_panel">
+
+                                                </div>
+                                            </v-list>
+                                        </v-navigation-drawer>
+                                        <v-speed-dial
+                                                top
+                                                absolute
+                                                v-model="fab"
+                                                :right="!right"
+                                                :direction="'bottom'"
+                                                :transition="'slide-y-transition'"
+                                                style="top:40px;margin-left:10px"
+                                        >
+                                            <v-btn
+                                                    slot="activator"
+                                                    v-model="fab"
+                                                    color="blue darken-2"
+                                                    dark
+                                                    fab
+                                            >
+                                                <v-icon>settings</v-icon>
+                                                <v-icon>close</v-icon>
+                                            </v-btn>
+                                            <v-btn
+                                                    fab
+                                                    dark
+                                                    small
+
+                                                    color="green"
+                                                    @click="showmenu = !showmenu"
+                                            >
+                                                <v-icon>directions</v-icon>
+                                            </v-btn>
+                                            <v-btn
+                                                    fab
+                                                    dark
+                                                    small
+                                                    color="indigo"
+                                                    @click="right = !right"
+                                            >
+                                                <v-icon>compare_arrows</v-icon>
+                                            </v-btn>
+                                        </v-speed-dial>
+
+
+
+
+
+                                        <div id="gmap_container"></div>
+                                    </v-card>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -146,7 +304,7 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step editable :complete="e6 > 3" step="3">Description
+                    <v-stepper-step color="amber" editable :complete="e6 > 3" step="3">Description
                         <small>Set the description and translate</small>
                     </v-stepper-step>
 
@@ -170,7 +328,8 @@
                             >
                                 <v-card flat>
                                     <v-card-text>
-                                        <quill-editor :content="item.description" v-model="item.description"></quill-editor>
+                                        <quill-editor :content="item.description"
+                                                      v-model="item.description"></quill-editor>
                                     </v-card-text>
                                 </v-card>
                             </v-tab-item>
@@ -179,7 +338,7 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step step="4">Also done!
+                    <v-stepper-step color="red lighten-1" step="4">Also done!
                         <small>Finish</small>
                     </v-stepper-step>
                     <v-stepper-content step="4">
@@ -210,9 +369,11 @@
 
 <script>
     import Form from 'vform'
+    import VButton from "../../../components/global/Button";
 
     export default {
         name: "adminTourIndex",
+        components: {VButton},
         layout: "admin",
         head() {
             return {
@@ -222,72 +383,87 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
-        async asyncData({ params, $axios, $router}) {
+        async asyncData({params, $axios, redirect}) {
             try {
                 let categories = await $axios.get('tour/category/list')
                 return {
-                    categories:categories.data.data
+                    categories: categories.data.data
                 }
             } catch (e) {
-                $router.push({name: 'error'})
+                redirect('/error')
             }
         },
         data() {
             return {
-                snackbar:{
-                    status:false,
-                    timeout:4000,
-                    color:'success',
-                    message:'',
+
+
+                modal: false,
+                modal2: false,
+
+                snackbar: {
+                    status: false,
+                    timeout: 4000,
+                    color: 'success',
+                    message: '',
                 },
+
                 e6: 1,
                 categories: [],
                 tabs: null,
+
                 map: {},
-                mapTour: {},
                 toogleMapStyle: false,
+
                 form: new Form({
                     id: -1,
                     category: '',
+                    start_date: new Date().toISOString().substr(0, 10),
+                    end_date: new Date().toISOString().substr(0, 10),
                     translations: [
                         {locale: 'en', title: '', description: 'test'},
                         {locale: 'hu', title: '', description: 'test'},
                         {locale: 'ua', title: '', description: 'tes'},
                     ],
                 }),
-                formData:null,
+                formData: null,
 
-                sightLoading: false,
+                loading: false,
                 sightItems: [],
                 sightSearch: null,
-                sightSelects: null,
 
-                states: [
-                    'Alabama',
-                    'Alaska',
-                    'American Samoa',
-                    'Arizona',
-                    'Arkansas',
-                    'California',
-                    'Colorado',
-                    'Connecticut',
-                    'Delaware',
-                    'District of Columbia',
-                    'Federated States of Micronesia',
-                    'Florida',
-                    'Georgia',
-                    'Guam',
-                    'Hawaii',
-                    'Idaho'
-                ],
+                selectedSights: [],
+                sights: [],
+
+                directionsService: {},
+                directionsDisplay: {},
+                infowindows: [],
+                travelMode: 'DRIVING',
+                travelModes: ['DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT'],
+                showmenu: false,
+                fab: false,
+                right: false,
+                alert: false,
+                drawTimer: {},
+
+
+
+                TESTING:{},
+                DIRECTION:{},
             }
         },
         watch: {
-            sightSearch (val) {
-                val &&  this.loadSights()
+            sightSearch(val) {
+                val && this.loadSights()
+            },
+            selectedSights: function (v) {
+                clearTimeout(this.drawTimer)
+                this.drawTimer = setTimeout(() => {
+                    this.drawDirection
+
+                }, 800)
             }
         },
-        async  mounted() {
+        async mounted() {
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {
                 center: {lat: 48.496582, lng: 23.5212107},
                 zoom: 8.7,
@@ -296,23 +472,27 @@
                 disableDefaultUI: true
             })
 
-            this.mapTour = new google.maps.Marker({
-                map: this.map,
-                position: {lat: 48, lng: 22.5},
-                draggable: true
-            });
 
             // Load data
-            this.formData = await this.$axios.get(`tour/show/${this.$route.params.slug}`)
-            if(this.formData.data.data){
+            if (this.$route.params.slug) {
+                this.formData = await this.$axios.get(`tour/show/${this.$route.params.slug}`)
+                console.log(this.formData)
                 this.form = new Form(this.formData.data.data)
                 this.form.category = this.form.tour_category_id
-                this.mapTour.set('position',new google.maps.LatLng(this.form.lat, this.form.lng))
+                this.map.set('position', new google.maps.LatLng(this.form.lat, this.form.lng))
             }
             this.formData = null
 
             let self = this;
             if (google && google.maps) {
+
+                this.directionsService = new google.maps.DirectionsService;
+                this.directionsDisplay = new google.maps.DirectionsRenderer({
+                    draggable: true,
+                    map: self.map,
+                    panel: document.getElementById('d_panel')
+                });
+
                 var boundaries = new google.maps.FusionTablesLayer({
                     query: {
                         select: 'geometry',
@@ -335,30 +515,37 @@
         },
 
         methods: {
+            TESTCOPY(){
 
-            async loadSights(){
-                this.sightLoading = true
-                let url = `marker?page=1&limit=10&q=${this.sightSearch.trim()}`
-                const {data} = await this.$axios.get(url)
-                this.sightItems = data.data.slice(0)
-                this.sightLoading = false
+               this.TESTING = this.directionsDisplay.directions
+                console.log(JSON.stringify(this.TESTING))
+            },
+            TESTDRAW(){
+                this.directionsDisplay.setDirections(JSON.parse(this.TESTING))
             },
 
-            async querySelections (v) {
+            async loadSights() {
+                this.loading = true
+                let url = `marker?page=1&limit=10&q=${this.sightSearch.trim()}`
+                const {data} = await this.$axios.get(url)
+                this.sights = data.data.slice(0)
+                this.loading = false
+            },
+
+            async querySelections(v) {
                 clearTimeout(this.timeoutId);
                 this.timeoutId = setTimeout(this.loadSights(v), 700);
             },
 
-            titleTrim(value){
-                return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title.substr(0,20)
+            titleTrim(value) {
+                return value.translations.find(obj => obj.locale === this.$i18n.locale).title.substr(0, 20)
             },
-            subtitleTrim(value){
-                return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title
+            subtitleTrim(value) {
+                return value.translations.find(obj => obj.locale === this.$i18n.locale).title
             },
             removeFromSights(itemID) {
-                this.sightSelects.splice(this.sightSelects.indexOf(itemID), 1);
+                this.selectedSights.splice(this.selectedSights.indexOf(itemID), 1);
             },
-
             styleHandler() {
                 let mystyle = this.toogleMapStyle ? this.$store.state.gMapStyles.showLabels : this.$store.state.gMapStyles.hideLabels;
                 this.map.set('styles', mystyle);
@@ -374,30 +561,71 @@
             async store() {
                 console.log(this.form)
                 let url = 'tour/store'
-                if(this.form.id > 0) url = 'tour/edit'
-                await this.form.put(url).then((data)=>{
+                if (this.form.id > 0) url = 'tour/edit'
+                await this.form.put(url).then((data) => {
                     console.log(data.data)
                     this.form.id = data.data.data.id
-                    this.snackbar={
-                        status:true,
-                        timeout:4000,
-                        color:'success',
-                        message:'messages.saved',
+                    this.snackbar = {
+                        status: true,
+                        timeout: 4000,
+                        color: 'success',
+                        message: 'messages.saved',
                     }
-                }).catch((e)=>{
-                    this.snackbar={
-                        status:true,
-                        timeout:4000,
-                        color:'error',
-                        message:'messages.not_saved',
+                }).catch((e) => {
+                    this.snackbar = {
+                        status: true,
+                        timeout: 4000,
+                        color: 'error',
+                        message: 'messages.not_saved',
                     }
                     console.log(e)
                 })
             },
+
+            generateMarkers: function () {
+                return this.selectedSights.map(item => {
+                    return {
+                        location: new google.maps.LatLng(item.lat,item.lng),
+                        stopover: true
+                    }
+                });
+            },
+
+            getTitle(item) {
+                return item.translations.find(obj => obj.locale === this.getLocal).title
+            },
         },
-        computed:{
-            getLocal(){
-                return this.$i18n.locale === 'uk' ? 'ua' : this.$i18n.locale
+        computed: {
+            getLocal() {
+                return this.$i18n.locale
+            },
+
+            drawDirection: function () {
+                let waypts = this.generateMarkers();
+
+                if (waypts.length < 2) return
+
+
+                let self = this;
+                this.directionsService.route({
+                    origin: waypts.shift().location,
+                    destination: waypts.pop().location,
+                    waypoints: waypts,
+                    optimizeWaypoints: true,
+                    provideRouteAlternatives: true,
+                    travelMode: self.travelMode
+                }, function (response, status) {
+                    if (status === 'OK') {
+                        self.directionsDisplay.setDirections(response);
+                        this.DIRECTION = response
+                        // let route = response.routes[0];
+                        self.alert = false;
+                    } else {
+                        console.log(response, status)
+                        // window.alert('Directions request failed due to ' + status);
+                        self.alert = true;
+                    }
+                });
             }
         }
     }
@@ -405,6 +633,24 @@
 <style lang="scss" scoped>
     #gmap_container {
         width: 100%;
-        min-height: 400px;
+        min-height: 600px;
     }
+
+    #d_panel {
+        /*overflow-x: scroll;*/
+        word-wrap: break-word;
+    }
+
+    .adp-step, .adp-substep {
+        max-width: 200px;
+    }
+
+    .v-speed-dial__list {
+        top: -170px;
+    }
+
+    .v-speed-dial--absolute, .v-speed-dial--fixed {
+        z-index: 1
+    }
+
 </style>

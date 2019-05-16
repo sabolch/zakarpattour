@@ -173,14 +173,14 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
-        async asyncData({ params, $axios, $router}) {
+        async asyncData({ params, $axios, redirect}) {
             try {
                 let categories = await $axios.get('marker/category/list')
                 return {
                     categories:categories.data.data
                 }
             } catch (e) {
-                $router.push({name: 'error'})
+                redirect('/error')
             }
         },
         data() {
@@ -229,8 +229,8 @@
             this.searchBox(this.map)
 
            // Load data
-           this.formData = await this.$axios.get(`marker/show/${this.$route.params.slug}`)
-           if(this.formData.data.data){
+           if(this.$route.params.slug){
+               this.formData = await this.$axios.get(`marker/show/${this.$route.params.slug}`)
                this.form = new Form(this.formData.data.data)
                this.form.category = this.form.marker_category_id
                this.mapMarker.set('position',new google.maps.LatLng(this.form.lat, this.form.lng))
@@ -362,7 +362,7 @@
         },
         computed:{
             getLocal(){
-                return this.$i18n.locale === 'uk' ? 'ua' : this.$i18n.locale
+                return this.$i18n.locale
             }
         }
     }

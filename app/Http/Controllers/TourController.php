@@ -124,6 +124,8 @@ class TourController extends Controller
     {
         try{
             $tour = Tour::whereSlug($slug)->with('category')->first();
+            $tour->increment('views');
+
             return response()->json([
                 'success'=>true,
                 'data'=> $tour

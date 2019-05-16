@@ -1,17 +1,6 @@
 require('dotenv').config()
 const webpack = require('webpack')
 
-const polyfills = [
-    'Promise',
-    'Object.assign',
-    'Object.values',
-    'Array.prototype.find',
-    'Array.prototype.findIndex',
-    'Array.prototype.includes',
-    'String.prototype.includes',
-    'String.prototype.startsWith',
-    'String.prototype.endsWith'
-]
 
 module.exports = {
     mode: 'universal',
@@ -36,12 +25,13 @@ module.exports = {
         titleTemplate: '%s - ' + process.env.APP_NAME,
         meta: [
             {charset: 'utf-8'},
+            {charset: 'utf-8'},
             {
                 name: 'viewport',
                 content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui'
             },
             {name: 'mobile-web-app-capable', content: 'yes'},
-            {hid: 'description', name: 'description', content: 'Zakarpattour'}
+            {hid: 'description', name: 'description', content: 'Transcarpathian tours Sights, natural and historical monuments!'}
         ],
         link: [
             {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
@@ -66,7 +56,7 @@ module.exports = {
     },
 
     css: [
-        'quill/dist/quill.snow.css',
+        // 'quill/dist/quill.snow.css',
         'quill/dist/quill.core.css'
         // { src: '~assets/sass/app.scss', lang: 'scss' }
 

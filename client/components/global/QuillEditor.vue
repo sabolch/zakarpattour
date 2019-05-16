@@ -78,6 +78,7 @@
         methods: {
             onEditorChange({ editor, html, text }) {
                 this.$emit('input', this.myQuillEditor.root.innerHTML)
+                this.VQContent = this.myQuillEditor.root.innerHTML
             },
             onEditorGetContent(){
                 this.$emit('input', this.myQuillEditor.root.innerHTML)
