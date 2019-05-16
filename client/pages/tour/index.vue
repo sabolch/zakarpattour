@@ -186,127 +186,7 @@
                                     </v-icon>
                                 </v-btn>
                             </v-layout>
-
-                            <v-divider></v-divider>
-                            <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.price')}}</v-subheader>
-                            <v-layout row pa-2>
-                                <v-flex shrink xs2>
-                                    <v-text-field
-                                            v-model="price[0]"
-                                            class="mt-0"
-                                            hide-details
-                                            single-line
-                                            type="number"
-                                    ></v-text-field>
-                                </v-flex>
-
-                                <v-flex class="px-3" xs7>
-                                    <v-range-slider
-                                            v-model="price"
-                                            :max="15000"
-                                            :min="10"
-                                            :step="10"
-                                            thumb-size="100"
-                                    ></v-range-slider>
-                                </v-flex>
-
-                                <v-flex shrink xs3>
-                                    <v-text-field
-                                            v-model="price[1]"
-                                            class="mt-0"
-                                            hide-details
-                                            single-line
-                                            type="number"
-                                    ></v-text-field>
-                                </v-flex>
-                            </v-layout>
                         </v-flex>
-
-                        <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.rate')}}</v-subheader>
-                        <v-layout row pa-2>
-                            <v-flex shrink xs2>
-                                <v-text-field
-                                        v-model="rate[0]"
-                                        class="mt-0"
-                                        hide-details
-                                        single-line
-                                        type="number"
-                                ></v-text-field>
-                            </v-flex>
-
-                            <v-flex class="px-3" xs8>
-                                <v-range-slider
-                                        v-model="rate"
-                                        :max="5"
-                                        :min="0"
-                                        :step="1"
-                                ></v-range-slider>
-                            </v-flex>
-
-                            <v-flex shrink xs2>
-                                <v-text-field
-                                        v-model="rate[1]"
-                                        class="mt-0"
-                                        hide-details
-                                        single-line
-                                        type="number"
-                                ></v-text-field>
-                            </v-flex>
-                        </v-layout>
-
-                        <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.start_date')}}</v-subheader>
-                        <v-flex xs12>
-                            <v-dialog
-                                    ref="dialog1"
-                                    v-model="modal"
-                                    :return-value.sync="start_date"
-                                    persistent
-                                    lazy
-                                    full-width
-                            >
-                                <v-text-field
-                                        slot="activator"
-                                        class="mx-3"
-                                        v-model="start_date"
-                                        prepend-inner-icon="event"
-                                        readonly
-                                ></v-text-field>
-                                <v-date-picker :disabled="loading" v-model="start_date" :locale="$i18n.locale" scrollable>
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="modal = false">{{ $t('btns.cancel') }}</v-btn>
-                                    <v-btn flat color="primary" @click="$refs.dialog1.save(start_date)">OK</v-btn>
-                                </v-date-picker>
-                            </v-dialog>
-                        </v-flex>
-
-                        <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{ $t('form.data_panel.end_date') }}</v-subheader>
-                        <v-flex xs12>
-                            <v-dialog
-                                    ref="dialog"
-                                    v-model="modal2"
-                                    :return-value.sync="end_date"
-                                    persistent
-                                    lazy
-                                    full-width
-                            >
-                                <v-text-field
-                                        slot="activator"
-                                        class="mx-3"
-                                        v-model="end_date"
-                                        prepend-inner-icon="event"
-                                        readonly
-                                ></v-text-field>
-                                <v-date-picker :disabled="loading" v-model="end_date" :locale="$i18n.locale" scrollable>
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="modal2 = false">{{ $t('btns.cancel') }}</v-btn>
-                                    <v-btn flat color="primary" @click="$refs.dialog.save(end_date)">OK</v-btn>
-                                </v-date-picker>
-                            </v-dialog>
-                        </v-flex>
-
                         <v-divider></v-divider>
                         <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Category</v-subheader>
                         <v-flex xs12>
@@ -397,6 +277,162 @@
                                 </template>
                             </v-autocomplete>
                         </v-flex>
+                            <v-divider></v-divider>
+                            <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.price')}}</v-subheader>
+                            <v-layout row pa-2>
+                                <v-flex shrink xs2>
+                                    <v-text-field
+                                            v-model="price[0]"
+                                            class="mt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                    ></v-text-field>
+                                </v-flex>
+
+                                <v-flex class="px-3" xs7>
+                                    <v-range-slider
+                                            v-model="price"
+                                            :max="15000"
+                                            :min="10"
+                                            :step="10"
+                                            thumb-size="100"
+                                    ></v-range-slider>
+                                </v-flex>
+
+                                <v-flex shrink xs3>
+                                    <v-text-field
+                                            v-model="price[1]"
+                                            class="mt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                    ></v-text-field>
+                                </v-flex>
+                            </v-layout>
+
+
+                        <v-divider></v-divider>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Duartion </v-subheader>
+                        <v-layout row pa-2>
+                            <v-flex shrink xs2>
+                                <v-text-field
+                                        v-model="duration[0]"
+                                        class="mt-0"
+                                        hide-details
+                                        single-line
+                                        type="number"
+                                ></v-text-field>
+                            </v-flex>
+
+                            <v-flex class="px-3" xs8>
+                                <v-range-slider
+                                        v-model="duration"
+                                        :max="50"
+                                        :min="1"
+                                        :step="1"
+                                ></v-range-slider>
+                            </v-flex>
+
+                            <v-flex shrink xs2>
+                                <v-text-field
+                                        v-model="duration[1]"
+                                        class="mt-0"
+                                        hide-details
+                                        single-line
+                                        type="number"
+                                ></v-text-field>
+                            </v-flex>
+                        </v-layout>
+
+
+
+                        <v-divider></v-divider>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.start_date')}}</v-subheader>
+                        <v-flex xs12>
+                            <v-dialog
+                                    ref="dialog1"
+                                    v-model="modal"
+                                    :return-value.sync="start_date"
+                                    persistent
+                                    lazy
+                                    full-width
+                            >
+                                <v-text-field
+                                        slot="activator"
+                                        class="mx-3"
+                                        v-model="start_date"
+                                        prepend-inner-icon="event"
+                                        readonly
+                                ></v-text-field>
+                                <v-date-picker :disabled="loading" v-model="start_date" :locale="$i18n.locale" scrollable>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="modal = false">{{ $t('btns.cancel') }}</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.dialog1.save(start_date)">OK</v-btn>
+                                </v-date-picker>
+                            </v-dialog>
+                        </v-flex>
+
+                        <v-divider></v-divider>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{ $t('form.data_panel.end_date') }}</v-subheader>
+                        <v-flex xs12>
+                            <v-dialog
+                                    ref="dialog"
+                                    v-model="modal2"
+                                    :return-value.sync="end_date"
+                                    persistent
+                                    lazy
+                                    full-width
+                            >
+                                <v-text-field
+                                        slot="activator"
+                                        class="mx-3"
+                                        v-model="end_date"
+                                        prepend-inner-icon="event"
+                                        readonly
+                                ></v-text-field>
+                                <v-date-picker :disabled="loading" v-model="end_date" :locale="$i18n.locale" scrollable>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="modal2 = false">{{ $t('btns.cancel') }}</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.dialog.save(end_date)">OK</v-btn>
+                                </v-date-picker>
+                            </v-dialog>
+                        </v-flex>
+
+
+
+                            <v-divider></v-divider>
+                            <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.data_panel.rate')}}</v-subheader>
+                            <v-layout row pa-2>
+                                <v-flex shrink xs2>
+                                    <v-text-field
+                                            v-model="rate[0]"
+                                            class="mt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                    ></v-text-field>
+                                </v-flex>
+
+                                <v-flex class="px-3" xs8>
+                                    <v-range-slider
+                                            v-model="rate"
+                                            :max="5"
+                                            :min="0"
+                                            :step="1"
+                                    ></v-range-slider>
+                                </v-flex>
+
+                                <v-flex shrink xs2>
+                                    <v-text-field
+                                            v-model="rate[1]"
+                                            class="mt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                    ></v-text-field>
+                                </v-flex>
+                            </v-layout>
                     </v-list>
                 </v-navigation-drawer>
             </v-layout>
@@ -443,6 +479,7 @@
                 rating: 4,
                 rate: [0, 5],
                 price: [10, 15000],
+                duration: [1, 50],
                 filters: false,
 
                 start_date: new Date().toISOString().substr(0, 10),
@@ -473,6 +510,7 @@
 
                 sightSearch:null,
                 priceDelay:{},
+                durationDelay:{},
                 selectedSightsDelay:{}
             }
         },
@@ -510,6 +548,13 @@
             price(val) {
                 clearTimeout(this.priceDelay);
                 this.priceDelay = setTimeout(() => {
+                    this.page = 1;
+                    this.sendRequest();
+                }, 700);
+            },
+            duration(val) {
+                clearTimeout(this.durationDelay);
+                this.durationDelay = setTimeout(() => {
                     this.page = 1;
                     this.sendRequest();
                 }, 700);
@@ -560,7 +605,7 @@
 
 
             sendRequest() {
-                let url = `tour?page=${this.page}&limit=12&category=${JSON.stringify(this.types)}&price=${JSON.stringify(this.price)}&local=${this.getLocal}&start_date=${this.start_date}&end_date=${this.end_date}`
+                let url = `tour?page=${this.page}&limit=12&category=${JSON.stringify(this.types)}&price=${JSON.stringify(this.price)}&duration=${JSON.stringify(this.duration)}&local=${this.getLocal}&start_date=${this.start_date}&end_date=${this.end_date}`
                 if (this.search) {
                     url += `&q=${this.search}`
                 }

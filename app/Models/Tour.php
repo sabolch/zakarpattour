@@ -16,6 +16,10 @@ class Tour extends Model
 
     protected $table = 'tours';
 
+    protected $casts = [
+        'directions' => 'object'
+    ];
+
     public $translatedAttributes = ['title', 'description'];
     //
 
@@ -36,6 +40,10 @@ class Tour extends Model
     public function markers(){
         return $this->belongsToMany('App\Models\Marker','marker_tours');
     }
+    public function markers_paginate()
+    {
+        return $this->belongsToMany('App\Models\Marker','marker_tours');
+    }
 
     public function favourites(){
         return $this->belongsToMany('App\User','favourite_tours');
@@ -46,11 +54,21 @@ class Tour extends Model
         return $this->belongsTo(TourCategory::class, 'tour_category_id', 'id');
     }
 
-    public static function pagination($active = true, $search_query = null, $category,$sights,$price, $order_by,$start_date, $end_date, $per_page)
+    public static function pagination($active = true,
+                                      $search_query = null,
+                                      $category,
+                                      $sights,
+                                      $price,
+                                      $duration,
+                                      $order_by,
+                                      $start_date,
+                                      $end_date,
+                                      $per_page)
     {
 
         return Tour::whereBetween('price',$price)
             ->where('active',$active)
+            ->whereBetween('duration',$duration)
 //            ->whereBetween('start_date', array($start_date, $end_date))
             ->whereBetween('end_date', array($start_date, $end_date))
             // category
@@ -68,10 +86,11 @@ class Tour extends Model
                     $q->where('title','LIKE', '%'.$search_query.'%');
                 });
             })
-            ->with('category')
             ->with('markers')
+            ->with('category')
             ->orderBy( $order_by,'desc')
-            ->paginate($per_page);
+            ->paginate($per_page,['id','slug','tour_category_id','start_date','end_date','duration','price','views',
+                'created_at','updated_at']);
     }
 
     public static function paginateTrashed($search_query = null, $category,$sights,$price, $order_by, $per_page)
@@ -95,7 +114,8 @@ class Tour extends Model
             })
             ->with('category')
             ->orderBy( $order_by,'desc')
-            ->paginate($per_page);
+            ->paginate($per_page,['id','slug','tour_category_id','start_date','end_date','duration','price','views',
+                'created_at','updated_at']);
 
     }
 }

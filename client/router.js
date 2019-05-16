@@ -50,6 +50,10 @@ const AdminTourList = () => import('~/pages/admin/tour/adminTourList').then(m =>
 const AdminTourCategory = () => import('~/pages/admin/tour/adminTourCategory').then(m => m.default || m)
 
 const NotificationsMessage = () => import('~/pages/admin/notifications/contactUsMessage').then(m => m.default || m)
+// Users
+const UsersAdmins = () => import('~/pages/admin/users/users').then(m => m.default || m)
+const UsersUsers = () => import('~/pages/admin/users/admins').then(m => m.default || m)
+const AdminProfile = () => import('~/pages/admin/users/profile').then(m => m.default || m)
 
 
 const routes = [
@@ -108,6 +112,11 @@ const routes = [
   { path: '/admin/category/tour', name: 'admin.tour.category', component: AdminTourCategory },
 
   { path: '/admin/notifications/message', name: 'admin.notifications.message', component: NotificationsMessage },
+    // users
+  { path: '/admin/users/users', name: 'admin.users', component: UsersUsers },
+  { path: '/admin/users/admins', name: 'admin.admins', component: UsersAdmins },
+  { path: '/admin/profile', name: 'admin.profile', component: AdminProfile },
+
 ]
 
 export function createRouter () {

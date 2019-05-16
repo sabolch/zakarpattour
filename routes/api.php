@@ -115,6 +115,12 @@ Route::group(['prefix' => 'admin','middleware' => 'guest:admin'], function () {
     Route::post('/login', 'Auth\AdminLoginController@login');
 });
 
+Route::group(['prefix' => 'image'], function () {
+    Route::post('/upload', 'ImagesController@upload');
+    Route::delete('/remove', 'ImagesController@remove');
+    Route::get('/show/{type}/{name}/{size?}', 'ImagesController@show');
+});
+
 Route::group(['prefix' => 'admin','middleware' => 'auth:admin'], function () {
     Route::post('logout', 'Auth\AdminLoginController@logout');
 

@@ -42,6 +42,7 @@
                                 v-model="form.category"
                                 label="Select category"
                                 persistent-hint
+                                item-value="id"
                                 :filter="autoFilter"
                         >
                             <template slot="selection"
@@ -62,6 +63,23 @@
 
 
                         <v-flex xs12>
+                            <v-text-field
+                                    class="mx-3"
+                                    label="Price"
+                                    v-model="form.price"
+                                    type="number"
+                                    :max="50000"
+                                    :min="1"
+                            ></v-text-field>
+                            <v-text-field
+                                    class="mx-3"
+                                    label="Duration in days"
+                                    v-model="form.duration"
+                                    type="number"
+                                    :max="100"
+                                    :min="1"
+                            ></v-text-field>
+
                             <v-dialog
                                     ref="dialog1"
                                     v-model="modal"
@@ -117,7 +135,7 @@
                         <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step editable :complete="e6 > 2" step="2" color="purple">Title & category
+                    <v-stepper-step  :complete="e6 > 2" step="2" color="purple">Title & category
                         <small>Give a title and translate it also set the category</small>
                     </v-stepper-step>
 
@@ -128,7 +146,7 @@
                                 <v-flex xs12>
                                     <v-autocomplete
                                             class="pl-3 pr-3"
-                                            v-model="selectedSights"
+                                            v-model="form.markers"
                                             :loading="loading"
                                             :items="sights"
                                             :search-input.sync="sightSearch"
@@ -181,21 +199,10 @@
 
 
                                 <v-flex xs12 mt-4 mb-4>
-                                    <v-btn
-                                            @click="TESTCOPY"
-                                    >
-                                    Copy direction
-                                    </v-btn>
-                                    <v-btn
-                                            @click="TESTDRAW"
-                                    >
-                                    Disply direction
-                                    </v-btn>
-                                    <!--<div id="gmap_container"></div>-->
                                     <v-expansion-panel focusable>
                                         <v-expansion-panel-content
-                                                v-for="(item,i) in selectedSights"
-                                                :key="selectedSights.slug"
+                                                v-for="(item,i) in form.markers"
+                                                :key="item.slug"
                                         >
                                             <template v-slot:header>
                                                 <div>{{(i+1)}}. <v-icon small color="primary">location_on</v-icon> {{ getTitle(item)}}</div>
@@ -284,27 +291,31 @@
                                                     fab
                                                     dark
                                                     small
+                                                    color="amber"
+                                                    @click="setMapCenter"
+                                            >
+                                                <v-icon>center_focus_strong</v-icon>
+                                            </v-btn>
+                                            <v-btn
+                                                    fab
+                                                    dark
+                                                    small
                                                     color="indigo"
                                                     @click="right = !right"
                                             >
                                                 <v-icon>compare_arrows</v-icon>
                                             </v-btn>
                                         </v-speed-dial>
-
-
-
-
-
                                         <div id="gmap_container"></div>
                                     </v-card>
                                 </v-flex>
                             </v-layout>
                         </v-container>
-                        <v-btn color="primary" @click="e6 = 3">{{$t('btns.continue')}}</v-btn>
+                        <v-btn color="primary" @click="setDirectionData">{{$t('btns.continue')}}</v-btn>
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step color="amber" editable :complete="e6 > 3" step="3">Description
+                    <v-stepper-step color="amber" :complete="e6 > 3" step="3">Description
                         <small>Set the description and translate</small>
                     </v-stepper-step>
 
@@ -395,8 +406,6 @@
         },
         data() {
             return {
-
-
                 modal: false,
                 modal2: false,
 
@@ -417,6 +426,11 @@
                 form: new Form({
                     id: -1,
                     category: '',
+                    price:0,
+                    duration:0,
+                    markers:[],
+                    marker_ids:[],
+                    directions:{},
                     start_date: new Date().toISOString().substr(0, 10),
                     end_date: new Date().toISOString().substr(0, 10),
                     translations: [
@@ -436,7 +450,6 @@
 
                 directionsService: {},
                 directionsDisplay: {},
-                infowindows: [],
                 travelMode: 'DRIVING',
                 travelModes: ['DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT'],
                 showmenu: false,
@@ -444,24 +457,19 @@
                 right: false,
                 alert: false,
                 drawTimer: {},
-
-
-
-                TESTING:{},
-                DIRECTION:{},
             }
         },
         watch: {
             sightSearch(val) {
                 val && this.loadSights()
             },
-            selectedSights: function (v) {
+            'form.markers': function (v) {
                 clearTimeout(this.drawTimer)
                 this.drawTimer = setTimeout(() => {
                     this.drawDirection
 
                 }, 800)
-            }
+            },
         },
         async mounted() {
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {
@@ -476,7 +484,6 @@
             // Load data
             if (this.$route.params.slug) {
                 this.formData = await this.$axios.get(`tour/show/${this.$route.params.slug}`)
-                console.log(this.formData)
                 this.form = new Form(this.formData.data.data)
                 this.form.category = this.form.tour_category_id
                 this.map.set('position', new google.maps.LatLng(this.form.lat, this.form.lng))
@@ -515,13 +522,9 @@
         },
 
         methods: {
-            TESTCOPY(){
-
-               this.TESTING = this.directionsDisplay.directions
-                console.log(JSON.stringify(this.TESTING))
-            },
-            TESTDRAW(){
-                this.directionsDisplay.setDirections(JSON.parse(this.TESTING))
+            setDirectionData(){
+               this.form.directions = JSON.stringify(this.directionsDisplay.directions)
+                this.e6 = 3
             },
 
             async loadSights() {
@@ -544,7 +547,8 @@
                 return value.translations.find(obj => obj.locale === this.$i18n.locale).title
             },
             removeFromSights(itemID) {
-                this.selectedSights.splice(this.selectedSights.indexOf(itemID), 1);
+                let index = this.form.markers.findIndex(obj => obj.id === itemID)
+                this.form.markers.splice(index, 1);
             },
             styleHandler() {
                 let mystyle = this.toogleMapStyle ? this.$store.state.gMapStyles.showLabels : this.$store.state.gMapStyles.hideLabels;
@@ -559,11 +563,10 @@
             },
 
             async store() {
-                console.log(this.form)
+                this.form.marker_ids = JSON.stringify(this.form.markers.map(item => {return item.id}))
                 let url = 'tour/store'
                 if (this.form.id > 0) url = 'tour/edit'
                 await this.form.put(url).then((data) => {
-                    console.log(data.data)
                     this.form.id = data.data.data.id
                     this.snackbar = {
                         status: true,
@@ -583,7 +586,7 @@
             },
 
             generateMarkers: function () {
-                return this.selectedSights.map(item => {
+                return this.form.markers.map(item => {
                     return {
                         location: new google.maps.LatLng(item.lat,item.lng),
                         stopover: true
@@ -594,6 +597,9 @@
             getTitle(item) {
                 return item.translations.find(obj => obj.locale === this.getLocal).title
             },
+            setMapCenter(){
+                this.map.setCenter({lat: 48.496582, lng: 23.5212107});
+            }
         },
         computed: {
             getLocal() {
@@ -621,7 +627,7 @@
                         // let route = response.routes[0];
                         self.alert = false;
                     } else {
-                        console.log(response, status)
+                        // console.log(response, status)
                         // window.alert('Directions request failed due to ' + status);
                         self.alert = true;
                     }

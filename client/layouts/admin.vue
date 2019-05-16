@@ -250,8 +250,9 @@
                     text: 'Users',
                     model: false,
                     children: [
-                        { icon: 'build', text: 'Admins', href:'admin.notifications.message' },
-                        { icon: 'people', text: 'Users', href:'admin.notifications.message' },
+                        { icon: 'face', text: 'Profile', href:'admin.profile' },
+                        { icon: 'build', text: 'Admins', href:'admin.admins' },
+                        { icon: 'people', text: 'Users', href:'admin.users' },
                     ]
                 },
                 {
@@ -260,7 +261,7 @@
                     text: 'Sight',
                     model: false,
                     children: [
-                        { icon: 'category', text: 'Categorys', href:'admin.marker.category' },
+                        { icon: 'category', text: 'Categories', href:'admin.marker.category' },
                         { icon: 'add', text: 'Create', href:'admin.marker' },
                         { icon: 'location_on', text: 'Sights', href:'admin.marker.list' },
                     ]
@@ -271,7 +272,7 @@
                     text: 'Tour',
                     model: false,
                     children: [
-                        { icon: 'category', text: 'Categorys', href:'admin.tour.category' },
+                        { icon: 'category', text: 'Categories', href:'admin.tour.category' },
                         { icon: 'add', text: 'Create', href:'admin.tour' },
                         { icon: 'timeline', text: 'Tours', href:'admin.tour.list' },
                     ]

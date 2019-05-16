@@ -31,6 +31,7 @@ class TourController extends Controller
         $per_page = Input::has('limit') ? Input::get('limit') : 10;
         $category = Input::has('category') ? json_decode(Input::get('category')) : '';
         $price = Input::has('price') ? json_decode(Input::get('price')) : [10,15000];
+        $duration = Input::has('duration') ? json_decode(Input::get('duration')) : [1,150];
         $sights = Input::has('sights') ? json_decode(Input::get('sights')) : '';
         $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
@@ -38,7 +39,7 @@ class TourController extends Controller
         $end_date = Input::has('end_date') ? Input::get('end_date') : date('Y-m-d', strtotime('+7 months'));
 
         return  TourResource::collection(Tour::pagination(true, $search_query,  $category, $sights,$price,
-            $order_by, $start_date, $end_date,$per_page));
+            $duration, $order_by, $start_date, $end_date,$per_page));
     }
 
     public function trashed()
@@ -69,11 +70,12 @@ class TourController extends Controller
             [
                 'category'=>'required|integer',
                 'translations' =>'required',
-                'markers' =>'required',
+                'marker_ids' =>'required',
                 'start_date' =>'required|date',
                 'end_date' =>'required|date',
                 'duration' =>'required|integer',
                 'price' =>'required|numeric',
+                'directions' =>'required',
 
             ],[
                 'category.required'=>'Category ID is required',
@@ -85,7 +87,8 @@ class TourController extends Controller
                 'price.required'=>'Price is required',
                 'price.numeric'=>'Price must be numeric',
                 'translations.required'=>'Translation is required!',
-                'markers.required'=>'Markers is required!'
+                'marker_ids.required'=>'Markers ID array is required!',
+                'directions.required'=>'Directions is required!'
             ]);
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
@@ -94,11 +97,15 @@ class TourController extends Controller
         $data = $validator->valid();
 
         $tour = new Tour();
-        $tour->marker_category_id = $data['category'];
-        $tour->lat = $data['lat'];
-        $tour->lng = $data['lng'];
+        $tour->tour_category_id = $data['category'];
+        $tour->price = $data['price'];
+        $tour->duration = $data['duration'];
+        $tour->start_date = $data['start_date'];
+        $tour->end_date = $data['end_date'];
+
         $tour->title = $data['translations'][0]['title'];
         $tour->description = $data['translations'][0]['description'];
+        $tour->directions = json_decode($data['directions']);
         $tour->save();
 
         // Translate
@@ -107,7 +114,11 @@ class TourController extends Controller
             $tour->translateOrNew($array['locale'])->description = $array['description'];
         }
         $tour->save();
-//
+
+        // Save markers to pivot table
+        $tour->markers()->attach(json_decode($data['marker_ids']));
+
+        // Return saved data (ID)
         return response()->json([
             'success'=>true,
             'data'=> $tour,
@@ -123,7 +134,7 @@ class TourController extends Controller
     public function show($slug)
     {
         try{
-            $tour = Tour::whereSlug($slug)->with('category')->first();
+            $tour = Tour::whereSlug($slug)->with('category')->with('markers')->first();
             $tour->increment('views');
 
             return response()->json([
@@ -148,13 +159,15 @@ class TourController extends Controller
     {
         $validator =  Validator::make($request->all(),
             [
+                'id'=>'required|integer',
                 'category'=>'required|integer',
                 'translations' =>'required',
-                'markers' =>'required',
+                'marker_ids' =>'required',
                 'start_date' =>'required|date',
                 'end_date' =>'required|date',
                 'duration' =>'required|integer',
                 'price' =>'required|numeric',
+                'directions' =>'required',
 
             ],[
                 'category.required'=>'Category ID is required',
@@ -166,7 +179,8 @@ class TourController extends Controller
                 'price.required'=>'Price is required',
                 'price.numeric'=>'Price must be numeric',
                 'translations.required'=>'Translation is required!',
-                'markers.required'=>'Markers is required!'
+                'marker_ids.required'=>'Markers ID array  is required!',
+                'directions.required'=>'Directions is required!'
             ]);
 
         if ($validator->fails()) {
@@ -177,10 +191,13 @@ class TourController extends Controller
 
         try{
             $tour = Tour::findOrFail($data['id']);
-            $tour->marker_category_id = $data['category'];
-            $tour->lat = $data['lat'];
-            $tour->lng = $data['lng'];
-            $tour->title = $data['title'];
+            $tour->tour_category_id = $data['category'];
+            $tour->price = $data['price'];
+            $tour->duration = $data['duration'];
+            $tour->start_date = $data['start_date'];
+            $tour->end_date = $data['end_date'];
+
+            $tour->directions = $data['directions'];
             $tour->save();
             // Translate
             foreach ($data['translations'] as $array) {
@@ -189,6 +206,11 @@ class TourController extends Controller
             }
             $tour->save();
 
+            // Sync markers to pivot table
+            $tour->markers()->sync(json_decode($data['marker_ids']));
+
+
+            // Return updated data
             return response()->json([
                 'success'=>true,
                 'data'=> $tour,

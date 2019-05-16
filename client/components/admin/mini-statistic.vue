@@ -27,6 +27,11 @@
                 type:Object,
                 required:true
             }
+        },
+        computed:{
+            breakpoint() {
+                return this.$vuetify.breakpoint.xs
+            }
         }
     }
 </script>

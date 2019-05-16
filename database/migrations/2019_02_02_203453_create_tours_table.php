@@ -25,6 +25,7 @@ class CreateToursTable extends Migration
 
             $table->boolean('active')->default(true);
             $table->integer('views')->default(0);
+            $table->json('directions')->default('{}');
 
             $table->integer('tour_category_id')->unsigned();
 
