@@ -1,16 +1,18 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12>
-            <v-container grid-list-md fluid>
+            <v-container grid-list-md fluid pa-2 ma-0>
                 <v-layout row wrap>
-                    <v-flex v-if="uploades.length > 0" xs12 class="headline"><v-card class="pa-3">Uploaded Images</v-card></v-flex>
+                    <v-flex v-if="uploades.length > 0" xs12>
+                        <v-card :elevation="2" color="green darken-2" dark class="pa-3 headline font-weight-bold">Uploaded Images</v-card>
+                    </v-flex>
                     <v-flex
                             v-for="(item,key) in uploades"
                             :key="item.url"
                             xs3
                             d-flex
                     >
-                        <v-card flat tile class="d-flex">
+                        <v-card flat tile class="d-flex" :elevation="1">
                             <v-img
                                     :src="item.url"
                                     aspect-ratio="1"
@@ -45,17 +47,26 @@
                     </v-flex>
 
 
-                    <v-flex v-if="files.length > 0" xs12 class="headline"><v-card class="pa-3">Review Images</v-card></v-flex>
+                    <v-flex v-if="files.length > 0" xs12>
+                        <v-card :elevation="2"  class="pa-3 headline font-weight-bold" color="primary" dark>Review Images</v-card>
+                        <v-alert
+                                :value="smallSize"
+                                type="error"
+                        >
+                            Small size images selected! Please select minimum {{`${this.minHeight}x${this.minWidth}`}} pixels or larger.
+                        </v-alert>
+                    </v-flex>
                     <v-flex
                             v-for="(item,key) in files"
                             :key="item.name"
                             xs3
                             d-flex
                     >
-                        <v-card flat tile class="d-flex">
+                        <v-card :elevation="1"  flat tile class="d-flex">
                             <v-img
-                                    :src="`${previewURL(item)}`"
+                                    :src="item.previewUrl"
                                     aspect-ratio="1"
+                                    ref="images"
                                     class="grey lighten-2"
                             >
                                 <template v-slot:placeholder>
@@ -70,7 +81,7 @@
                                 </template>
                                 <v-container fill-height fluid pa-0 ma-0>
                                     <v-layout fill-height>
-                                        <v-flex xs12 align-end flexbox>
+                                        <v-flex xs6>
                                             <v-btn
                                                     v-if="!item.uploaded"
                                                     small
@@ -80,6 +91,18 @@
                                             >
                                                 <v-icon class="white--text">block</v-icon>
                                             </v-btn>
+
+                                        </v-flex>
+                                        <v-spacer></v-spacer>
+                                        <v-flex xs6 class="text-xs-right pa-2">
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-if="item.small" large color="red" v-on="on">
+                                                        photo_size_select_large
+                                                    </v-icon>
+                                                </template>
+                                                <span>Small image size</span>
+                                            </v-tooltip>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
@@ -90,30 +113,32 @@
 
                 </v-layout>
             </v-container>
-
         </v-flex>
         <v-flex xs12>
-            <v-progress-linear :indeterminate="loading"></v-progress-linear>
+            <v-container pa-0 ma-0 fluid>
+                <v-progress-linear :hidden="!loading" :indeterminate="loading"></v-progress-linear>
 
-            <v-btn
-                    @click="selectFiles"
-                    color="primary"
-                    :disabled="loading"
-            >
-                Select files
-                <v-icon right dark>file_copy</v-icon>
-            </v-btn>
-            <v-btn
-                    :loading="loading"
-                    :disabled="loading"
-                    color="green darken-2"
-                    class="white--text"
-                    @click="submitFiles"
-            >
-                Upload
-                <v-icon right dark>cloud_upload</v-icon>
-            </v-btn>
-            <input hidden type="file" id="files" ref="files" multiple v-on:change="handleFileUploads()"  accept="image/x-png,image/gif,image/jpeg"/>
+                <v-btn
+                        @click="selectFiles"
+                        color="primary"
+                        :disabled="loading"
+                >
+                    Select files
+                    <v-icon right dark>file_copy</v-icon>
+                </v-btn>
+                <v-btn
+                        :loading="loading"
+                        :disabled="loading"
+                        color="green darken-2"
+                        class="white--text"
+                        @click="submitFiles"
+                >
+                    Upload
+                    <v-icon right dark>cloud_upload</v-icon>
+                </v-btn>
+                <input hidden type="file" id="files" ref="files" multiple v-on:change="handleFileUploads()"
+                       accept="image/x-png,image/gif,image/jpeg"/>
+            </v-container>
         </v-flex>
     </v-layout>
 </template>
@@ -123,91 +148,140 @@
 
     export default {
         name: "image-upload",
+        props: {
+            itemID: {
+                type: Number,
+                default: 0,
+                required: true
+            },
+            uploadUrl: {
+                type: String,
+                default: 'image/upload'
+            },
+            removeUrl: {
+                type: String,
+                default: 'image/remove'
+            },
+            type: {
+                type: String,
+                default: 'sight'
+            },
+            minHeight: {
+                type: Number,
+                default: 640
+            },
+            minWidth: {
+                type: Number,
+                default: 480
+            }
+
+        }
+        ,
+        async mounted() {
+            let data = await this.$axios.get(`image/collect/${this.type}/${this.itemID}`)
+            this.uploades = data.data.splice(0)
+
+        },
         data() {
             return {
                 files: [],
                 loading: false,
-                uploades:[]
+                uploades: [],
+                smallSize:false
+
             }
-        },
+        }
+        ,
         methods: {
             handleFileUploads() {
-                let filesArray =  Array.from(this.$refs.files.files);
+                let filesArray = Array.from(this.$refs.files.files);
 
-                filesArray = filesArray.map( item => {
-                    return {file:item, uploaded:false}
+                filesArray = filesArray.map((item) => {
+                    let previewUrl = URL.createObjectURL(item)
+                    return {file: item, uploaded: false, small: false, previewUrl: previewUrl}
                 });
 
-                this.files =  this.files.concat(filesArray.filter(item => {
+                this.files = this.files.concat(filesArray.filter(item => {
                     return this.files.findIndex(obj => obj.file.name === item.file.name) < 0;
                 }));
 
-                console.log(this.files)
-            },
+            }
+            ,
             selectFiles() {
                 this.$refs.files.click()
-            },
+            }
+            ,
 
             async submitFiles() {
-                if(this.files < 1 ) return
+                this.smallSize = false;
+
+                if(!this.$refs.images) return
+                // Check image size
+                this.$refs.images.map((obj,index)=>{
+                    let  img = obj.image;
+                    if(img.height < this.minHeight || img.width < this.minWidth){
+                        this.files[index].small = true
+                        this.smallSize  = true
+                    }
+                })
+
+                if (this.files < 1 || this.smallSize ) return
                 this.loading = true
-                /*
-                  Initialize the form data
-                */
 
                 /*
-                  Iteate over any file sent over appending the files
-                  to the form data.
+                  Initialize the form data and iterate files
                 */
+                try {
+                    for (let i = this.files.length - 1; i >= 0; i--) {
+                        let formData = new FormData();
+                        let file = this.files[i].file;
+                        formData.append('file', file);
+                        formData.append('type', 'sight');
+                        formData.append('id', this.itemID);
+                        await this.upload(formData, i)
+                        this.files[i].uploaded = true
+                    }
+                    this.loading = false
+                    // Clear reviewed files
+                    this.files = [];
+                } catch (e) {
 
-
-
-                for (var i = 0; i < this.files.length; i++) {
-                    let formData = new FormData();
-                    let file = this.files[i].file;
-                    formData.append('file', file);
-                    formData.append('type','sight');
-                    await this.upload(formData)
-                    this.files[i].uploaded = true
+                    this.loading = false
                 }
 
-                this.files = [];
-                /*
-                  Make the request to the POST /multiple-files URL
-                */
+            }
+            ,
+            // Remove Uploaded Image
+            async removeImage(key, name) {
 
-
-            },
-            async removeImage(key,name){
-
-               let form =  new Form({
+                let form = new Form({
                     path: name,
                 });
 
                 this.loading = true
-                form.delete('image/remove').then( res => {
-                        console.log(res)
-                        this.loading = false
-                        this.uploades.splice(key,1)
-                    }).catch(res => {
-                        console.log(res)
-                        this.loading = false
-                    });
-
-            },
-
-            previewURL(file){
-                return URL.createObjectURL(file.file)
-            },
-            removeFile( key ){
-                this.files.splice(key,1)
-            },
+                form.delete(this.removeUrl).then(res => {
+                    this.uploades.splice(key, 1)
+                    this.loading = false
+                }).catch(res => {
+                    console.log(res)
+                    this.loading = false
+                });
+            }
+            ,
+            // Remove File from array
+            removeFile(key) {
+                this.files.splice(key, 1)
+            }
+            ,
+            // Return true if item is selected
             includes(array, name) {
                 return array.some(item => item.name === name)
-            },
-            async upload(formData){
+            }
+            ,
+            // Upload data to server
+            async upload(formData, key) {
                 var self = this;
-                await  this.$axios.post('image/upload',
+                await this.$axios.post(this.uploadUrl,
                     formData,
                     {
                         headers: {
@@ -215,20 +289,14 @@
                         }
                     }
                 ).then(function (res) {
-                    console.log(res.data.image)
                     self.uploades.push(res.data.image)
-
-                    self.loading = false
-                    console.log('Successfully uploaded!!');
                 })
                     .catch(function (v) {
                         console.log(v)
-                        self.loading = false
-
                         console.log('Erorr on upload ...');
                     });
             }
-        }
+        },
     }
 </script>
 

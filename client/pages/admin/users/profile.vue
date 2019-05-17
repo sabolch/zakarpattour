@@ -4,7 +4,7 @@
             <v-flex xs12>
                 Hello admin profile
             </v-flex>
-            <image-upload></image-upload>
+            <image-upload :itemID="2"></image-upload>
         </v-layout>
     </v-container>
 </template>

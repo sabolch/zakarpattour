@@ -40,24 +40,76 @@ class ImagesController extends Controller
 
     public function upload(Request $request)
     {
-        $type = $request->input('type');
-        $file = $request->file('file');
+        try {
+            $type = $request->input('type');
+            $file = $request->file('file');
+            $id = (int)$request->input('id');
 
-        $name = uniqid('img_') . '.' . $file->extension();
-        $path = Storage::putFileAs(
-            $type, $file, $name
-        );
-
-        return response()->json(['image'=>['url'=>config('app.url') . '/image/show/' . $path,'path'=>$path]]);
+            $name = uniqid('img_') . '.' . $file->extension();
+            $path = $type . DIRECTORY_SEPARATOR . $id;
+            $path = Storage::putFileAs(
+                $path, $file, $name
+            );
+            return response()->json(['image' => ['url' => config('app.url') . DIRECTORY_SEPARATOR . 'image'
+                . DIRECTORY_SEPARATOR . 'show' . DIRECTORY_SEPARATOR
+                . $path, 'path' => $path]], 202);
+        } catch (\Exception $e) {
+            return response()->json([], 204);
+        }
     }
 
     public function remove(Request $request)
     {
-        Storage::delete($request->input('path'));
-        return response()->json([],200);
+        try {
+            Storage::delete($request->input('path'));
+            return response()->json([], 202);
+        } catch (\Exception $e) {
+            return response()->json([], 204);
+        }
     }
 
-    public function show($type,$name){
-        return Image::make(storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $name))->response();
+    public function collect($type, $id)
+    {
+        $path_to = $type . DIRECTORY_SEPARATOR . $id;
+        $files = [];
+        $filesInFolder = \File::files(storage_path() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $path_to);
+        foreach ($filesInFolder as $path) {
+            $p = pathinfo($path)['basename'];
+            $files[] = ['url' => config('app.url') . DIRECTORY_SEPARATOR . 'image' . DIRECTORY_SEPARATOR
+                . 'show' . DIRECTORY_SEPARATOR . $path_to . DIRECTORY_SEPARATOR . $p, 'path' => $path_to
+                . DIRECTORY_SEPARATOR . $p];
+        }
+        return response()->json($files, 200);
+
+    }
+
+    public function show($type, $id, $name, $size = null)
+    {
+        $path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR
+            . $id . DIRECTORY_SEPARATOR . $size);
+        $img_path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR
+            . $id . DIRECTORY_SEPARATOR . $name);
+        // Resize and store image
+        if($size && !is_dir($path)){
+            // make image from file
+            $img = Image::make($img_path);
+            $size = explode('x', $size);
+            // resize the image
+            $img->resize((int)$size[0], (int) $size[1],function($constraint)
+            {
+                $constraint->aspectRatio();
+            });
+            // create dir with sizes
+            mkdir($path);
+            //save img
+            $img->save($path . DIRECTORY_SEPARATOR . $name);
+            return $img->response();
+        }
+        // If resized return the resized img
+        if($size){
+            return Image::make($path . DIRECTORY_SEPARATOR . $name )->response();
+        }
+        // if $size null return original
+        return Image::make($img_path)->response();
     }
 }

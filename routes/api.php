@@ -118,7 +118,8 @@ Route::group(['prefix' => 'admin','middleware' => 'guest:admin'], function () {
 Route::group(['prefix' => 'image'], function () {
     Route::post('/upload', 'ImagesController@upload');
     Route::delete('/remove', 'ImagesController@remove');
-    Route::get('/show/{type}/{name}/{size?}', 'ImagesController@show');
+    Route::get('/show/{type}/{id}/{name}/{size?}', 'ImagesController@show');
+    Route::get('/collect/{type}/{id}', 'ImagesController@collect');
 });
 
 Route::group(['prefix' => 'admin','middleware' => 'auth:admin'], function () {
