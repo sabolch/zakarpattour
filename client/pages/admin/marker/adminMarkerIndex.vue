@@ -63,6 +63,57 @@
                                 <span>&nbsp;&nbsp;{{ item.translations.find(obj => obj.locale ===  getLocal).name  }}</span>
                             </template>
                         </v-autocomplete>
+                        <v-autocomplete
+                                class="pl-3 pr-3"
+                                v-model="form.settlement"
+                                :loading="loading"
+                                :items="settlements"
+                                :search-input.sync="settlementSearch"
+                                chips
+                                clearable
+                                hide-details
+                                hide-selected
+                                item-text="title"
+                                item-value="id"
+                                label="Search for a settlement.."
+                                single-line
+                                :disabled="loading"
+                                :filter="autoSettlementFilter"
+                        >
+                            <template v-slot:no-data>
+                                <v-list-tile>
+                                    <v-list-tile-title>
+                                        Search for a settlement...
+                                    </v-list-tile-title>
+                                </v-list-tile>
+                            </template>
+                            <template v-slot:item="{ item }">
+                                <v-list-tile-avatar
+                                        color="indigo"
+                                        class="headline font-weight-light white--text"
+                                >
+                                    <v-icon dark>location_city</v-icon>
+                                </v-list-tile-avatar>
+                                <v-list-tile-content>
+                                    <v-list-tile-title v-text="titleTrim(item)"></v-list-tile-title>
+                                    <v-list-tile-sub-title v-text="subtitleTrim(item)"></v-list-tile-sub-title>
+                                </v-list-tile-content>
+                            </template>
+                            <template slot="selection" slot-scope="data">
+                                <v-chip
+                                        :selected="data.selected.title"
+                                        close
+                                        outline
+                                        color="indigo"
+                                        @input="removeFromSettlements(data.item.id)"
+
+                                >
+                                    <v-icon left>location_city</v-icon>
+                                    <strong>{{ titleTrim(data.item) }}</strong>&nbsp;
+                                </v-chip>
+                            </template>
+                        </v-autocomplete>
+
                         <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
                     </v-stepper-content>
 
@@ -121,7 +172,8 @@
                             >
                                 <v-card flat>
                                     <v-card-text>
-                                        <quill-editor :content="item.description" v-model="item.description"></quill-editor>
+                                        <quill-editor :content="item.description"
+                                                      v-model="item.description"></quill-editor>
                                     </v-card-text>
                                 </v-card>
                             </v-tab-item>
@@ -130,12 +182,38 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step step="4">Also done!
+                    <v-stepper-step step="4" :complete="e6 > 4">Also done!
                         <small>Finish</small>
                     </v-stepper-step>
                     <v-stepper-content step="4">
                         <v-btn dark color="green" :loading="form.busy" @click="store">Save</v-btn>
+
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn
+                                        :disabled="form.id < 1"
+                                        color="primary"
+                                        @click="e6 = 5"
+                                >
+                                    Continue
+                                </v-btn>
+                            </template>
+                            <span>Enabled if we saved the marker</span>
+                        </v-tooltip>
+
                         <v-btn dark color="orange" @click="e6 = e6-1">{{$t('btns.back')}}</v-btn>
+                    </v-stepper-content>
+                    <v-stepper-step step="5">Images
+                        <small>Uploade and manage images</small>
+                    </v-stepper-step>
+                    <v-stepper-content step="5">
+                        <v-flex>
+                            <image-upload
+                                    :itemID="form.id"
+                                    type="sight"
+                                    ref="imgUploadComponent"
+                            ></image-upload>
+                        </v-flex>
                     </v-stepper-content>
                 </v-stepper>
             </v-flex>
@@ -161,9 +239,11 @@
 
 <script>
     import Form from 'vform'
+    import ImageUpload from "../../../components/admin/image-upload";
 
     export default {
         name: "adminMarkerIndex",
+        components: {ImageUpload},
         layout: "admin",
         head() {
             return {
@@ -173,11 +253,11 @@
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
-        async asyncData({ params, $axios, redirect}) {
+        async asyncData({params, $axios, redirect}) {
             try {
                 let categories = await $axios.get('marker/category/list')
                 return {
-                    categories:categories.data.data
+                    categories: categories.data.data
                 }
             } catch (e) {
                 redirect('/error')
@@ -185,11 +265,11 @@
         },
         data() {
             return {
-                snackbar:{
-                    status:false,
-                    timeout:4000,
-                    color:'success',
-                    message:'',
+                snackbar: {
+                    status: false,
+                    timeout: 4000,
+                    color: 'success',
+                    message: '',
                 },
                 e6: 1,
                 categories: [],
@@ -197,9 +277,11 @@
                 map: {},
                 mapMarker: {},
                 toogleMapStyle: false,
+                itemID:-1,
                 form: new Form({
                     id: -1,
                     category: '',
+                    settlement: '',
                     lat: 0,
                     lng: 0,
                     translations: [
@@ -208,12 +290,17 @@
                         {locale: 'ua', title: '', description: 'tes'},
                     ],
                 }),
-                formData:null
+                formData: null,
+
+                loading: false,
+                settlementDelay: {},
+                settlements: [],
+                settlementSearch: '',
             }
         },
-       async  mounted() {
+        async mounted() {
 
-           this.map = new google.maps.Map(document.getElementById('gmap_container'), {
+            this.map = new google.maps.Map(document.getElementById('gmap_container'), {
                 center: {lat: 48.496582, lng: 23.5212107},
                 zoom: 8.7,
                 minZoom: 8,
@@ -228,16 +315,24 @@
             });
             this.searchBox(this.map)
 
-           // Load data
-           if(this.$route.params.slug){
-               this.formData = await this.$axios.get(`marker/show/${this.$route.params.slug}`)
-               this.form = new Form(this.formData.data.data)
-               this.form.category = this.form.marker_category_id
-               this.mapMarker.set('position',new google.maps.LatLng(this.form.lat, this.form.lng))
-           }
-           this.formData = null
+            // Load data
+            if (this.$route.params.slug) {
+                this.$axios.get(`marker/show/${this.$route.params.slug}`).then(res => {
+                    this.form = new Form(res.data.data)
+                    this.form.category = this.form.marker_category_id
 
-           let self = this;
+                    this.settlements.push(this.form.settlement)
+
+                    this.form.settlement = this.form.settlement_id
+                    this.mapMarker.set('position', new google.maps.LatLng(this.form.lat, this.form.lng))
+
+                })
+
+            }
+            this.formData = null
+
+            // draw borders
+            let self = this;
             if (google && google.maps) {
                 var boundaries = new google.maps.FusionTablesLayer({
                     query: {
@@ -257,6 +352,18 @@
                         boundaries.set('styles', self.$store.state.gMapStyles.stylesZoomIn);
                     }
                 })
+            }
+        },
+        watch: {
+            settlementSearch(val) {
+                clearTimeout(this.settlementDelay);
+                this.settlementDelay = setTimeout(() => {
+                    val && this.loadSettlements()
+                }, 800);
+
+            },
+            'form.id':function (v) {
+                this.$refs.imgUploadComponent.loadData(v)
             }
         },
 
@@ -332,36 +439,56 @@
             autoFilter(item, queryText, itemText) {
                 return item.name.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
+            autoSettlementFilter(item, queryText, itemText) {
+                return this.getTitle(item.translations).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+            },
+            getTitle(item) {
+                return item.find(obj => obj.locale === this.getLocal).title
+            },
             autoValue(value) {
                 return value.id
+            },
+            titleTrim(value) {
+                return value.translations.find(obj => obj.locale === this.$i18n.locale).title.substr(0, 20)
+            },
+            subtitleTrim(value) {
+                return value.translations.find(obj => obj.locale === this.$i18n.locale).title
+            },
+
+            async loadSettlements() {
+                this.loading = true
+                let url = `settlement?page=1&limit=10&q=${this.settlementSearch}&locale=${this.getLocal}`
+                const {data} = await this.$axios.get(url)
+                this.settlements = data.data.slice(0)
+                this.loading = false
             },
 
             async store() {
                 console.log(this.form)
                 let url = 'marker/store'
-                if(this.form.id > 0) url = 'marker/edit'
-                await this.form.put(url).then((data)=>{
+                if (this.form.id > 0) url = 'marker/edit'
+                await this.form.put(url).then((data) => {
                     console.log(data.data)
                     this.form.id = data.data.data.id
-                    this.snackbar={
-                        status:true,
-                        timeout:4000,
-                        color:'success',
-                        message:'messages.saved',
+                    this.snackbar = {
+                        status: true,
+                        timeout: 4000,
+                        color: 'success',
+                        message: 'messages.saved',
                     }
-                }).catch((e)=>{
-                    this.snackbar={
-                            status:true,
-                            timeout:4000,
-                            color:'error',
-                            message:'messages.not_saved',
+                }).catch((e) => {
+                    this.snackbar = {
+                        status: true,
+                        timeout: 4000,
+                        color: 'error',
+                        message: 'messages.not_saved',
                     }
                     console.log(e)
                 })
             },
         },
-        computed:{
-            getLocal(){
+        computed: {
+            getLocal() {
                 return this.$i18n.locale
             }
         }

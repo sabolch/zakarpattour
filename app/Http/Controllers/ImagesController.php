@@ -52,7 +52,7 @@ class ImagesController extends Controller
             );
             return response()->json(['image' => ['url' => config('app.url') . DIRECTORY_SEPARATOR . 'image'
                 . DIRECTORY_SEPARATOR . 'show' . DIRECTORY_SEPARATOR
-                . $path, 'path' => $path]], 202);
+                . $type .DIRECTORY_SEPARATOR . $id , 'name'=>$name,'path' => $path]], 202);
         } catch (\Exception $e) {
             return response()->json([], 204);
         }
@@ -68,6 +68,49 @@ class ImagesController extends Controller
         }
     }
 
+
+    public function titleImg($type, $id)
+    {
+        $img_path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR
+            . $id . DIRECTORY_SEPARATOR . 'title');
+        if (is_dir($img_path)) {
+            $filesInFolder = \File::files($img_path);
+            $img = pathinfo($filesInFolder[0])['basename'];
+            return Image::make($img_path . DIRECTORY_SEPARATOR . $img)->response();
+        }
+        return Image::make(storage_path('app') . DIRECTORY_SEPARATOR . 'default.jpg')->response();
+
+    }
+
+    public function setTitleImg(Request $request)
+    {
+        try {
+            $path = $request->input('path');
+            $id = $request->input('id');
+            $type = $request->input('type');
+
+            $title_path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . 'title');
+            $image_full_path = storage_path('app') . DIRECTORY_SEPARATOR . $path;
+
+            if(is_dir($title_path)){
+                \File::deleteDirectory($title_path);
+            }
+            $img = Image::make($image_full_path);
+//            // resize the image
+            $img->resize(600, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+//            // create dir if not exist with sizes
+            mkdir($title_path);
+//            //save img
+            $img->save($title_path . DIRECTORY_SEPARATOR . basename($image_full_path));
+
+            return response()->json([], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error'=>204], 204);
+        }
+    }
+
     public function collect($type, $id)
     {
         $path_to = $type . DIRECTORY_SEPARATOR . $id;
@@ -76,40 +119,52 @@ class ImagesController extends Controller
         foreach ($filesInFolder as $path) {
             $p = pathinfo($path)['basename'];
             $files[] = ['url' => config('app.url') . DIRECTORY_SEPARATOR . 'image' . DIRECTORY_SEPARATOR
-                . 'show' . DIRECTORY_SEPARATOR . $path_to . DIRECTORY_SEPARATOR . $p, 'path' => $path_to
+                . 'show' . DIRECTORY_SEPARATOR . $path_to, 'name' => $p, 'path' => $path_to
                 . DIRECTORY_SEPARATOR . $p];
         }
         return response()->json($files, 200);
 
     }
 
-    public function show($type, $id, $name, $size = null)
+    public function showOriginal($type, $id, $name)
     {
-        $path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR
-            . $id . DIRECTORY_SEPARATOR . $size);
-        $img_path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR
-            . $id . DIRECTORY_SEPARATOR . $name);
-        // Resize and store image
-        if($size && !is_dir($path)){
-            // make image from file
-            $img = Image::make($img_path);
-            $size = explode('x', $size);
-            // resize the image
-            $img->resize((int)$size[0], (int) $size[1],function($constraint)
-            {
-                $constraint->aspectRatio();
-            });
-            // create dir with sizes
-            mkdir($path);
-            //save img
-            $img->save($path . DIRECTORY_SEPARATOR . $name);
-            return $img->response();
-        }
-        // If resized return the resized img
-        if($size){
-            return Image::make($path . DIRECTORY_SEPARATOR . $name )->response();
-        }
-        // if $size null return original
-        return Image::make($img_path)->response();
+        return $this->show($type, $id, null, $name);
     }
+
+    public function show($type, $id, $size = null, $name)
+    {
+        try {
+            $path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR
+                . $id . DIRECTORY_SEPARATOR . $size);
+            $image_full_path = $path . DIRECTORY_SEPARATOR . $name;
+            $img_path = storage_path('app' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR
+                . $id . DIRECTORY_SEPARATOR . $name);
+            // Resize and store image
+            if ($size && !file_exists($image_full_path)) {
+                // make image from file
+                $img = Image::make($img_path);
+                $size = explode('x', $size);
+                // resize the image
+                $img->resize((int)$size[0], (int)$size[1], function ($constraint) {
+//                    $constraint->aspectRatio();
+                });
+                // create dir if not exist with sizes
+                if (!is_dir($path)) {
+                    mkdir($path);
+                }
+                //save img
+                $img->save($image_full_path);
+                return $img->response();
+            }
+            // If resized return the resized img
+            if ($size) {
+                return Image::make($image_full_path)->response();
+            }
+            // if $size null return original
+            return Image::make($img_path)->response();
+        } catch (\Exception $e) {
+            return Image::make($img_path)->response();
+        }
+    }
+
 }

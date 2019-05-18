@@ -98,51 +98,9 @@
                     </v-layout>
                 </v-flex>
                 <v-flex v-if="tours.length > 0" v-for="item in tours" :key="item.slug" xs12 md6 lg3>
-                    <v-card class="my-1">
-                        <v-img
-                                :src="'/images/Munkacs_vara.jpg'"
-                                aspect-ratio="1"
-                                height="300px"
-                                class="grey lighten-2"
-                        >
-                            <v-layout
-                                    slot="placeholder"
-                                    fill-height
-                                    align-center
-                                    justify-center
-                                    ma-0
-                            >
-                                <v-progress-circular indeterminate color="grey lighten-5"/>
-                            </v-layout>
-
-                            <v-card-actions>
-                                <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#{{getName(item.category)}}</span>
-                                <v-spacer></v-spacer>
-                                <btn-favorite type="tour" :itemID="item.id"></btn-favorite>
-                            </v-card-actions>
-                        </v-img>
-                        <v-card-text class="align-center text-xs-justify pa-2">
-                            <h1 class="headline">{{getTitle(item) }}</h1>
-                            <v-rating
-                                    color="blue darken-3"
-                                    readonly
-                                    background-color="grey darken-1"
-                                    medium
-                                    v-model="rating"
-                            ></v-rating>
-                        </v-card-text>
-                        <v-card-actions>
-                            <share-btns></share-btns>
-                            <v-spacer/>
-                            <v-btn flat class="blue--text"
-                                   :to="{name:'tour.show',params: {slug:item.slug}}"
-                                   outline
-                            >
-                                {{$t('btns.read_more')}}
-                            </v-btn>
-                        </v-card-actions>
-
-                    </v-card>
+                    <tour-post
+                            :item="item"
+                    ></tour-post>
                 </v-flex>
 
 
@@ -218,6 +176,60 @@
                                     >
                                         <v-icon left>label</v-icon>
                                         <strong> {{ getName(data.item) }}</strong>&nbsp;
+                                    </v-chip>
+                                </template>
+                            </v-autocomplete>
+                        </v-flex>
+
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Settlement</v-subheader>
+                        <v-flex xs12>
+                            <v-autocomplete
+                                    class="pl-3 pr-3"
+                                    v-model="selectedSettlements"
+                                    :loading="loading"
+                                    :items="settlements"
+                                    :search-input.sync="settlementSearch"
+                                    chips
+                                    clearable
+                                    hide-details
+                                    hide-selected
+                                    item-text="title"
+                                    item-value="id"
+                                    label="Search for settlements .."
+                                    multiple
+                                    single-line
+                                    :disabled="loading"
+                            >
+                                <template v-slot:no-data>
+                                    <v-list-tile>
+                                        <v-list-tile-title>
+                                            Search for settlements ..
+                                        </v-list-tile-title>
+                                    </v-list-tile>
+                                </template>
+                                <template v-slot:item="{ item }">
+                                    <v-list-tile-avatar
+                                            color="indigo"
+                                            class="headline font-weight-light white--text"
+                                    >
+                                        <v-icon dark>location_city</v-icon>
+                                    </v-list-tile-avatar>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title v-text="titleTrim(item)"></v-list-tile-title>
+                                        <v-list-tile-sub-title v-text="subtitleTrim(item)"></v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </template>
+                                <template slot="selection" slot-scope="data">
+                                    <v-chip
+                                            :selected="data.selected.title"
+                                            close
+                                            outline
+                                            color="indigo"
+                                            @input="removeFromSettlements(data.item.id)"
+
+                                    >
+                                        <v-icon left>location_city</v-icon>
+                                        <strong>{{ titleTrim(data.item) }}</strong>&nbsp;
                                     </v-chip>
                                 </template>
                             </v-autocomplete>
@@ -454,8 +466,10 @@
     </div>
 </template>
 <script>
+    import TourPost from "../../components/posts/tour-post";
     export default {
         name: "tourindex",
+        components: {TourPost},
         async asyncData({params, $axios, $router}) {
             try {
                 const {data} = await $axios.get('tour?limit=12')
@@ -511,7 +525,14 @@
                 sightSearch:null,
                 priceDelay:{},
                 durationDelay:{},
-                selectedSightsDelay:{}
+                selectedSightsDelay:{},
+
+
+                settlementDelay:{},
+                settlements:[],
+                selectedSettlements:[],
+                settlementSearch:'',
+
             }
         },
        async mounted() {
@@ -543,7 +564,24 @@
                 this.sendRequest();
             },
             sightSearch (val) {
-                val &&  this.loadSights()
+                clearTimeout(this.selectedSightsDelay);
+                this.selectedSightsDelay = setTimeout(() => {
+                    this.page = 1;
+                    val &&  this.loadSights()
+                }, 700);
+            },
+            selectedSettlements: function (v) {
+                clearTimeout(this.settlementDelay);
+                this.settlementDelay = setTimeout(() => {
+                    this.page = 1;
+                    v && this.sendRequest();
+                }, 800);
+            },
+            settlementSearch (val) {
+                clearTimeout(this.settlementDelay);
+                this.settlementDelay = setTimeout(() => {
+                    val &&  this.loadSettlements()
+                }, 800);
             },
             price(val) {
                 clearTimeout(this.priceDelay);
@@ -563,7 +601,7 @@
                 clearTimeout(this.selectedSightsDelay);
                 this.selectedSightsDelay = setTimeout(() => {
                     this.page = 1;
-                    this.sendRequest();
+                    v && this.sendRequest();
                 }, 700);
             },
             start_date(v){
@@ -615,6 +653,11 @@
                 if(this.selectedSights.length > 0){
                     url += `&sights=${JSON.stringify(this.selectedSights)}`
                 }
+
+                if(this.selectedSettlements.length > 0){
+                    url+= `&settlements=${JSON.stringify(this.selectedSettlements)}`
+                }
+
                 this.getDataFromApi(url)
             },
 
@@ -623,6 +666,13 @@
                 let url = `marker?page=1&limit=10&q=${this.sightSearch.trim()}`
                 const {data} = await this.$axios.get(url)
                 this.sights = data.data.slice(0)
+                this.loading = false
+            },
+            async loadSettlements(){
+                this.loading = true
+                let url = `settlement?page=1&limit=10&q=${this.settlementSearch.trim()}`
+                const {data} = await this.$axios.get(url)
+                this.settlements = data.data.slice(0)
                 this.loading = false
             },
 
@@ -653,6 +703,10 @@
             removeFromSights(itemID) {
                 this.selectedSights.splice(this.selectedSights.indexOf(itemID), 1);
             },
+            removeFromSettlements(itemID) {
+                this.selectedSettlements.splice(this.selectedSettlements.indexOf(itemID), 1);
+            },
+
             autoValue(value) {
                 return value.id
             },

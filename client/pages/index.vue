@@ -39,8 +39,11 @@
                     <v-layout row wrap>
                         <v-flex xs4 md2 v-for="(tile,index) in tiles" :key="tile.icon">
                             <v-card dark :color="tile.color" class="text-xs-center pa-2">
-                                <v-icon :size="breakpoint ? 40 : 50">{{ tile.icon }}</v-icon><br>
-                                <div :class="[{'subtitle': breakpoint},'mt-2 mb-2',{'title': !breakpoint}]">{{ $t(`index.tiles[${index}]`) }}</div>
+                                <v-icon :size="breakpoint ? 40 : 50">{{ tile.icon }}</v-icon>
+                                <br>
+                                <div :class="[{'subtitle': breakpoint},'mt-2 mb-2',{'title': !breakpoint}]">{{
+                                    $t(`index.tiles[${index}]`) }}
+                                </div>
                             </v-card>
                         </v-flex>
                     </v-layout>
@@ -51,7 +54,9 @@
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.recommended_slights')
+                                <h1 class="ml-4 font-weight-bold"
+                                    :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{
+                                    $t('index.subtitles.recommended_slights')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'sights'}" outline>
@@ -61,49 +66,22 @@
                         </v-container>
                     </v-card>
                 </v-flex>
-                <v-flex v-for="(item,index) in posts.recommended_slights" :key="`${item.image}-${index}-o`" xs12 md6
-                        lg3>
-                    <v-card class="my-1">
-                       <lazy-item-img
-                       :itemID="0"
-                       type="sight"
-                       :src="item.image"
-                       category="category"
-                       ></lazy-item-img>
-
-                        <v-card-text class="align-center text-xs-justify pa-2">
-                            <h1 class="headline">Lorem ipsum dolor set amit</h1>
-                            <v-rating
-                                    color="blue darken-3"
-                                    readonly
-                                    background-color="grey darken-1"
-                                    medium
-                                    v-model="rating"
-                            ></v-rating>
-                        </v-card-text>
-                        <v-card-actions>
-                            <share-btns></share-btns>
-                            <v-spacer/>
-                            <v-btn flat class="blue--text"
-                                   @click="readMore(item.slug)"
-                                   outline
-                            > {{ $t('btns.read_more') }}
-                            </v-btn>
-                        </v-card-actions>
-
-                    </v-card>
+                <v-flex v-for="(item,index) in sights" :key="`${item.slug}-${index}-o`" xs12 md6 lg3>
+                    <sight-post :item="item"></sight-post>
                 </v-flex>
                 <v-flex xs12 pa-1>
                     <lazy-paralax
-                        src="/images/bg/bg2.jpg"
-                        title="Долина нарцисів"
+                            src="/images/bg/bg2.jpg"
+                            title="Долина нарцисів"
                     ></lazy-paralax>
                 </v-flex>
                 <v-flex xs12>
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.recommended_tours')
+                                <h1 class="ml-4 font-weight-bold"
+                                    :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{
+                                    $t('index.subtitles.recommended_tours')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'tours'}" outline>
@@ -115,10 +93,10 @@
                 </v-flex>
 
 
-                <v-flex v-for="(item,index ) in posts.recommended_tours" :key="index" xs12 md6 lg3>
-                        <tour-post
+                <v-flex v-for="(item,index ) in tours" :key="index" xs12 md6 lg3>
+                    <tour-post
                             :item="item"
-                        ></tour-post>
+                    ></tour-post>
                 </v-flex>
 
                 <v-flex xs12 pa-1>
@@ -132,7 +110,9 @@
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.popular_slights')
+                                <h1 class="ml-4 font-weight-bold"
+                                    :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{
+                                    $t('index.subtitles.popular_slights')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'sights'}" outline>
@@ -143,46 +123,9 @@
                     </v-card>
                 </v-flex>
 
-
-                <v-flex v-for="(item,index) in posts.popular_slights" :key="`${index}-${item.image}`" xs12 md6 lg3>
-                    <v-card class="my-1">
-                        <lazy-item-img
-                                :itemID="0"
-                                type="sight"
-                                :src="item.image"
-                                category="category"
-                        ></lazy-item-img>
-                        <v-card-text class="align-center text-xs-justify pa-2">
-                            <h1 class="headline">Lorem ipsum dolor set amit</h1>
-                            <v-rating
-                                    color="blue darken-3"
-                                    readonly
-                                    background-color="grey darken-1"
-                                    medium
-                                    v-model="rating"
-                            ></v-rating>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn icon class="purple--text">
-                                <v-icon medium>sb-instagram</v-icon>
-                            </v-btn>
-                            <v-btn icon class="light-blue--text">
-                                <v-icon medium>sb-twitter</v-icon>
-                            </v-btn>
-                            <v-btn icon class="blue--text text--darken-4">
-                                <v-icon medium>sb-facebook</v-icon>
-                            </v-btn>
-                            <v-spacer/>
-                            <v-btn flat class="blue--text"
-                                   @click="readMore(item.slug)"
-                                   outline
-                            > {{ $t('btns.read_more') }}
-                            </v-btn>
-                        </v-card-actions>
-
-                    </v-card>
+                <v-flex v-for="(item,index) in sights" :key="`${index}-${item.slug}`" xs12 md6 lg3>
+                    <sight-post :item="item"></sight-post>
                 </v-flex>
-
 
                 <v-flex xs12 pa-1>
                     <lazy-paralax
@@ -197,7 +140,9 @@
                     <v-card>
                         <v-container ma-0 pa-3 fluid grid-list-xl>
                             <v-layout row justify-space-between class="align-center">
-                                <h1 class="ml-4 font-weight-bold" :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{ $t('index.subtitles.popular_tours')
+                                <h1 class="ml-4 font-weight-bold"
+                                    :class="[{'title': breakpoint},{'headline': !breakpoint}]">{{
+                                    $t('index.subtitles.popular_tours')
                                     }}</h1>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" class="mr-4" :to="{name: 'tours'}" outline>
@@ -209,7 +154,7 @@
                 </v-flex>
 
 
-                <v-flex v-for="(item,index) in posts.popular_tours" :key="`${item.image}-${index}`" xs12 md6 lg3>
+                <v-flex v-for="(item,index) in tours" :key="`${item.slug}-${index}`" xs12 md6 lg3>
                     <tour-post
                             :item="item"
                     ></tour-post>
@@ -230,7 +175,8 @@
                                                 </v-card-text>
                                             </v-flex>
                                         </v-layout>
-                                        <v-divider class="hidden-md-and-down" v-if="item.divider" :vertical="true"></v-divider>
+                                        <v-divider class="hidden-md-and-down" v-if="item.divider"
+                                                   :vertical="true"></v-divider>
                                     </v-container>
                                 </v-flex>
                             </v-layout>
@@ -253,78 +199,76 @@
     import LazyParalax from "../components/lazy-load/lazy-paralax";
     import LazyItemImg from "../components/lazy-load/lazy-item-img";
     import TourPost from "../components/posts/tour-post";
+    import SightPost from "../components/posts/sight-post";
 
     export default {
         name: 'indexpage',
+
+        async asyncData({params, $axios, redirect}) {
+            try {
+                const {data} = await $axios.get('marker?limit=4')
+                return {
+                    sights: data.data,
+                }
+            } catch (e) {
+                redirect('/error');
+            }
+        },
+
         head() {
             return {
                 title: this.$t("index.title")
             }
         },
-        components: {TourPost, LazyItemImg, LazyParalax},
+        components: {SightPost, TourPost, LazyItemImg, LazyParalax},
 
         data: () => ({
-            appName: process.env.appName,
-            datetime: '',
-            rating: 4,
+                appName: process.env.appName,
+                datetime: '',
+                rating: 4,
 
-            tiles: [
-                {icon: "landscape", color: "red accent-4"},
-                {icon: "account_balance", color: "orange darken-4"},
-                {icon: "local_hotel", color: "yellow accent-4"},
-                {icon: "local_dining", color: "green accent-4"},
-                {icon: "card_travel", color: "light-blue darken-4"},
-                {icon: "local_activity", color: "deep-purple accent-4"},
-            ],
-            footer: [
-                {icon: "my_location", divider: true},
-                {icon: "shopping_cart", divider: true},
-                {icon: "explore", divider: false},
-            ],
-            posts: {
-                recommended_slights: [
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'}
-                ],
-                recommended_tours: [
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'}
-                ],
-                popular_slights: [
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'}
-                ],
-                popular_tours: [
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'},
-                    {image: '/images/Munkacs_vara.jpg'}
-                ]
+                sights: [],
+                tours: [],
 
+                tiles: [
+                    {icon: "landscape", color: "red accent-4"},
+                    {icon: "account_balance", color: "orange darken-4"},
+                    {icon: "local_hotel", color: "yellow accent-4"},
+                    {icon: "local_dining", color: "green accent-4"},
+                    {icon: "card_travel", color: "light-blue darken-4"},
+                    {icon: "local_activity", color: "deep-purple accent-4"},
+                ],
+                footer: [
+                    {icon: "my_location", divider: true},
+                    {icon: "shopping_cart", divider: true},
+                    {icon: "explore", divider: false},
+                ],
             }
-
-        }),
+        ),
 
         computed: {
             breakpoint() {
                 return this.$vuetify.breakpoint.xs
             }
-        },
-        mounted() {
+        }
+        ,
+        async mounted() {
             window.$nuxt.$moment.locale('uk');
             this.datetime = window.$nuxt.$moment().locale(this.$i18n.locale).format('ll')
-        },
+
+            let {data} = await this.$axios.get('tour?limit=4')
+            this.tours = data.data;
+
+        }
+        ,
         watch: {
-            '$i18n.locale': function (value) {
-                this.datetime = window.$nuxt.$moment().locale(value).format('ll')
-            }
-        },
+            '$i18n.locale':
+
+                function (value) {
+                    this.datetime = window.$nuxt.$moment().locale(value).format('ll')
+                }
+        }
+        ,
         methods: {}
     }
 </script>

@@ -349,12 +349,38 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step color="red lighten-1" step="4">Also done!
+                    <v-stepper-step color="red lighten-1" :complete="e6 > 4" step="4">Also done!
                         <small>Finish</small>
                     </v-stepper-step>
                     <v-stepper-content step="4">
                         <v-btn dark color="green" :loading="form.busy" @click="store">Save</v-btn>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn
+                                        :disabled="form.id < 1"
+                                        color="primary"
+                                        @click="e6 = 5"
+                                >
+                                    Continue
+                                </v-btn>
+                            </template>
+                            <span>Enabled if we saved the marker</span>
+                        </v-tooltip>
+
                         <v-btn dark color="orange" @click="e6 = e6-1">{{$t('btns.back')}}</v-btn>
+                    </v-stepper-content>
+
+                    <v-stepper-step step="5">Images
+                        <small>Uploade and manage images</small>
+                    </v-stepper-step>
+                    <v-stepper-content step="5">
+                        <v-flex>
+                         <image-upload
+                                 :itemID="form.id"
+                                 type="tour"
+                                 ref="imgUploadComponent"
+                         ></image-upload>
+                        </v-flex>
                     </v-stepper-content>
                 </v-stepper>
             </v-flex>
@@ -381,10 +407,12 @@
 <script>
     import Form from 'vform'
     import VButton from "../../../components/global/Button";
+    import ImageUpload from "../../../components/admin/image-upload";
+
 
     export default {
         name: "adminTourIndex",
-        components: {VButton},
+        components: {ImageUpload, VButton},
         layout: "admin",
         head() {
             return {
@@ -470,6 +498,9 @@
 
                 }, 800)
             },
+            'form.id':function (v) {
+                this.$refs.imgUploadComponent.loadData(v)
+            }
         },
         async mounted() {
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {

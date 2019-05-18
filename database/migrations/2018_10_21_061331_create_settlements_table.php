@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMarkersTable extends Migration
+class CreateSettlementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,14 @@ class CreateMarkersTable extends Migration
      */
     public function up()
     {
-        Schema::create('markers', function (Blueprint $table) {
+        Schema::create('settlements', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->float('lat',12,8);
             $table->float('lng',12,8);
             $table->bigInteger('views');
-            $table->integer('marker_category_id')->unsigned();
-            $table->integer('settlement_id')->unsigned();
             $table->string('slug')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('marker_category_id')->references('id')->on('marker_categories');
-            $table->foreign('settlement_id')->references('id')->on('settlements');
         });
     }
 
@@ -36,6 +31,6 @@ class CreateMarkersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('markers');
+        Schema::dropIfExists('settlements');
     }
 }

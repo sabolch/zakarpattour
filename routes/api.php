@@ -89,6 +89,19 @@ Route::group(['prefix' => 'marker'], function () {
     Route::get('/trashed', 'MarkerController@trashed');
     Route::delete('/remove', 'MarkerController@destroyForever');
 });
+
+
+//    Settlement
+Route::group(['prefix' => 'settlement'], function () {
+    Route::put('/store', 'SettlementController@store');
+    Route::put('/edit', 'SettlementController@edit');
+    Route::delete('/trash', 'SettlementController@destroy');
+    Route::get('/show/{slug}', 'SettlementController@show');
+    Route::get('/', 'SettlementController@index');
+    Route::get('/trashed', 'SettlementController@trashed');
+});
+
+
 // Favourite
 Route::group(['middleware' => 'auth:api','prefix' => 'favourite'], function () {
     Route::put('/add/marker', 'FavouritesController@createMarker');
@@ -118,8 +131,12 @@ Route::group(['prefix' => 'admin','middleware' => 'guest:admin'], function () {
 Route::group(['prefix' => 'image'], function () {
     Route::post('/upload', 'ImagesController@upload');
     Route::delete('/remove', 'ImagesController@remove');
-    Route::get('/show/{type}/{id}/{name}/{size?}', 'ImagesController@show');
+    Route::get('/show/{type}/{id}/{size?}/{name}', 'ImagesController@show');
+    Route::get('/show/{type}/{id}/{name}', 'ImagesController@showOriginal');
     Route::get('/collect/{type}/{id}', 'ImagesController@collect');
+
+    Route::get('/title/{type}/{id}', 'ImagesController@titleImg');
+    Route::post('/set/title', 'ImagesController@setTitleImg');
 });
 
 Route::group(['prefix' => 'admin','middleware' => 'auth:admin'], function () {

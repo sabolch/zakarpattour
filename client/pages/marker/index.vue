@@ -104,7 +104,6 @@
                     ></sight-post>
                 </v-flex>
 
-
                 <v-flex xs12 v-if="sights.length > 0">
                     <v-card style="padding:10px">
                         <v-layout justify-center>
@@ -189,9 +188,9 @@
                                     multiple
                                     chips
                                     :disabled="loading"
-                                    hide-selected
                                     persistent-hint
-                                    :filter="autoFilter"
+                                    hide-no-date
+                                    :filter="autoFilterCat"
                                     :item-value="autoValue"
                             >
                                 <template slot="item" slot-scope="data">
@@ -214,6 +213,62 @@
                             </v-autocomplete>
                         </v-flex>
 
+
+                        <v-divider></v-divider>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Settlements</v-subheader>
+                        <v-flex xs12>
+                            <v-autocomplete
+                                    class="pl-3 pr-3"
+                                    v-model="selectedSettlements"
+                                    :loading="loading"
+                                    :items="settlements"
+                                    :search-input.sync="settlementSearch"
+                                    chips
+                                    clearable
+                                    hide-details
+                                    hide-selected
+                                    item-text="title"
+                                    item-value="id"
+                                    label="Search for a settlements.."
+                                    multiple
+                                    single-line
+                                    :disabled="loading"
+                                    :filter="autoFilter"
+                            >
+                                <template v-slot:no-data>
+                                    <v-list-tile>
+                                        <v-list-tile-title>
+                                            Search for a settlements...
+                                        </v-list-tile-title>
+                                    </v-list-tile>
+                                </template>
+                                <template v-slot:item="{ item }">
+                                    <v-list-tile-avatar
+                                            color="indigo"
+                                            class="headline font-weight-light white--text"
+                                    >
+                                        <v-icon dark>location_city</v-icon>
+                                    </v-list-tile-avatar>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title v-text="titleTrim(item)"></v-list-tile-title>
+                                        <v-list-tile-sub-title v-text="subtitleTrim(item)"></v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </template>
+                                <template slot="selection" slot-scope="data">
+                                    <v-chip
+                                            :selected="data.selected.title"
+                                            close
+                                            outline
+                                            color="indigo"
+                                            @input="removeFromSettlements(data.item.id)"
+
+                                    >
+                                        <v-icon left>location_city</v-icon>
+                                        <strong>{{ titleTrim(data.item) }}</strong>&nbsp;
+                                    </v-chip>
+                                </template>
+                            </v-autocomplete>
+                        </v-flex>
                     </v-list>
                 </v-navigation-drawer>
             </v-layout>
@@ -235,14 +290,12 @@
     </div>
 </template>
 <script>
-    import BtnFavorite from "../../components/global/btn-favorite";
-    import ShareBtns from "../../components/global/share-btns";
-    import SightPost from "../../components/posts/sight-post";
+   import SightPost from "../../components/posts/sight-post";
 
     export default {
         name: "markerindex",
-        components: {SightPost, ShareBtns, BtnFavorite},
-        async asyncData({params, $axios, $router}) {
+        components: {SightPost},
+        async asyncData({params, $axios, redirect}) {
             try {
                 const {data} = await $axios.get('marker?limit=12')
                 return {
@@ -251,7 +304,7 @@
                     total : data.meta.last_page
                 }
             } catch (e) {
-                $router.push({name: 'error'})
+                redirect('/error');
             }
         },
 
@@ -267,6 +320,7 @@
                 rate: [0, 5],
                 filters: false,
 
+
                 sights: [],
 
                 items: [],
@@ -281,6 +335,12 @@
                 typeItems: [],
                 types: [],
                 typeDelay: {},
+
+                settlementDelay:{},
+                settlements:[],
+                selectedSettlements:[],
+                settlementSearch:'',
+
 
                 sortBy: null,
             }
@@ -303,8 +363,22 @@
                     this.sendRequest();
                 }, 800);
             },
+            selectedSettlements: function (v) {
+                clearTimeout(this.settlementDelay);
+                this.settlementDelay = setTimeout(() => {
+                    this.page = 1;
+                    v && this.sendRequest();
+                }, 800);
+            },
             page: function () {
                 this.sendRequest();
+            },
+            settlementSearch (val) {
+                clearTimeout(this.settlementDelay);
+                this.settlementDelay = setTimeout(() => {
+                    val &&  this.loadSettlements()
+                }, 800);
+
             },
             search(val) {
                 val && val !== this.select && this.querySelections(val)
@@ -314,6 +388,13 @@
             }
         },
         methods: {
+            async loadSettlements(){
+                this.loading = true
+                let url = `settlement?page=1&limit=10&q=${this.settlementSearch}&locale=${this.getLocal}`
+                const {data} = await this.$axios.get(url)
+                this.settlements = data.data.slice(0)
+                this.loading = false
+            },
             keyupHandle(event) {
                 clearTimeout(this.timeoutId);
                 if (event.key == 'Enter') {
@@ -343,7 +424,7 @@
                 // .finaly(()=>{}) on IE not works
             },
             sendRequest() {
-                let url = `marker?page=${this.page}&limit=12&category=${JSON.stringify(this.types)}`
+                let url = `marker?page=${this.page}&limit=12&category=${JSON.stringify(this.types)}&settlements=${JSON.stringify(this.selectedSettlements)}&local=${this.getLocal}`
                 if (this.search) {
                     url += `&q=${this.search}`
                 }
@@ -359,13 +440,6 @@
                 //     return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
                 // })
             },
-            getCategoryName(id) {
-                if(typeof  this.typeItems.find(obj => obj.id ===  id) == 'undefined')
-                    return 'category'
-
-               return this.typeItems.find(obj => obj.id ===  id)
-                     .translations.find(obj => obj.locale ===  this.getLocal).name
-            },
             getTitle(item) {
                 return item.find(obj => obj.locale ===  this.getLocal).title
             },
@@ -373,24 +447,33 @@
                 return item.find(obj => obj.locale ===  this.getLocal).name
             },
 
-            autoFilter(item, queryText, itemText) {
+            autoFilterCat(item, queryText, itemText) {
                 return this.getName(item.translations).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+            },
+            autoFilter(item, queryText, itemText) {
+                return this.getTitle(item.translations).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
             autoValue(value) {
                 return value.id
+            },
+            titleTrim(value){
+                return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title.substr(0,20)
+            },
+            subtitleTrim(value){
+                return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title
+            },
+            removeFromSettlements(itemID) {
+                this.selectedSettlements.splice(this.selectedSettlements.indexOf(itemID), 1);
             },
         },
         computed: {
             getLocal(){
                 return this.$i18n.locale
             }
-
         }
     }
 </script>
 
 <style scoped>
-.no-data{
-    width: 100vw !important;
-}
+
 </style>

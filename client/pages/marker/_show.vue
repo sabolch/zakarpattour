@@ -7,9 +7,9 @@
                         <v-flex xs12>
                             <v-carousel>
                                 <v-carousel-item
-                                        v-for="(item,i) in items"
-                                        :key="i"
-                                        :src="item.src"
+                                        v-for="item in images"
+                                        :key="item.path"
+                                        :src="`${item.url}/1440x500/${item.name}`"
                                 >
                                     <v-toolbar style="background-color: transparent; box-shadow: none;">
                                         <v-toolbar-title class="white--text"><span
@@ -37,12 +37,15 @@
                                                     wrap
                                                     align-center
                                             >
-                                                <v-flex xs6 md3 class=" align-center">
-                                                    <v-layout align-center>
-                                                        <v-icon color="indigo" class="mr-1">visibility</v-icon>
-                                                        <span class="subheading mr-2"> Views : {{ sight.views }}</span>
-                                                    </v-layout>
-                                                </v-flex>
+
+                                                <v-chip color="blue darken-4" outline>
+                                                    <v-icon left>location_city</v-icon>
+                                                    {{ getTitle(sight.settlement) }}
+                                                </v-chip>
+                                                <v-chip color="blue darken-4" outline>
+                                                    <v-icon left>visibility</v-icon>
+                                                    Views : {{ sight.views }}
+                                                </v-chip>
                                             </v-layout>
                                         </v-flex>
                                     </v-layout>
@@ -194,15 +197,15 @@
         data() {
             return {
                 sight: null,
-                marker:null,
+                marker: null,
 
 
                 dialog: false,
                 snackbar: {
-                    active:false,
-                    timeout:4000,
-                    text:'Copied to clipboard',
-                    color:'success'
+                    active: false,
+                    timeout: 4000,
+                    text: 'Copied to clipboard',
+                    color: 'success'
                 },
 
 
@@ -211,24 +214,19 @@
                 right: false,
                 alert: false,
 
-                items: [
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
-                    },
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-                    },
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-                    },
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
-                    }
-                ],
+                images: [],
                 map: {},
             }
         },
-        mounted() {
+        async mounted() {
+            try {
+                let {data} = await this.$axios.get(`image/collect/sight/${this.sight.id}`)
+                this.images = data
+
+            } catch (e) {
+                this.images = []
+            }
+
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {
                 center: {lat: 48.496582, lng: 23.5212107},
                 zoom: 8.7,
@@ -272,7 +270,7 @@
                     self.snackbar.color = 'success'
                 }, function (err) {
                     self.snackbar.color = 'erorr'
-                    self.snackbar.text  = 'Copy not supported'
+                    self.snackbar.text = 'Copy not supported'
                     self.snackbar.active = true
 
                     // console.error('Async: Could not copy text: ', err);
@@ -289,7 +287,7 @@
             getDescription(item) {
                 return item.translations.find(obj => obj.locale === this.getLocal).description
             },
-            setMapCenter(){
+            setMapCenter() {
                 this.map.setCenter(this.marker.getPosition());
             }
         },
@@ -297,14 +295,14 @@
             getLocal() {
                 return this.$i18n.locale
             },
-            getPosition(){
+            getPosition() {
                 return `${this.sight.lat},${this.sight.lng}`
             },
             generateMarker() {
                 this.marker = new google.maps.Marker({
-                    position: new google.maps.LatLng( this.sight.lat,this.sight.lng),
+                    position: new google.maps.LatLng(this.sight.lat, this.sight.lng),
                     icon: {
-                        url: '/svg/' +this.sight.category.icon + '.svg',
+                        url: '/svg/' + this.sight.category.icon + '.svg',
                         scaledSize: new google.maps.Size(32, 32),
                         origin: new google.maps.Point(0, 0),
                         anchor: new google.maps.Point(0, 0)
@@ -313,12 +311,12 @@
                 })
 
                 let self = this.marker;
-                this.marker.addListener('rightclick', function() {
+                this.marker.addListener('rightclick', function () {
                     this.map.setZoom(8);
                     this.map.setCenter(self.getPosition());
                 });
 
-                this.marker.addListener('click', function() {
+                this.marker.addListener('click', function () {
                     this.map.setZoom(18);
                     this.map.setCenter(self.getPosition());
                 });

@@ -31,9 +31,10 @@ class MarkerController extends Controller
         $search_query = Input::has('q') ? Input::get('q') : false;
         $per_page = Input::has('limit') ? Input::get('limit') : 10;
         $category = Input::has('category') ? json_decode(Input::get('category')) : '';
+        $settlements = Input::has('settlements') ? json_decode(Input::get('settlements')) : '';
         $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
-        return  MarkerResource::collection(Marker::pagination($search_query, $category,$order_by,$per_page));
+        return  MarkerResource::collection(Marker::pagination($search_query, $settlements,$category,$order_by,$per_page));
     }
 
     public function trashed()
@@ -61,6 +62,7 @@ class MarkerController extends Controller
         $validator =  Validator::make($request->all(),
             [
                 'category'=>'required|integer',
+                'settlement'=>'required|integer',
                 'lat'=>'required|numeric',
                 'lng'=>'required|numeric',
                 'translations' =>'required',
@@ -68,6 +70,8 @@ class MarkerController extends Controller
             ],[
                 'category.required'=>'Category ID is required',
                 'category.integer'=>'Category ID must be integer',
+                'settlement.required'=>'Settlement ID is required',
+                'settlement.integer'=>'Settlement ID must be integer',
                 'lat.required'=>'Latitude is required',
                 'lng.required'=>'Longitude is required',
                 'lat.numeric'=>'Latitude must be numeric',
@@ -83,6 +87,7 @@ class MarkerController extends Controller
 
         $marker = new Marker();
         $marker->marker_category_id = $data['category'];
+        $marker->settlement_id = $data['settlement'];
         $marker->lat = $data['lat'];
         $marker->lng = $data['lng'];
         $marker->title = $data['translations'][0]['title'];
@@ -111,7 +116,7 @@ class MarkerController extends Controller
     public function show($slug)
     {
         try{
-            $marker = Marker::whereSlug($slug)->with('category')->first();
+            $marker = Marker::whereSlug($slug)->with('category')->with('settlement')->first();
 
             $marker->increment('views');
 
@@ -138,6 +143,7 @@ class MarkerController extends Controller
         $validator =  Validator::make($request->all(),
             [
                 'category'=>'required|integer',
+                'settlement'=>'required|integer',
                 'lat'=>'required|numeric',
                 'lng'=>'required|numeric',
                 'translations' =>'required',
@@ -145,6 +151,8 @@ class MarkerController extends Controller
             ],[
                 'category.required'=>'Category ID is required',
                 'category.integer'=>'Category ID must be integer',
+                'settlement.required'=>'Settlement ID is required',
+                'settlement.integer'=>'Settlement ID must be integer',
                 'lat.required'=>'Latitude is required',
                 'lng.required'=>'Longitude is required',
                 'lat.numeric'=>'Latitude must be numeric',
@@ -161,6 +169,7 @@ class MarkerController extends Controller
         try{
             $marker = Marker::findOrFail($data['id']);
             $marker->marker_category_id = $data['category'];
+            $marker->settlement_id = $data['settlement'];
             $marker->lat = $data['lat'];
             $marker->lng = $data['lng'];
             $marker->title = $data['title'];

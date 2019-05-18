@@ -1,62 +1,19 @@
 <template>
-    <!--<v-card class="my-1">-->
-        <!--<v-img-->
-                <!--:src="'/images/Munkacs_vara.jpg'"-->
-                <!--aspect-ratio="1"-->
-                <!--height="300px"-->
-                <!--class="grey lighten-2"-->
-        <!--&gt;-->
-            <!--<v-layout-->
-                    <!--slot="placeholder"-->
-                    <!--fill-height-->
-                    <!--align-center-->
-                    <!--justify-center-->
-                    <!--ma-0-->
-            <!--&gt;-->
-                <!--<v-progress-circular indeterminate color="grey lighten-5"/>-->
-            <!--</v-layout>-->
-
-            <!--<v-card-actions>-->
-                <!--<span class="white&#45;&#45;text amber darken-4 pa-1 font-weight-black subheading">#{{getName(item.category.translations)}}</span>-->
-                <!--<v-spacer></v-spacer>-->
-                <!--<btn-favorite type="sight" :itemID="item.id"></btn-favorite>-->
-            <!--</v-card-actions>-->
-        <!--</v-img>-->
-        <!--<v-card-text class="align-center text-xs-justify pa-2">-->
-            <!--<h1 class="headline">{{ getTitle(item.translations) }}</h1>-->
-            <!--<v-rating-->
-                    <!--color="blue darken-3"-->
-                    <!--readonly-->
-                    <!--background-color="grey darken-1"-->
-                    <!--medium-->
-                    <!--v-model="rating"-->
-            <!--&gt;</v-rating>-->
-        <!--</v-card-text>-->
-        <!--<v-card-actions>-->
-            <!--<share-btns></share-btns>-->
-            <!--<v-spacer/>-->
-            <!--<v-btn flat class="blue&#45;&#45;text"-->
-                   <!--:to="{name:'sight.show',params: {slug:item.slug}}"-->
-                   <!--outline-->
-            <!--&gt;-->
-                <!--{{$t('btns.read_more')}}-->
-            <!--</v-btn>-->
-        <!--</v-card-actions>-->
-
-    <!--</v-card>-->
-
-
     <v-card class="my-1">
         <lazy-item-img
                 :itemID="item.id"
                 type="sight"
-                :src="'/images/Munkacs_vara.jpg'"
-                category="category"
+                :src="imgUrl"
+                :category="`${getName(item.category.translations)}`"
         >
 
         </lazy-item-img>
         <v-card-text class="align-center text-xs-justify pa-2">
             <h1 class="headline">{{ getTitle(item.translations) }}</h1>
+            <v-chip color="blue darken-4" outline>
+                <v-icon left>location_city</v-icon>
+                {{ getTitle(item.settlement.translations) }}
+            </v-chip>
             <v-rating
                     color="blue darken-3"
                     readonly
@@ -91,7 +48,8 @@
             },
             item: {
                 type: Object,
-                default: {}
+                default: {},
+                required:true
             }
 
         },
@@ -102,12 +60,18 @@
         },
         computed: {
             getLocal() {
-                return this.$i18n.locale === 'uk' ? 'ua' : this.$i18n.locale
+                return this.$i18n.locale
+            },
+             imgUrl(){
+                return `${this.$axios.defaults.baseURL}/image/title/sight/${this.item.id}`;
             }
         },
         methods: {
             getTitle(item) {
                 return item.find(obj => obj.locale ===  this.getLocal).title
+            },
+            getName(item) {
+                return item.find(obj => obj.locale ===  this.getLocal).name
             },
           }
     }

@@ -21,8 +21,8 @@ class CreateTourTranslationsTable extends Migration
             $table->string('title',400);
             $table->text('description');
 
-            $table->unique(['tours_id','locale']);
-            $table->foreign('tours_id')->references('id')->on('tours')->onDelete('cascade');
+            $table->unique(['tour_id','locale']);
+            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
         });
     }
 

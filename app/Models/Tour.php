@@ -54,10 +54,12 @@ class Tour extends Model
         return $this->belongsTo(TourCategory::class, 'tour_category_id', 'id');
     }
 
+    // not clean code version :(
     public static function pagination($active = true,
                                       $search_query = null,
                                       $category,
                                       $sights,
+                                      $settlements,
                                       $price,
                                       $duration,
                                       $order_by,
@@ -75,11 +77,24 @@ class Tour extends Model
             ->when($category, function ($q) use ($category) {
                 return $q->whereIn('tour_category_id', $category);})
             // sights
-            ->when($sights, function ($q) use ($sights) {
-                return $q->whereHas('markers', function($q) use ($sights) {
-                    $q->whereIn('marker_id',$sights);
+            ->when(($sights || $settlements), function ($q) use ($sights,$settlements) {
+                return $q->whereHas('markers', function($q) use ($sights,$settlements) {
+                    // sights
+                    if($sights) {
+                       $q->whereIn('marker_id', $sights);
+                   }
+                    // settlements
+                   if($settlements) {
+                       $q->whereIn('settlement_id',$settlements);
+                   }
                 });
             })
+//            // settlements
+//            ->when($settlements, function ($q) use ($settlements) {
+//                return $q->whereHas('markers', function($q) use ($settlements) {
+//                    $q->whereIn('settlement_id',$settlements);
+//                });
+//            })
             // search query
             ->when($search_query, function ($q) use ($search_query) {
                 return $q->whereHas('translations', function($q) use ($search_query) {

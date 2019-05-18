@@ -7,9 +7,9 @@
                         <v-flex xs12>
                             <v-carousel>
                                 <v-carousel-item
-                                        v-for="(item,i) in tourImages"
-                                        :key="i"
-                                        :src="item.src"
+                                        v-for="item in tourImages"
+                                        :key="item.path"
+                                        :src="`${item.url}/1440x500/${item.name}`"
                                 >
                                     <v-toolbar style="background-color: transparent; box-shadow: none;">
                                         <v-toolbar-title class="white--text"><span
@@ -39,31 +39,22 @@
                                                     wrap
                                                     align-center
                                             >
-                                                <v-flex xs6 md3 class=" align-center">
-                                                    <v-layout align-center>
-                                                        <v-icon color="indigo" class="mr-1">visibility</v-icon>
-                                                        <span class="subheading mr-2"> Views : {{tour.views}}</span>
-                                                    </v-layout>
-                                                </v-flex>
-
-                                                <v-flex xs6 md3>
-                                                    <v-layout align-center>
-                                                        <v-icon color="indigo" class="mr-1">access_time</v-icon>
-                                                        <span class="subheading mr-2"> Duration : {{tour.duration}} days</span>
-                                                    </v-layout>
-                                                </v-flex>
-                                                <v-flex xs6 md3>
-                                                    <v-layout align-center>
-                                                        <v-icon color="indigo" class="mr-1">date_range</v-icon>
-                                                        <span class="subheading mr-2"> Start : {{ tour.start_date.substr(0,10) }}</span>
-                                                    </v-layout>
-                                                </v-flex>
-                                                <v-flex xs6 md3>
-                                                    <v-layout align-center>
-                                                        <v-icon color="indigo" class="mr-1">date_range</v-icon>
-                                                        <span class="subheading mr-2"> End : {{tour.end_date.substr(0,10)}}</span>
-                                                    </v-layout>
-                                                </v-flex>
+                                                <v-chip color="blue darken-4" outline>
+                                                    <v-icon left>visibility</v-icon>
+                                                    Views : {{ tour.views }}
+                                                </v-chip>
+                                                <v-chip color="blue darken-4" outline>
+                                                    <v-icon left>access_time</v-icon>
+                                                    Duration : {{tour.duration}} days
+                                                </v-chip>
+                                                <v-chip color="blue darken-4" outline>
+                                                    <v-icon left>date_range</v-icon>
+                                                    Start : {{ tour.start_date.substr(0,10) }}
+                                                </v-chip>
+                                                <v-chip color="blue darken-4" outline>
+                                                    <v-icon left>date_range</v-icon>
+                                                    End : {{tour.end_date.substr(0,10)}}
+                                                </v-chip>
                                             </v-layout>
                                         </v-flex>
                                     </v-layout>
@@ -181,7 +172,8 @@
                                                             </v-flex>
                                                             <v-btn box color="orange"
                                                                    @click="addToCart(5)"
-                                                            >Add to cart now</v-btn>
+                                                            >Add to cart now
+                                                            </v-btn>
                                                         </v-layout>
 
                                                     </v-flex>
@@ -200,11 +192,17 @@
                                                 >
                                                     <v-layout pt-3>
                                                         <v-flex xs3>
-                                                            <strong>{{ item.item }}</strong>
+                                                            <strong>Start : {{ tour.start_date.substr(0,10) }}</strong>
                                                         </v-flex>
                                                         <v-flex>
-                                                            <strong>New Icon</strong>
-                                                            <div class="caption">{{ item.color}}</div>
+                                                            <v-chip color="blue darken-4" outline>
+                                                                <v-icon left>location_city</v-icon>
+                                                                {{ getTitle(item.settlement) }}
+                                                            </v-chip>
+
+                                                            <div class="caption">
+                                                                <strong>{{ item.title }}</strong>
+                                                            </div>
                                                         </v-flex>
                                                     </v-layout>
                                                 </v-timeline-item>
@@ -240,53 +238,48 @@
                 title: this.$t('navbar.home'),
             }
         },
-        async asyncData ({ params, $axios,redirect }) {
+        async asyncData({params, $axios, redirect}) {
             try {
-                let {data} = await  $axios.$get(`/tour/show/${params.slug}`)
+                let {data} = await $axios.$get(`/tour/show/${params.slug}`)
                 return {tour: data}
-            }catch (e) {
+            } catch (e) {
                 redirect('/error')
             }
         },
         data() {
             return {
-                showmenu:false,
-                fab:false,
-                right:false,
+                showmenu: false,
+                fab: false,
+                right: false,
 
                 tour: {},
-                map:{},
+                map: {},
 
-                alert:false,
-                travelMode:'DRIVING',
-                travelModes:['DRIVING','WALKING','BICYCLING','TRANSIT'],
+                alert: false,
+                travelMode: 'DRIVING',
+                travelModes: ['DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT'],
 
                 colors: [
                     'red', 'purple darken-1', 'green lighten-1',
-                    'pink lighten-1','indigo','teal darken-2','deep-purple darken-2','teal darken-2',
-                    'yellow accent-2','blue-grey darken-1','amber darken-3','green darken-4','lime accent-2','brown darken-2'
+                    'pink lighten-1', 'indigo', 'teal darken-2', 'deep-purple darken-2', 'teal darken-2',
+                    'yellow accent-2', 'blue-grey darken-1', 'amber darken-3', 'green darken-4', 'lime accent-2', 'brown darken-2'
 
                 ],
 
-                tourImages: [
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
-                    },
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-                    },
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-                    },
-                    {
-                        src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
-                    }
-                ],
+                tourImages: [],
 
-                directionsDisplay:{},
+                directionsDisplay: {},
             }
         },
-        mounted() {
+        async mounted() {
+
+            try {
+                let {data} = await this.$axios.get(`image/collect/tour/${this.tour.id}`)
+                this.tourImages = data;
+            } catch (e) {
+                this.tourImages = [{url:'/images/post',name:'default.jpg'}];
+            }
+
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {
                 center: {lat: 48.496582, lng: 23.5212107},
                 zoom: 8.7,
@@ -305,23 +298,23 @@
             this.directionsDisplay.setDirections(JSON.parse(this.tour.directions))
 
             let self = this;
-            if(google && google.maps){
+            if (google && google.maps) {
                 var boundaries = new google.maps.FusionTablesLayer({
                     query: {
                         select: 'geometry',
                         from: '1g6jCZjMjMz-OzUItTvfEpTjon2MkEmPI8_Dl6RfA',
                         where: "'o_name' = 'Zakarpatska'"
                     },
-                    location:'region',
+                    location: 'region',
                     styles: self.$store.state.gMapStyles.stylesZoomIn,
                     map: self.map,
                     suppressInfoWindows: true
                 })
-                google.maps.event.addListener(self.map, 'zoom_changed', function() {
-                    if (( self.map.getZoom() > 10) || ( self.map.getZoom() < 4)) {
-                        boundaries.set('styles',self.$store.state.gMapStyles.stylesZoomOut);
+                google.maps.event.addListener(self.map, 'zoom_changed', function () {
+                    if ((self.map.getZoom() > 10) || (self.map.getZoom() < 4)) {
+                        boundaries.set('styles', self.$store.state.gMapStyles.stylesZoomOut);
                     } else {
-                        boundaries.set('styles',self.$store.state.gMapStyles.stylesZoomIn);
+                        boundaries.set('styles', self.$store.state.gMapStyles.stylesZoomIn);
                     }
                 })
             }
@@ -331,7 +324,7 @@
             addToCart(id) {
                 console.log(id);
             },
-            addToFavorites(id){
+            addToFavorites(id) {
                 console.log(id);
             },
 
@@ -344,7 +337,7 @@
             getDescription(item) {
                 return item.translations.find(obj => obj.locale === this.getLocal).description
             },
-            setMapCenter(){
+            setMapCenter() {
                 this.map.setCenter({lat: 48.496582, lng: 23.5212107});
             },
             getRandomColor() {
@@ -367,7 +360,8 @@
         width: 100%;
         min-height: 600px;
     }
-    #d_panel{
+
+    #d_panel {
         /*overflow-x: scroll;*/
         word-wrap: break-word;
     }

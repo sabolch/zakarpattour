@@ -33,12 +33,13 @@ class TourController extends Controller
         $price = Input::has('price') ? json_decode(Input::get('price')) : [10,15000];
         $duration = Input::has('duration') ? json_decode(Input::get('duration')) : [1,150];
         $sights = Input::has('sights') ? json_decode(Input::get('sights')) : '';
+        $settlements = Input::has('settlements') ? json_decode(Input::get('settlements')) : '';
         $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
         $start_date = Input::has('start_date') ? Input::get('start_date') : date('Y-m-d');
         $end_date = Input::has('end_date') ? Input::get('end_date') : date('Y-m-d', strtotime('+7 months'));
 
-        return  TourResource::collection(Tour::pagination(true, $search_query,  $category, $sights,$price,
+        return  TourResource::collection(Tour::pagination(true, $search_query,  $category, $sights,$settlements,$price,
             $duration, $order_by, $start_date, $end_date,$per_page));
     }
 
@@ -134,7 +135,9 @@ class TourController extends Controller
     public function show($slug)
     {
         try{
-            $tour = Tour::whereSlug($slug)->with('category')->with('markers')->first();
+            $tour = Tour::whereSlug($slug)->with('category')->with(['markers'=>function($q){
+                $q->with('settlement');
+            }])->first();
             $tour->increment('views');
 
             return response()->json([
