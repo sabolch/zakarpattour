@@ -145,6 +145,16 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:admin'], function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('/statistic', 'AdminController@index');
+    Route::get('/users', 'AdminController@getUsers');
+    Route::get('/admins', 'AdminController@getAdmins');
+    Route::put('/edit', 'AdminController@edit');
+    Route::put('/create', 'AdminController@create');
+    Route::post('/activate', 'AdminController@activate');
+    Route::delete('/delete', 'AdminController@delete');
+
+
 });
 
 Route::get('mapkey/icons', function () {

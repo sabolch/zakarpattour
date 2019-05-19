@@ -10,6 +10,7 @@ class Admin extends Authenticatable implements JWTSubject
 {
     use SoftDeletes;
     protected $guard = 'admin';
+    protected $table = 'admins';
     /**
      * The attributes that are mass assignable.
      *
@@ -46,5 +47,14 @@ class Admin extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+    public static function pagination($search_query, $order_by, $per_page)
+    {
+        return Admin::withTrashed()
+            ->when($search_query, function ($q) use ($search_query) {
+                $q ->where('name', 'LIKE', '%' . $search_query . '%');
+            })
+            ->orderBy('created_at', $order_by)
+            ->paginate($per_page,['id', 'name', 'email', 'telephone', 'created_at', 'updated_at','deleted_at']);
     }
 }

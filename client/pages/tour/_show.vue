@@ -289,7 +289,7 @@
             })
 
             this.directionsDisplay = new google.maps.DirectionsRenderer({
-                draggable: true,
+                draggable: false,
                 map: this.map,
                 panel: document.getElementById('d_panel')
             });

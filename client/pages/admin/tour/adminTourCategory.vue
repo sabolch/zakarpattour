@@ -61,7 +61,7 @@
                     slot="items"
                     slot-scope="props"
             >
-                <td>{{ props.item.name }}</td>
+                <td>{{ getName(props.item) }}</td>
                 <td>
                     <v-flex xs12 class="text-xs-center">
                         <v-btn
@@ -197,11 +197,9 @@
 
         async asyncData({$axios, $router}) {
             try {
-                let icons = await $axios.get('mapkey/icons')
                 let category = await $axios.get('tour/category')
 
                 return {
-                    icons: icons.data.icons,
                     pagination: category.data.meta,
                     categories: category.data.data
                 }
@@ -214,7 +212,6 @@
             return {
                 first: true,
                 loading: false,
-                icons: {},
                 categories: {},
                 page: 1,
                 tablePagination: {},
@@ -267,7 +264,7 @@
         },
         mounted() {
         },
-        computed: {},
+
         methods: {
             async responseCategory() {
                 let url = `tour/category?page=${this.page}&per_page=${this.tablePagination.rowsPerPage}`
@@ -335,8 +332,16 @@
             trashing(item) {
                 this.form = new Form(item)
                 this.dialog = true
-            }
+            },
+            getName(item) {
+                return item.translations.find(obj => obj.locale ===  this.getLocal).name
+            },
         },
+        computed: {
+            getLocal(){
+                return this.$i18n.locale
+            }
+        }
     }
 </script>
 <style scoped>

@@ -17,7 +17,7 @@ class CreateSettlementsTable extends Migration
             $table->increments('id')->unique();
             $table->float('lat',12,8);
             $table->float('lng',12,8);
-            $table->bigInteger('views');
+            $table->bigInteger('views')->default(0);
             $table->string('slug')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();

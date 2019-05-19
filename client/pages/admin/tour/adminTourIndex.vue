@@ -160,6 +160,7 @@
                                             single-line
                                             :disabled="loading"
                                             return-object
+                                            :filter="autoFilterSights"
                                     >
                                         <template v-slot:no-data>
                                             <v-list-tile>
@@ -475,6 +476,8 @@
 
                 selectedSights: [],
                 sights: [],
+                timeoutId:{},
+
 
                 directionsService: {},
                 directionsDisplay: {},
@@ -489,7 +492,11 @@
         },
         watch: {
             sightSearch(val) {
-                val && this.loadSights()
+                clearTimeout(this.timeoutId);
+                this.timeoutId = setTimeout(()=>{
+                    val && this.loadSights()
+                }, 800);
+
             },
             'form.markers': function (v) {
                 clearTimeout(this.drawTimer)
@@ -562,13 +569,13 @@
                 this.loading = true
                 let url = `marker?page=1&limit=10&q=${this.sightSearch.trim()}`
                 const {data} = await this.$axios.get(url)
-                this.sights = data.data.slice(0)
+                this.sights = [...this.sights, ...data.data]
                 this.loading = false
             },
 
             async querySelections(v) {
-                clearTimeout(this.timeoutId);
-                this.timeoutId = setTimeout(this.loadSights(v), 700);
+                // clearTimeout(this.timeoutId);
+                // this.timeoutId = setTimeout(this.loadSights(v), 800);
             },
 
             titleTrim(value) {
@@ -589,6 +596,7 @@
             autoFilter(item, queryText, itemText) {
                 return item.name.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
+
             autoValue(value) {
                 return value.id
             },
@@ -630,7 +638,11 @@
             },
             setMapCenter(){
                 this.map.setCenter({lat: 48.496582, lng: 23.5212107});
-            }
+            },
+            autoFilterSights(item, queryText, itemText) {
+                console.log(item,queryText,itemText)
+                return this.getTitle(item).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+            },
         },
         computed: {
             getLocal() {

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\FavouriteMarkers;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,6 +12,7 @@ use App\Notifications\ResetPassword as ResetPasswordNotification;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -63,7 +65,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)
@@ -87,10 +89,23 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function favouriteMarkers(){
-        return $this->belongsToMany('App\Models\Marker','favourite_markers');
+    public function favouriteMarkers()
+    {
+        return $this->belongsToMany('App\Models\Marker', 'favourite_markers');
     }
-    public function favouriteTours(){
-        return $this->belongsToMany('App\Models\Tour','favourite_tours');
+
+    public function favouriteTours()
+    {
+        return $this->belongsToMany('App\Models\Tour', 'favourite_tours');
+    }
+
+    public static function pagination($search_query, $order_by, $per_page)
+    {
+       return User::select(['id', 'name', 'email', 'telephone', 'active', 'created_at', 'updated_at'])
+            ->when($search_query, function ($q) use ($search_query) {
+                $q ->where('name', 'LIKE', '%' . $search_query . '%');
+            })
+            ->orderBy('created_at', $order_by)
+            ->paginate($per_page);
     }
 }

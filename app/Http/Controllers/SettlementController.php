@@ -7,6 +7,7 @@ use App\Models\Settlement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class SettlementController extends Controller
 {
@@ -54,7 +55,6 @@ class SettlementController extends Controller
                 'lng.required'=>'Longitude is required',
                 'lat.numeric'=>'Latitude must be numeric',
                 'lng.numeric'=>'Longitude must be numeric',
-                'title.required'=>'Title array is required!',
                 'translations.required'=>'Translation is required!'
             ]);
         if ($validator->fails()) {
@@ -118,19 +118,17 @@ class SettlementController extends Controller
     {
         $validator =  Validator::make($request->all(),
             [
-                'category'=>'required|integer',
+                'id'=>'required|numeric',
                 'lat'=>'required|numeric',
                 'lng'=>'required|numeric',
                 'translations' =>'required',
 
             ],[
-                'category.required'=>'Category ID is required',
-                'category.integer'=>'Category ID must be integer',
+                'id.required'=>'Item ID is required',
                 'lat.required'=>'Latitude is required',
                 'lng.required'=>'Longitude is required',
                 'lat.numeric'=>'Latitude must be numeric',
                 'lng.numeric'=>'Longitude must be numeric',
-                'title.required'=>'Title array is required!',
                 'translations.required'=>'Translation is required!'
             ]);
         if ($validator->fails()) {
@@ -139,12 +137,16 @@ class SettlementController extends Controller
 
         $data = $validator->valid();
 
+
+
         try{
             $settlement = Settlement::findOrFail($data['id']);
             $settlement->lat = $data['lat'];
             $settlement->lng = $data['lng'];
-            $settlement->title = $data['title'];
+            $settlement->title = $data['translations'][0]['title'];
+            $settlement->description = $data['translations'][0]['description'];
             $settlement->save();
+
             // Translate
             foreach ($data['translations'] as $array) {
                 $settlement->translateOrNew($array['locale'])->title = $array['title'];

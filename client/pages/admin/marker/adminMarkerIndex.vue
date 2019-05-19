@@ -459,7 +459,7 @@
                 this.loading = true
                 let url = `settlement?page=1&limit=10&q=${this.settlementSearch}&locale=${this.getLocal}`
                 const {data} = await this.$axios.get(url)
-                this.settlements = data.data.slice(0)
+                this.settlements = [...this.settlements, ...data.data.slice(0)]
                 this.loading = false
             },
 

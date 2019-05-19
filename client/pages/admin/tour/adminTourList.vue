@@ -59,7 +59,7 @@
                                 color="primary"
                                 exact
                                 flat
-                                :to="{name:'sight.show',params: {slug:props.item.slug}}"
+                                :to="{name:'tour.show',params: {slug:props.item.slug}}"
                                 target="_blank"
                         >
                             <v-icon>remove_red_eye</v-icon>

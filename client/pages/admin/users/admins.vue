@@ -12,7 +12,7 @@
                     <v-icon medium dark>add</v-icon>
 
                 </v-btn>
-                <span>Create new category</span>
+                <span>Create new admin</span>
             </v-tooltip>
             <v-spacer></v-spacer>
             <v-text-field
@@ -50,7 +50,7 @@
         </v-card-title>
         <v-data-table
                 :headers="headers"
-                :items="categories"
+                :items="admins"
                 :pagination.sync="tablePagination"
                 :total-items="pagination.total"
                 :rows-per-page-items="rowsPerPageItems"
@@ -61,7 +61,20 @@
                     slot="items"
                     slot-scope="props"
             >
-                <td>{{ props.item.name }}</td>
+                <td>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-btn  v-on="on"
+                                    :color="props.item.deleted_at ? 'red darken-2' : 'green darken-2'" outline flat>
+                                <v-icon left color="red" medium v-if="props.item.deleted_at">delete</v-icon>
+                                {{ props.item.name }}
+                            </v-btn>
+                        </template>
+                        <span>{{ props.item.deleted_at ? `Deactivated at ${props.item.deleted_at}` : 'Active' }}</span>
+                    </v-tooltip>
+
+                </td>
+                <td>{{ props.item.email }}</td>
                 <td>
                     <v-flex xs12 class="text-xs-center">
                         <v-btn
@@ -74,6 +87,7 @@
                             <v-icon>edit</v-icon>
                         </v-btn>
                         <v-btn
+                                v-if="!props.item.deleted_at"
                                 outline
                                 small
                                 fab
@@ -108,9 +122,9 @@
         >
             <v-card>
                 <v-card-title class="headline">
-                    Remove category
+                    Remove admin
                 </v-card-title>
-                <v-card-text> Are you sure remove this category?</v-card-text>
+                <v-card-text> Are you sure remove this user?</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -138,7 +152,7 @@
             <v-card>
                 <v-card-title>
                     <v-layout justify-center>
-                        <span class="headline">Create category</span>
+                        <span class="headline">Create admin</span>
                     </v-layout>
                 </v-card-title>
                 <v-card-text>
@@ -146,52 +160,55 @@
                         <v-layout wrap>
                             <v-flex xs12>
                                 <v-form>
-                                    <v-autocomplete
-                                            :items="icons"
-                                            v-model="form.icon"
-                                            label="Select Icon"
-                                            persistent-hint
-                                            :filter="autoFilter"
-                                            :item-value="autoValue"
-                                    >
-                                        <template slot="selection"
-                                                  slot-scope="{ item, index }"
-                                        >
-                                                <span style="color:blue;font-size: 28px;" class="v-icon mki"
-                                                      :class="`mki-${item.value}`"></span>
-                                            <span>&nbsp;&nbsp; {{ item.name }}</span>
-                                        </template>
-
-                                        <template slot="item"
-                                                  slot-scope="{ item, index }"
-                                        >
-                                            <span style="color:blue;font-size: 28px;" class="v-icon mki"
-                                                  :class="`mki-${item.value}`"></span>
-                                            <span>&nbsp;&nbsp;{{ item.name }}</span>
-                                        </template>
-
-                                    </v-autocomplete>
-
-                                    <v-text-field label="Name Eng"
-                                                  v-model="form.translations[0].name"
-                                                  required
-                                                  :counter="30"
-                                                  :maxlength="30"
-                                                  clearable
+                                    <v-text-field
+                                            v-model="form.name"
+                                            v-validate="'required|max:30'"
+                                            :error-messages="errors.collect('name')"
+                                            label="Name"
+                                            data-vv-name="username"
+                                            clearable
+                                            required
                                     ></v-text-field>
-                                    <v-text-field label="Name Hun"
-                                                  v-model="form.translations[1].name"
-                                                  :counter="30"
-                                                  :maxlength="30"
-                                                  clearable
-
+                                    <v-text-field
+                                            v-model="form.email"
+                                            v-validate="'required|email'"
+                                            :error-messages="errors.collect('email')"
+                                            label="E-mail"
+                                            data-vv-name="email"
                                     ></v-text-field>
-                                    <v-text-field label="Name Ukr"
-                                                  v-model="form.translations[2].name"
-                                                  :counter="30"
-                                                  :maxlength="30"
-                                                  clearable
-
+                                    <v-text-field
+                                            mask="phone"
+                                            v-model="form.telephone"
+                                            v-validate="'required|min:10'"
+                                            :error-messages="errors.collect('telephone')"
+                                            label="Telephone"
+                                            data-vv-name="telephone"
+                                            clearable
+                                            required
+                                    ></v-text-field>
+                                    <v-text-field
+                                            :type="show1 ? 'text' : 'password'"
+                                            :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                                            @click:append="show1 = !show1"
+                                            ref="password"
+                                            v-model="form.password"
+                                            v-validate="'required|min:5|max:15'"
+                                            :error-messages="errors.collect('password')"
+                                            label="Password"
+                                            data-vv-name="password"
+                                            clearable
+                                            required
+                                    ></v-text-field>
+                                    <v-text-field
+                                            :type="show1 ? 'text' : 'password'"
+                                            :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                                            @click:append="show1 = !show1"
+                                            v-model="form.password_confirmation"
+                                            v-validate="'required|confirmed:password'"
+                                            :error-messages="errors.collect('password_confirmation')"
+                                            label="Confirm Password"
+                                            data-vv-name="password_confirmation"
+                                            required
                                     ></v-text-field>
                                 </v-form>
                             </v-flex>
@@ -201,6 +218,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn outline color="blue darken-1" flat @click="savedialog = false">Close</v-btn>
+                    <v-btn v-if="form.deleted_at" outline color="amber darken-4" flat @click="activate">Activate</v-btn>
                     <v-btn :loading="form.busy" outline color="green darken-1" flat @click="saveCategory">Save</v-btn>
                 </v-card-actions>
             </v-card>
@@ -210,6 +228,7 @@
 </template>
 <script>
     import Form from 'vform'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: "admins",
@@ -221,31 +240,38 @@
             }
         },
 
-        async asyncData({$axios, $router}) {
+        async asyncData({store,$axios, redirect}) {
             try {
-                let icons = await $axios.get('mapkey/icons')
-                let category = await $axios.get('marker/category')
-
+                $axios.setToken(store.state.admin.token,'Bearer')
+                let admins = await $axios.get('admin/admins')
                 return {
-                    icons: icons.data.icons,
-                    pagination: category.data.meta,
-                    categories: category.data.data
+                    pagination: admins.data.meta,
+                    admins: admins.data.data
                 }
             } catch (e) {
-                $router.push({name: 'error'})
+                redirect('/error')
             }
         },
 
         data() {
             return {
+                rules: {
+                    required: value => !!value || 'Required.',
+                    min: v => v.length >= 6 || 'Min 6 characters',
+                    email: value => {
+                        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                        return pattern.test(value) || 'Invalid e-mail.'
+                    }
+                },
+
                 first: true,
                 loading: false,
-                icons: {},
-                categories: {},
+                admins: {},
                 page: 1,
                 tablePagination: {},
                 pagination: {},
 
+                show1:false,
                 search: '',
                 editing: false,
                 dialog: false,
@@ -253,25 +279,26 @@
 
                 formObj: {
                     id: '',
-                    icon: '',
-                    translations: [
-                        {locale: 'en', name: ''},
-                        {locale: 'hu', name: ''},
-                        {locale: 'ua', name: ''},
-                    ],
+                    type: 'admin',
+                    name:'',
+                    email:'',
+                    telephone:'',
+                    password:'',
+                    password_confirmation:''
                 },
                 form: new Form({
                     id: '',
-                    icon: '',
-                    translations: [
-                        {locale: 'en', name: ''},
-                        {locale: 'hu', name: ''},
-                        {locale: 'ua', name: ''},
-                    ],
+                    type: 'admin',
+                    name:'',
+                    email:'',
+                    telephone:'',
+                    password:'',
+                    password_confirmation:''
                 }),
 
                 headers: [
                     {text: 'Name', align: 'left', sortable: false, value: 'name'},
+                    {text: 'Email', align: 'left', sortable: false, value: 'email'},
                     {text: 'Action', value: 'action', sortable: false, align: 'center'},
                 ],
                 rowsPerPageItems: [5, 10, 20],
@@ -292,42 +319,61 @@
             }
         },
         mounted() {
+            this.authrize()
         },
-        computed: {},
+        computed: mapGetters({
+            admin: 'admin/user'
+        }),
         methods: {
+            authrize(){
+                this.form.keys().forEach(key => {
+                    this.form[key] = this.admin[key]
+                })
+                this.form.type = 'admin'
+                this.form.telephone = ''
+                this.form.password = ''
+                this.form.password_confirmation = ''
+            },
             async responseCategory() {
-                let url = `marker/category?page=${this.page}&per_page=${this.tablePagination.rowsPerPage}`
+                let url = `admin/admins?page=${this.page}&per_page=${this.tablePagination.rowsPerPage}`
                 if (this.search) url += `&q=${this.search}`
-
                 this.loading = true
+                this.$axios.setToken(this.$store.state.admin.token,'Bearer')
                 const {data} = await this.$axios.get(url)
                 this.pagination = data.meta
-                this.categories = data.data
+                this.admins = data.data
                 this.loading = false
-                console.log('loaded')
-
             },
 
             async store(url) {
-                const {data} = await this.form.put(url)
-                this.form = new Form(this.formObj)
+                await this.form.put(url).then(res =>{
+                    this.authrize();
+                    this.responseCategory()
+                    this.savedialog = false
+                })
+            },
+
+            async trash() {
+                const {data} = await this.form.delete('admin/delete')
+                this.authrize();
+                await this.responseCategory()
+                this.dialog = false
+            },
+
+            async activate() {
+                const {data} = await this.form.post('admin/activate')
+                this.authrize();
                 await this.responseCategory()
                 this.savedialog = false
             },
 
-            async trash() {
-                const {data} = await this.form.delete('marker/category/trash')
-                this.form = new Form(this.formObj)
-                await this.responseCategory()
-                this.dialog = false
-            },
             doPaginate() {
                 if (this.page == 1) this.responseCategory()
                 this.page = 1
             },
             saveCategory() {
-                let url = 'marker/category/store';
-                if (this.editing) url = 'marker/category/edit';
+                let url = 'admin/create';
+                if (this.editing) url = 'admin/edit';
                 this.store(url)
             },
 
@@ -349,18 +395,22 @@
             },
 
             createNew() {
-                this.form = new Form(this.formObj)
+                this.authrize()
                 this.savedialog = true
                 this.editing = false
 
             },
             edit(item) {
                 this.form = new Form(item)
+                this.form.type = 'admin'
+                this.form.password = ''
+                this.form.password_confirmation = ''
                 this.editing = true
                 this.savedialog = true
             },
             trashing(item) {
                 this.form = new Form(item)
+                this.form.type = 'admin'
                 this.dialog = true
             }
         },

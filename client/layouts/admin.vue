@@ -25,7 +25,7 @@
                     </v-list-tile-avatar>
 
                     <v-list-tile-content>
-                        <v-list-tile-title>John Leider</v-list-tile-title>
+                        <v-list-tile-title>{{ getAdmin }}</v-list-tile-title>
                     </v-list-tile-content>
 
                     <v-list-tile-action>
@@ -106,20 +106,18 @@
             <v-toolbar-title>ZakarpatTour</v-toolbar-title>
 
             <v-spacer></v-spacer>
-
             <v-btn icon @click="handleFullScreen()">
                 <v-icon>fullscreen</v-icon>
             </v-btn>
 
-
             <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
-                <v-btn icon flat slot="activator">
+                <v-btn icon flat slot="activator" @click="$router.push({name:'admin.profile'})">
                     <v-badge color="red" overlap>
                         <span slot="badge">3</span>
                         <v-icon medium>notifications</v-icon>
                     </v-badge>
                 </v-btn>
-                <v-card class="elevation-0">
+                <v-card class="elevation-0" v-if="false">
                     <v-toolbar card dense color="transparent">
                         <v-toolbar-title><h4>Notification</h4></v-toolbar-title>
                     </v-toolbar>
@@ -148,22 +146,20 @@
                     </v-card-text>
                 </v-card>
             </v-menu>
-
-
             <v-menu offset-y origin="center center" :nudge-bottom="14" transition="scale-transition">
                 <v-btn icon flat slot="activator">
-                        <v-icon large>account_circle</v-icon>
+                        <v-icon large>more_vert</v-icon>
                 </v-btn>
                 <v-list class="pa-0">
-                    <v-list-tile v-for="(item,index) in itemss"  @click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="index">
-                        <v-list-tile-action v-if="item.icon">
-                            <v-icon>{{ item.icon }}</v-icon>
+                    <v-list-tile  ripple="ripple" @click="$router.push({name:'admin.profile'})" rel="noopener" >
+                        <v-list-tile-action>
+                            <v-icon>account_circle</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                            <v-list-tile-title>Profile</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-                    <v-list-tile ripple="ripple" rel="noopener" :key="'logout'" @click="logout">
+                    <v-list-tile  ripple="ripple" @click="logout" rel="noopener" >
                         <v-list-tile-action>
                             <v-icon>logout</v-icon>
                         </v-list-tile-action>
@@ -173,9 +169,32 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
-            <v-btn icon>
-                <v-icon>more_vert</v-icon>
-            </v-btn>
+            <v-menu
+                    bottom
+                    origin="center center"
+                    transition="slide-y-transition"
+                    offset-y
+            >
+                <v-btn slot="activator" icon>
+                    <v-icon class="flag-language flag-icon ">{{ `flag-icon-${getLang}` }}</v-icon>
+                </v-btn>
+
+                <v-list>
+                    <v-list-tile
+                            v-for="(item, i) in language"
+                            :key="i"
+                            @click="changeLanguage(item)"
+                    >
+                        <v-list-tile-title>
+                            <v-icon class="flag-icon ">{{ `flag-icon-${item}` }}</v-icon>
+
+                            {{item.toUpperCase() }}
+                        </v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+
+
         </v-toolbar>
         <v-content>
             <v-container fluid>
@@ -211,14 +230,17 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
+    import {loadMessages} from '~/plugins/i18n'
     export default {
         middleware:['admin-route','admin'],
+
         data: () => ({
             fav: true,
             menu: false,
             message: false,
             hints: true,
-
+            language: ['en', 'hu', 'ua'],
             dark: false,
 
             scroll:null,
@@ -257,6 +279,15 @@
                 },
                 {
                     icon: 'keyboard_arrow_up',
+                    'icon-alt': 'location_city',
+                    text: 'Settlement',
+                    model: false,
+                    children: [
+                        { icon: 'location_city', text: 'Settlements', href:'admin.settlement' },
+                    ]
+                },
+                {
+                    icon: 'keyboard_arrow_up',
                     'icon-alt': 'location_on',
                     text: 'Sight',
                     model: false,
@@ -288,40 +319,6 @@
                 },
             ],
 
-            itemss: [
-                {
-                    icon: 'account_circle',
-                    href: '#',
-                    title: 'Profile',
-                    click: (e) => {
-                        console.log(e);
-                    }
-                },
-                {
-                    icon: 'settings',
-                    href: '#',
-                    title: 'Settings',
-                    click: (e) => {
-                        console.log(e);
-                    }
-                },
-                {
-                    icon: 'logout',
-                    href: '#',
-                    title: 'Logout',
-                    click: (e) => {
-                        this.logout()
-                    }
-                },
-                {
-                    icon: 'more_vert',
-                    href: '#',
-                    title: 'Logout',
-                    click: (e) => {
-                        this.logout()
-                    }
-                }
-            ],
 
             mini: false,
             footer: {
@@ -335,9 +332,28 @@
                     return;
                 }
                 this.scroll = false;
-            }
+            },
         },
         methods:{
+            setLocale(locale) {
+                if (this.$i18n.locale !== locale) {
+                    loadMessages(locale)
+                    this.$store.dispatch('lang/setLocale', {locale})
+                }
+            },
+            changeLanguage(lang) {
+                switch (lang) {
+                    case 'en':
+                        this.setLocale('en')
+                        break
+                    case 'ua':
+                        this.setLocale('ua')
+                        break
+                    case 'hu':
+                        this.setLocale('hu')
+                        break
+                }
+            },
             toggleFullScreen()  {
                 let doc = window.document;
                 let docEl = doc.documentElement;
@@ -371,6 +387,13 @@
         computed: {
             target() {
                 return 0
+            },
+            getAdmin(){
+              return this.$store.state.admin.user.name
+            },
+
+            getLang() {
+                return this.$i18n.locale
             },
             options() {
                 return {

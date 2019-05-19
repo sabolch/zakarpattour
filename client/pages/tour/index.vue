@@ -158,7 +158,7 @@
                                     :disabled="loading"
                                     hide-selected
                                     persistent-hint
-                                    :filter="autoFilter"
+                                    :filter="autoFilterCat"
                                     :item-value="autoValue"
                             >
                                 <template slot="item" slot-scope="data">
@@ -195,10 +195,11 @@
                                     hide-selected
                                     item-text="title"
                                     item-value="id"
-                                    label="Search for settlements .."
+                                    label="Search for a settlements.."
                                     multiple
                                     single-line
                                     :disabled="loading"
+                                    :filter="autoFilter"
                             >
                                 <template v-slot:no-data>
                                     <v-list-tile>
@@ -253,6 +254,7 @@
                                     label="Search for a sight.."
                                     multiple
                                     single-line
+                                    :filter="autoFilter"
                                     :disabled="loading"
                             >
                                 <template v-slot:no-data>
@@ -663,16 +665,16 @@
 
             async loadSights(){
                 this.loading = true
-                let url = `marker?page=1&limit=10&q=${this.sightSearch.trim()}`
+                let url = `marker?page=1&limit=10&q=${this.sightSearch}&locale=${this.getLocal}`
                 const {data} = await this.$axios.get(url)
-                this.sights = data.data.slice(0)
+                this.sights = [...this.sights, ...data.data.slice(0)]
                 this.loading = false
             },
             async loadSettlements(){
                 this.loading = true
-                let url = `settlement?page=1&limit=10&q=${this.settlementSearch.trim()}`
+                let url = `settlement?page=1&limit=10&q=${this.settlementSearch}&locale=${this.getLocal}`
                 const {data} = await this.$axios.get(url)
-                this.settlements = data.data.slice(0)
+                this.settlements = [...this.settlements, ...data.data.slice(0)]
                 this.loading = false
             },
 
@@ -691,8 +693,11 @@
             getName(item) {
                 return item.translations.find(obj => obj.locale ===  this.getLocal).name
             },
-            autoFilter(item, queryText, itemText) {
+            autoFilterCat(item, queryText, itemText) {
                 return this.getName(item).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+            },
+            autoFilter(item, queryText, itemText) {
+                return this.getTitle(item).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
             titleTrim(value){
                 return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title.substr(0,20)
@@ -714,7 +719,7 @@
         },
         computed: {
             getLocal(){
-                return this.$i18n.locale === 'uk' ? 'ua' : this.$i18n.locale
+                return this.$i18n.locale
             },
             breakpoint() {
                 return this.$vuetify.breakpoint.xs

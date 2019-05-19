@@ -73,36 +73,49 @@
         components: {MiniStatistic, BarChart, DoughnutChart, PieChart, LineChart},
         layout: 'admin',
         middleware: 'admin',
-        async asyncData({$axios}) {
-            return {
-                barChartData: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                    datasets: [
-                        {
-                            label: 'Data One',
-                            backgroundColor: ['rgba(230, 155, 155, 0.5)','rgba(120, 15, 155, 0.5)','rgba(30, 155, 188, 0.5)'],
-                            borderColor:'rgba(230, 155, 155, 1)',
-                            borderWidth:2,
-                            data: [40, 25, 15, 40, 39, 65, 40],
-                            pointBackgroundColor: "#dd5555"
-                        }
-                    ]
-                },
-                pieData: {
-                    labels: ["Green", "Red", "Blue"],
-                    datasets: [
-                        {
-                            label: "Data One",
-                            backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
-                            data: [1, 10, 5]
-                        }
-                    ]
+        async asyncData({store,$axios, redirect}) {
+            try {
+                $axios.setToken(store.state.admin.token,'Bearer')
+                const {data} = await $axios.get('admin/statistic')
+                let statistics = data.data
+                return {
+                    statistics:statistics,
+                    barChartData: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        datasets: [
+                            {
+                                label: 'Data One',
+                                backgroundColor: ['rgba(230, 155, 155, 0.5)','rgba(120, 15, 155, 0.5)','rgba(30, 155, 188, 0.5)'],
+                                borderColor:'rgba(230, 155, 155, 1)',
+                                borderWidth:2,
+                                data: [40, 25, 15, 40, 39, 65, 40],
+                                pointBackgroundColor: "#dd5555"
+                            }
+                        ]
+                    },
+                    pieData :{
+                        labels: ["Settlements", "Sights", "Tours"],
+                        datasets: [
+                            {
+                                label: "Statistic",
+                                backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+                                data: [statistics.settlements,statistics.sights, statistics.tours]
+                            }
+                        ]
+                    }
+
                 }
+
+            } catch (e) {
+                redirect('/error')
             }
+
         },
+
         data() {
             return {
                 compact: false,
+                statistics:{},
                 lineChartoptions:{
                     maintainAspectRatio: false,
                     scales: {
@@ -123,16 +136,25 @@
                 },
                 panels:[
                     {color:'green darken-2',title:'200',icon:'group_add',subTitle:'New Users'},
-                    {color:'purple',title:'350',icon:'share',subTitle:'Shares'},
-                    {color:'blue darken-2',title:'892',icon:'star',subTitle:'Likes'},
-                    {color:'red lighten-2',title:'152',icon:'shopping_cart',subTitle:'Orders'},
-                ]
+                    {color:'purple',title:'350',icon:'location_city',subTitle:'Settlements'},
+                    {color:'blue darken-2',title:'892',icon:'location_on',subTitle:'Sights'},
+                    {color:'red lighten-2',title:'152',icon:'favorite',subTitle:'In Favorites'},
+                ],
+                pieData:{}
             }
         },
         computed:{
             breakpoint() {
                 return this.$vuetify.breakpoint.xs
             }
+        },
+        mounted() {
+            this.panels[0].title = this.statistics.users
+            this.panels[1].title = this.statistics.settlements
+            this.panels[2].title = this.statistics.sights
+            this.panels[3].title = this.statistics.fovorites
+
+
         }
     }
 </script>

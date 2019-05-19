@@ -69,7 +69,7 @@
                                     v-model="form.email"
                                     v-validate="'required|email'"
                                     :error-messages="errors.collect('email')"
-                                    label="Email"
+                                    label="E-mail"
                                     data-vv-name="email"
                                     clearable
                                     required

@@ -49,10 +49,12 @@ const AdminTour = () => import('~/pages/admin/tour/adminTourIndex').then(m => m.
 const AdminTourList = () => import('~/pages/admin/tour/adminTourList').then(m => m.default || m)
 const AdminTourCategory = () => import('~/pages/admin/tour/adminTourCategory').then(m => m.default || m)
 
+const AdminSettlements = () => import('~/pages/admin/settlement/SettlementsIndex').then(m => m.default || m)
+
 const NotificationsMessage = () => import('~/pages/admin/notifications/contactUsMessage').then(m => m.default || m)
 // Users
-const UsersAdmins = () => import('~/pages/admin/users/users').then(m => m.default || m)
-const UsersUsers = () => import('~/pages/admin/users/admins').then(m => m.default || m)
+const UsersAdmins = () => import('~/pages/admin/users/admins').then(m => m.default || m)
+const UsersUsers = () => import('~/pages/admin/users/users').then(m => m.default || m)
 const AdminProfile = () => import('~/pages/admin/users/profile').then(m => m.default || m)
 
 
@@ -110,6 +112,8 @@ const routes = [
   { path: '/admin/tour/:slug?', name: 'admin.tour', component: AdminTour},
   { path: '/admin/tours', name: 'admin.tour.list', component: AdminTourList},
   { path: '/admin/category/tour', name: 'admin.tour.category', component: AdminTourCategory },
+
+  { path: '/admin/settlement', name: 'admin.settlement', component: AdminSettlements },
 
   { path: '/admin/notifications/message', name: 'admin.notifications.message', component: NotificationsMessage },
     // users

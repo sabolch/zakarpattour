@@ -17,7 +17,7 @@ class CreateMarkersTable extends Migration
             $table->increments('id')->unique();
             $table->float('lat',12,8);
             $table->float('lng',12,8);
-            $table->bigInteger('views');
+            $table->bigInteger('views')->default(0);
             $table->integer('marker_category_id')->unsigned();
             $table->integer('settlement_id')->unsigned();
             $table->string('slug')->nullable()->index();

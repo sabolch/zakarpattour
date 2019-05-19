@@ -190,14 +190,7 @@
                 return 0
             },
             getLang() {
-              switch (this.$i18n.locale) {
-                  case 'hu':
-                      return 'hu'
-                  case  'ua':
-                      return 'ua'
-                  default:
-                      return 'en'
-              }
+              return this.$i18n.locale
             },
             options() {
                 return {

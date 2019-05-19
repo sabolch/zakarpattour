@@ -12,7 +12,7 @@
                     <v-icon medium dark>add</v-icon>
 
                 </v-btn>
-                <span>Create new category</span>
+                <span>Create new settlement</span>
             </v-tooltip>
             <v-spacer></v-spacer>
             <v-text-field
@@ -50,7 +50,7 @@
         </v-card-title>
         <v-data-table
                 :headers="headers"
-                :items="categories"
+                :items="settlements"
                 :pagination.sync="tablePagination"
                 :total-items="pagination.total"
                 :rows-per-page-items="rowsPerPageItems"
@@ -61,7 +61,7 @@
                     slot="items"
                     slot-scope="props"
             >
-                <td>{{ getName(props.item)}}</td>
+                <td>{{ getTitle(props.item) }}</td>
                 <td>
                     <v-flex xs12 class="text-xs-center">
                         <v-btn
@@ -108,9 +108,9 @@
         >
             <v-card>
                 <v-card-title class="headline">
-                    Remove category
+                    Remove settlement
                 </v-card-title>
-                <v-card-text> Are you sure remove this category?</v-card-text>
+                <v-card-text> Are you sure remove this settlement?</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -138,7 +138,7 @@
             <v-card>
                 <v-card-title>
                     <v-layout justify-center>
-                        <span class="headline">Create category</span>
+                        <span class="headline">Adding settlement</span>
                     </v-layout>
                 </v-card-title>
                 <v-card-text>
@@ -146,48 +146,24 @@
                         <v-layout wrap>
                             <v-flex xs12>
                                 <v-form>
-                                    <v-autocomplete
-                                            :items="icons"
-                                            v-model="form.icon"
-                                            label="Select Icon"
-                                            persistent-hint
-                                            :filter="autoFilter"
-                                            :item-value="autoValue"
-                                    >
-                                        <template slot="selection"
-                                                  slot-scope="{ item, index }"
-                                        >
-                                                <span style="color:blue;font-size: 28px;" class="v-icon mki"
-                                                      :class="`mki-${item.value}`"></span>
-                                            <span>&nbsp;&nbsp; {{ item.name }}</span>
-                                        </template>
+                                    <v-text-field
 
-                                        <template slot="item"
-                                                  slot-scope="{ item, index }"
-                                        >
-                                            <span style="color:blue;font-size: 28px;" class="v-icon mki"
-                                                  :class="`mki-${item.value}`"></span>
-                                            <span>&nbsp;&nbsp;{{ item.name }}</span>
-                                        </template>
-
-                                    </v-autocomplete>
-
-                                    <v-text-field label="Name Eng"
-                                                  v-model="form.translations[0].name"
-                                                  required
-                                                  :counter="30"
-                                                  :maxlength="30"
-                                                  clearable
+                                            label="Name Eng"
+                                            v-model="form.translations[0].title"
+                                            required
+                                            :counter="30"
+                                            :maxlength="30"
+                                            clearable
                                     ></v-text-field>
                                     <v-text-field label="Name Hun"
-                                                  v-model="form.translations[1].name"
+                                                  v-model="form.translations[1].title"
                                                   :counter="30"
                                                   :maxlength="30"
                                                   clearable
 
                                     ></v-text-field>
                                     <v-text-field label="Name Ukr"
-                                                  v-model="form.translations[2].name"
+                                                  v-model="form.translations[2].title"
                                                   :counter="30"
                                                   :maxlength="30"
                                                   clearable
@@ -212,27 +188,25 @@
     import Form from 'vform'
 
     export default {
-        name: "adminMarkerCategory",
+        name: "SettlementsIndex",
         layout: "admin",
 
         head() {
             return {
-                title: this.$t('navbar.home'),
+                title: 'Admin - Settlements',
             }
         },
 
-        async asyncData({$axios, $router}) {
+        async asyncData({$axios, redirect}) {
             try {
-                let icons = await $axios.get('mapkey/icons')
-                let category = await $axios.get('marker/category')
+                let settlement = await $axios.get('settlement')
 
                 return {
-                    icons: icons.data.icons,
-                    pagination: category.data.meta,
-                    categories: category.data.data
+                    pagination: settlement.data.meta,
+                    settlements: settlement.data.data
                 }
             } catch (e) {
-                $router.push({name: 'error'})
+                redirect('/error')
             }
         },
 
@@ -241,7 +215,7 @@
                 first: true,
                 loading: false,
                 icons: {},
-                categories: {},
+                settlements: {},
                 page: 1,
                 tablePagination: {},
                 pagination: {},
@@ -253,25 +227,29 @@
 
                 formObj: {
                     id: '',
-                    icon: '',
+                    lat: 48.22,
+                    lng: 22.48,
                     translations: [
-                        {locale: 'en', name: ''},
-                        {locale: 'hu', name: ''},
-                        {locale: 'ua', name: ''},
+                        {locale: 'en', title: '', description: 'description'},
+                        {locale: 'hu', title: '', description: 'description'},
+                        {locale: 'ua', title: '', description: 'description'},
+
                     ],
                 },
                 form: new Form({
                     id: '',
-                    icon: '',
+                    lat: 48.22,
+                    lng: 22.48,
                     translations: [
-                        {locale: 'en', name: ''},
-                        {locale: 'hu', name: ''},
-                        {locale: 'ua', name: ''},
+                        {locale: 'en', title: '', description: 'description'},
+                        {locale: 'hu', title: '', description: 'description'},
+                        {locale: 'ua', title: '', description: 'description'},
+
                     ],
                 }),
 
                 headers: [
-                    {text: 'Name', align: 'left', sortable: false, value: 'name'},
+                    {text: 'Title', align: 'left', sortable: false, value: 'name'},
                     {text: 'Action', value: 'action', sortable: false, align: 'center'},
                 ],
                 rowsPerPageItems: [5, 10, 20],
@@ -280,12 +258,14 @@
         watch: {
             page: {
                 handler() {
-                    this.responseCategory()
+                    this.responseSettlement()
                 }
             },
             'tablePagination.rowsPerPage': {
                 handler(val) {
-                    if (this.first) {this.first = !this.first} else {
+                    if (this.first) {
+                        this.first = !this.first
+                    } else {
                         this.doPaginate()
                     }
                 },
@@ -294,42 +274,40 @@
         mounted() {
         },
         methods: {
-            async responseCategory() {
-                let url = `marker/category?page=${this.page}&per_page=${this.tablePagination.rowsPerPage}`
+            async responseSettlement() {
+                let url = `settlement?page=${this.page}&per_page=${this.tablePagination.rowsPerPage}`
                 if (this.search) url += `&q=${this.search}`
 
                 this.loading = true
                 const {data} = await this.$axios.get(url)
                 this.pagination = data.meta
-                this.categories = data.data
+                this.settlements = data.data
                 this.loading = false
-                console.log('loaded')
 
             },
 
             async store(url) {
                 const {data} = await this.form.put(url)
                 this.form = new Form(this.formObj)
-                await this.responseCategory()
+                await this.responseSettlement()
                 this.savedialog = false
             },
 
             async trash() {
-                const {data} = await this.form.delete('marker/category/trash')
+                const {data} = await this.form.delete('settlement/trash')
                 this.form = new Form(this.formObj)
-                await this.responseCategory()
+                await this.responseSettlement()
                 this.dialog = false
             },
             doPaginate() {
-                if (this.page == 1) this.responseCategory()
+                if (this.page == 1) this.responseSettlement()
                 this.page = 1
             },
             saveCategory() {
-                let url = 'marker/category/store';
-                if (this.editing) url = 'marker/category/edit';
+                let url = 'settlement/store';
+                if (this.editing) url = 'settlement/edit';
                 this.store(url)
             },
-
 
             keyupHandle(event) {
                 clearTimeout(this.timeoutId);
@@ -362,12 +340,16 @@
                 this.form = new Form(item)
                 this.dialog = true
             },
-            getName(item) {
-                return item.translations.find(obj => obj.locale ===  this.getLocal).name
+            getTitle(item) {
+                console.log(item)
+                if (!item.translations[0]) {
+                    return '';
+                }
+                return item.translations.find(obj => obj.locale === this.getLocal).title
             },
         },
         computed: {
-            getLocal(){
+            getLocal() {
                 return this.$i18n.locale
             }
         }
