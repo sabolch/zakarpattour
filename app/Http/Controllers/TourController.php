@@ -77,6 +77,7 @@ class TourController extends Controller
                 'duration' =>'required|integer',
                 'price' =>'required|numeric',
                 'directions' =>'required',
+                'dates' =>'required',
 
             ],[
                 'category.required'=>'Category ID is required',
@@ -89,7 +90,8 @@ class TourController extends Controller
                 'price.numeric'=>'Price must be numeric',
                 'translations.required'=>'Translation is required!',
                 'marker_ids.required'=>'Markers ID array is required!',
-                'directions.required'=>'Directions is required!'
+                'directions.required'=>'Directions is required!',
+                'dates.required'=>'Dates is required!'
             ]);
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
@@ -107,6 +109,7 @@ class TourController extends Controller
         $tour->title = $data['translations'][0]['title'];
         $tour->description = $data['translations'][0]['description'];
         $tour->directions = json_decode($data['directions']);
+        $tour->available_dates = json_decode($data['dates']);
         $tour->save();
 
         // Translate
@@ -171,6 +174,7 @@ class TourController extends Controller
                 'duration' =>'required|integer',
                 'price' =>'required|numeric',
                 'directions' =>'required',
+                'dates' =>'required',
 
             ],[
                 'category.required'=>'Category ID is required',
@@ -183,7 +187,9 @@ class TourController extends Controller
                 'price.numeric'=>'Price must be numeric',
                 'translations.required'=>'Translation is required!',
                 'marker_ids.required'=>'Markers ID array  is required!',
-                'directions.required'=>'Directions is required!'
+                'directions.required'=>'Directions is required!',
+                'dates.required'=>'Dates is required!'
+
             ]);
 
         if ($validator->fails()) {
@@ -194,13 +200,21 @@ class TourController extends Controller
 
         try{
             $tour = Tour::findOrFail($data['id']);
+
+            $tour->slug = null;
+
             $tour->tour_category_id = $data['category'];
             $tour->price = $data['price'];
             $tour->duration = $data['duration'];
             $tour->start_date = $data['start_date'];
             $tour->end_date = $data['end_date'];
 
-            $tour->directions = $data['directions'];
+            $tour->title = $data['translations'][0]['title'];
+            $tour->description = $data['translations'][0]['description'];
+
+            $tour->directions = json_decode($data['directions']);
+            $tour->available_dates = json_decode($data['dates']);
+
             $tour->save();
             // Translate
             foreach ($data['translations'] as $array) {

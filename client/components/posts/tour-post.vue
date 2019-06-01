@@ -31,7 +31,13 @@
                     </template>
                     <v-card>
                         <v-card-text>
-                            <v-chip color="blue darken-4" outline v-for="maker in item.markers" :key="maker.slug">
+                            <v-chip
+                                    color="blue darken-4"
+                                    outline
+                                    v-for="maker in item.markers"
+                                    :key="maker.slug"
+                                    @click="$router.push({name:'sight.show',params: {slug:maker.slug}})"
+                            >
                                 <v-icon left>location_city</v-icon>
                                 {{ getTitle(maker.translations) }}
                             </v-chip>

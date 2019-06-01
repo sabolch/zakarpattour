@@ -4,8 +4,8 @@
             <v-flex xs12>
                 <v-stepper v-model="e6" vertical>
                     <v-stepper-step editable :complete="e6 > 1" step="1">
-                        Marker
-                        <small>Select the location</small>
+                        {{$t('sights_steps[0].title')}}
+                        <small>{{$t('sights_steps[0].subtitle')}}</small>
                     </v-stepper-step>
                     <v-stepper-content step="1">
 
@@ -83,7 +83,7 @@
                             <template v-slot:no-data>
                                 <v-list-tile>
                                     <v-list-tile-title>
-                                        Search for a settlement...
+                                        {{$t('settlements_search')}}..
                                     </v-list-tile-title>
                                 </v-list-tile>
                             </template>
@@ -117,8 +117,8 @@
                         <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step editable :complete="e6 > 2" step="2">Title & category
-                        <small>Give a title and translate it also set the category</small>
+                    <v-stepper-step editable :complete="e6 > 2" step="2"> {{$t('sights_steps[1].title')}}
+                        <small>{{$t('sights_steps[1].subtitle')}}</small>
                     </v-stepper-step>
 
                     <v-stepper-content step="2">
@@ -126,7 +126,7 @@
                             <v-text-field label="" id="g-searchbox"></v-text-field>
                             <v-layout row wrap>
                                 <v-flex m6>
-                                    <v-btn @click="createMarker" color="success">Add Marker</v-btn>
+                                    <v-btn @click="createMarker" color="success">{{$t('btns.add_marker')}}</v-btn>
                                 </v-flex>
                                 <v-flex m6>
                                     <v-switch
@@ -148,8 +148,8 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step editable :complete="e6 > 3" step="3">Description
-                        <small>Set the description and translate</small>
+                    <v-stepper-step editable :complete="e6 > 3" step="3"> {{$t('sights_steps[2].title')}}
+                        <small>{{$t('sights_steps[2].subtitle')}}</small>
                     </v-stepper-step>
 
                     <v-stepper-content step="3">
@@ -182,29 +182,26 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step step="4" :complete="e6 > 4">Also done!
-                        <small>Finish</small>
+                    <v-stepper-step step="4" :complete="e6 > 4"> {{$t('sights_steps[3].title')}}
+                        <small>{{$t('sights_steps[3].subtitle')}}</small>
                     </v-stepper-step>
                     <v-stepper-content step="4">
-                        <v-btn dark color="green" :loading="form.busy" @click="store">Save</v-btn>
+                        <v-btn dark color="green" :loading="form.busy" @click="store">{{$t('btns.save')}}</v-btn>
 
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on }">
+
                                 <v-btn
                                         :disabled="form.id < 1"
                                         color="primary"
                                         @click="e6 = 5"
                                 >
-                                    Continue
+                                    {{$t('btns.continue')}}
                                 </v-btn>
-                            </template>
-                            <span>Enabled if we saved the marker</span>
-                        </v-tooltip>
+
 
                         <v-btn dark color="orange" @click="e6 = e6-1">{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
-                    <v-stepper-step step="5">Images
-                        <small>Uploade and manage images</small>
+                    <v-stepper-step step="5"> {{$t('sights_steps[4].title')}}
+                        <small>{{$t('sights_steps[4].subtitle')}}</small>
                     </v-stepper-step>
                     <v-stepper-content step="5">
                         <v-flex>
@@ -485,6 +482,9 @@
                     }
                     console.log(e)
                 })
+            },
+            removeFromSettlements(itemID) {
+                this.form.settlement = '';
             },
         },
         computed: {

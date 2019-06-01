@@ -39,7 +39,7 @@
                                                     wrap
                                                     align-center
                                             >
-                                                <v-chip color="blue darken-4" outline>
+                                                <v-chip color="purple darken-4" outline>
                                                     <v-icon left>visibility</v-icon>
                                                     Views : {{ tour.views }}
                                                 </v-chip>
@@ -47,13 +47,17 @@
                                                     <v-icon left>access_time</v-icon>
                                                     Duration : {{tour.duration}} days
                                                 </v-chip>
-                                                <v-chip color="blue darken-4" outline>
+                                                <v-chip color="green darken-4" outline>
                                                     <v-icon left>date_range</v-icon>
                                                     Start : {{ tour.start_date.substr(0,10) }}
                                                 </v-chip>
-                                                <v-chip color="blue darken-4" outline>
+                                                <v-chip color="orange darken-4" outline>
                                                     <v-icon left>date_range</v-icon>
                                                     End : {{tour.end_date.substr(0,10)}}
+                                                </v-chip>
+                                                <v-chip color="red darken-1" outline>
+                                                    <v-icon left>attach_money</v-icon>
+                                                    Price : {{tour.price}}
                                                 </v-chip>
                                             </v-layout>
                                         </v-flex>
@@ -162,58 +166,96 @@
                                         <v-flex xs12 md6>
                                             <v-container fill-height fluid>
                                                 <v-layout row wrap align-center justify-center>
-                                                    <v-flex xs4>
+                                                    <v-flex xs12>
                                                         <v-layout row wrap justify-center class="text-xs-center">
                                                             <v-flex xs12>
-                                                                <v-icon size="72" color="indigo">shopping_cart</v-icon>
-                                                            </v-flex>
-                                                            <v-flex xs12>
-                                                                <span class="title font-weight-bold">Price: &euro;{{tour.price}}</span>
-                                                            </v-flex>
-                                                            <v-btn box color="orange"
-                                                                   @click="addToCart(5)"
-                                                            >Add to cart now
-                                                            </v-btn>
-                                                        </v-layout>
+                                                                <v-card class="card-bord">
+                                                                    <v-toolbar color="primary" dark>
+                                                                        <v-toolbar-title>Available dates
+                                                                        </v-toolbar-title>
+                                                                    </v-toolbar>
+                                                                    <v-list>
+                                                                        <v-list-group
+                                                                                v-for="item in tour.available_dates"
+                                                                                :key="item"
+                                                                                prepend-icon="event"
+                                                                                no-action
+                                                                        >
+                                                                            <template v-slot:activator>
+                                                                                <v-list-tile>
+                                                                                    <v-list-tile-content>
+                                                                                        <v-list-tile-title>
+                                                                                            {{ item }}
+                                                                                        </v-list-tile-title>
+                                                                                    </v-list-tile-content>
+                                                                                </v-list-tile>
+                                                                            </template>
 
+                                                                            <v-list-tile>
+                                                                                <v-list-tile-content>
+                                                                                    <v-list-tile-title>
+                                                                                        <v-icon color="primary">
+                                                                                            attach_money
+                                                                                        </v-icon>
+                                                                                       <strong>{{tour.price}}</strong>
+                                                                                    </v-list-tile-title>
+                                                                                </v-list-tile-content>
+                                                                                <v-list-tile-action>
+                                                                                    <v-btn
+                                                                                            icon
+                                                                                            @click=""
+                                                                                    >
+                                                                                        <v-icon color="red">
+                                                                                            shopping_cart
+                                                                                        </v-icon>
+                                                                                    </v-btn>
+                                                                                </v-list-tile-action>
+                                                                            </v-list-tile>
+
+                                                                        </v-list-group>
+                                                                    </v-list>
+                                                                </v-card>
+                                                            </v-flex>
+                                                        </v-layout>
                                                     </v-flex>
                                                 </v-layout>
                                             </v-container>
                                         </v-flex>
                                         <v-flex xs12 md6 mb-2>
-                                            <v-timeline
-                                                    dense
-                                            >
+
+                                            <v-timeline dense>
                                                 <v-timeline-item
                                                         v-for="item in tour.markers"
                                                         :color="`${getRandomColor()}`"
                                                         :key="item.slug"
                                                         small
                                                 >
-                                                    <v-layout pt-3>
-                                                        <v-flex xs3>
-                                                            <strong>Start : {{ tour.start_date.substr(0,10) }}</strong>
-                                                        </v-flex>
-                                                        <v-flex>
-                                                            <v-chip color="blue darken-4" outline>
-                                                                <v-icon left>location_city</v-icon>
-                                                                {{ getTitle(item.settlement) }}
-                                                            </v-chip>
 
-                                                            <div class="caption">
-                                                                <strong>{{ item.title }}</strong>
-                                                            </div>
-                                                        </v-flex>
-                                                    </v-layout>
+
+                                                    <v-card class="elevation-2 card-bord" elevation="5">
+                                                        <v-card-title class="title">
+                                                            <v-icon color="primary" left>location_city</v-icon>
+                                                            {{ getTitle(item.settlement) }}
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-chip @click="$router.push({name:'sight.show',params: {slug:item.slug}})"
+                                                                    color="blue darken-4" outline>
+                                                                <v-icon left>location_on</v-icon>
+                                                                {{ item.title }}
+                                                            </v-chip>
+                                                        </v-card-text>
+                                                    </v-card>
                                                 </v-timeline-item>
                                             </v-timeline>
+
+
                                         </v-flex>
                                         <v-flex xs12 class="ql-editor" v-html="getDescription(tour)"></v-flex>
                                         <v-flex xs12 class="align-content-end mt-2">
                                             <v-btn color="primary"
                                                    @click="$router.go(-1)"
                                             >
-                                                <v-icon>arrow_back</v-icon>&nbsp;Back
+                                                <v-icon>arrow_back</v-icon>&nbsp;{{$t('btns.back')}}
                                             </v-btn>
                                         </v-flex>
                                     </v-layout>
@@ -235,7 +277,7 @@
         },
         head() {
             return {
-                title: this.$t('navbar.home'),
+                title: this.title,
             }
         },
         async asyncData({params, $axios, redirect}) {
@@ -252,6 +294,8 @@
                 fab: false,
                 right: false,
 
+                title:"",
+
                 tour: {},
                 map: {},
 
@@ -267,17 +311,15 @@
                 ],
 
                 tourImages: [],
-
                 directionsDisplay: {},
             }
         },
         async mounted() {
-
             try {
                 let {data} = await this.$axios.get(`image/collect/tour/${this.tour.id}`)
                 this.tourImages = data;
             } catch (e) {
-                this.tourImages = [{url:'/images/post',name:'default.jpg'}];
+                this.tourImages = [{url: '/images/post', name: 'default.jpg'}];
             }
 
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {
@@ -295,7 +337,7 @@
             });
             // this.directionsDisplay.setMap(this.map);
             // console.log(JSON.parse(this.tour.directions))
-            this.directionsDisplay.setDirections(JSON.parse(this.tour.directions))
+            this.directionsDisplay.setDirections(this.tour.directions)
 
             let self = this;
             if (google && google.maps) {
@@ -318,7 +360,7 @@
                     }
                 })
             }
-
+            this.title = this.getTitle(this.tour)
         },
         methods: {
             addToCart(id) {
@@ -364,5 +406,9 @@
     #d_panel {
         /*overflow-x: scroll;*/
         word-wrap: break-word;
+    }
+
+    .card-bord{
+        border-radius: 5px;
     }
 </style>

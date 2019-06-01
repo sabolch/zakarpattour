@@ -153,8 +153,6 @@
             this.panels[1].title = this.statistics.settlements
             this.panels[2].title = this.statistics.sights
             this.panels[3].title = this.statistics.fovorites
-
-
         }
     }
 </script>

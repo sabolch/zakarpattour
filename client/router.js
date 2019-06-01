@@ -57,6 +57,8 @@ const UsersAdmins = () => import('~/pages/admin/users/admins').then(m => m.defau
 const UsersUsers = () => import('~/pages/admin/users/users').then(m => m.default || m)
 const AdminProfile = () => import('~/pages/admin/users/profile').then(m => m.default || m)
 
+const AdminPagesAbout = () => import('~/pages/admin/pages/about').then(m => m.default || m)
+
 
 const routes = [
 
@@ -120,6 +122,8 @@ const routes = [
   { path: '/admin/users/users', name: 'admin.users', component: UsersUsers },
   { path: '/admin/users/admins', name: 'admin.admins', component: UsersAdmins },
   { path: '/admin/profile', name: 'admin.profile', component: AdminProfile },
+
+  { path: '/admin/pages/about', name: 'admin.about', component: AdminPagesAbout },
 
 ]
 

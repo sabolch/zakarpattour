@@ -4,8 +4,8 @@
             <v-flex xs12>
                 <v-stepper v-model="e6" vertical>
                     <v-stepper-step editable :complete="e6 > 1" step="1" color="green">
-                        Tour
-                        <small>Title & category</small>
+                        {{$t('tours_steps[0].title')}}
+                        <small>{{$t('tours_steps[0].subtitle')}}</small>
                     </v-stepper-step>
                     <v-stepper-content step="1">
                         <v-tabs
@@ -29,7 +29,7 @@
                                     <v-card-text>
                                         <v-text-field
                                                 v-model="item.title"
-                                                :label="`Title ${item.locale}`"
+                                                :label="`${$t('form.title')} ${item.locale}`"
                                                 clearable
                                         ></v-text-field>
                                     </v-card-text>
@@ -40,7 +40,7 @@
                                 class="pl-3 pr-3"
                                 :items="categories"
                                 v-model="form.category"
-                                label="Select category"
+                                :label="$t('form.category')"
                                 persistent-hint
                                 item-value="id"
                                 :filter="autoFilter"
@@ -66,6 +66,7 @@
                             <v-text-field
                                     class="mx-3"
                                     label="Price"
+                                    :label="$t('form.data_panel.price')"
                                     v-model="form.price"
                                     type="number"
                                     :max="50000"
@@ -73,7 +74,7 @@
                             ></v-text-field>
                             <v-text-field
                                     class="mx-3"
-                                    label="Duration in days"
+                                    :label="$t('form.data_panel.duration')"
                                     v-model="form.duration"
                                     type="number"
                                     :max="100"
@@ -126,17 +127,48 @@
                                                scrollable>
                                     <v-spacer></v-spacer>
                                     <v-btn flat color="primary" @click="modal2 = false">{{ $t('btns.cancel') }}</v-btn>
-                                    <v-btn flat color="primary" @click="$refs.dialog.save(form.end_date)">OK</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.dialog.save(form.end_date)">{{ $t('btns.ok') }}</v-btn>
                                 </v-date-picker>
                             </v-dialog>
                         </v-flex>
 
 
+
+                        <v-flex xs12 class="pl-3 pr-3">
+                                    <v-combobox
+                                            v-model="form.available_dates"
+                                            multiple
+                                            chips
+                                            :label="$t('form.available_dates')"
+                                            prepend-icon="event"
+                                            readonly
+                                    >
+                                        <template slot="selection" slot-scope="data">
+                                            <v-chip
+                                                    close
+                                                    outline
+                                                    color="indigo"
+                                                    @input="removeDates(data.index)"
+                                            >
+                                                <v-icon left>event</v-icon>
+                                                <strong>{{data.item}}</strong>&nbsp;
+                                            </v-chip>
+                                        </template>
+                                    </v-combobox>
+                        </v-flex>
+                        <v-flex xs12 class="text-xs-center">
+                            <v-date-picker
+                                    v-model="form.available_dates"
+                                    multiple
+                                    :locale="$i18n.locale"
+                            ></v-date-picker>
+                        </v-flex>
+
                         <v-btn color="primary" @click="e6 = 2">{{$t('btns.continue')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step  :complete="e6 > 2" step="2" color="purple">Title & category
-                        <small>Give a title and translate it also set the category</small>
+                    <v-stepper-step  :complete="e6 > 2" step="2" color="purple">  {{$t('tours_steps[1].title')}}
+                        <small>{{$t('tours_steps[1].subtitle')}}</small>
                     </v-stepper-step>
 
                     <v-stepper-content step="2">
@@ -155,7 +187,7 @@
                                             hide-details
                                             hide-selected
                                             item-text="title"
-                                            label="Search for a sight.."
+                                            :label="$t('sights_search')"
                                             multiple
                                             single-line
                                             :disabled="loading"
@@ -165,7 +197,7 @@
                                         <template v-slot:no-data>
                                             <v-list-tile>
                                                 <v-list-tile-title>
-                                                    Search for sights ..
+                                                    {{$t('sights_search')}}
                                                 </v-list-tile-title>
                                             </v-list-tile>
                                         </template>
@@ -209,7 +241,7 @@
                                                 <div>{{(i+1)}}. <v-icon small color="primary">location_on</v-icon> {{ getTitle(item)}}</div>
                                             </template>
                                             <v-card>
-                                                <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+
                                             </v-card>
                                         </v-expansion-panel-content>
                                     </v-expansion-panel>
@@ -245,7 +277,7 @@
                                                         dismissible
                                                         type="error"
                                                 >
-                                                    Opps no directions available.
+                                                    {{$t('no_directions')}}
                                                 </v-alert>
                                                 <v-flex xs12 d-flex style="margin: 5px;">
                                                     <v-select
@@ -316,8 +348,8 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step color="amber" :complete="e6 > 3" step="3">Description
-                        <small>Set the description and translate</small>
+                    <v-stepper-step color="amber" :complete="e6 > 3" step="3">  {{$t('tours_steps[2].title')}}
+                        <small>{{$t('tours_steps[2].subtitle')}}</small>
                     </v-stepper-step>
 
                     <v-stepper-content step="3">
@@ -350,29 +382,23 @@
                         <v-btn @click="e6 = e6-1" flat>{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step color="red lighten-1" :complete="e6 > 4" step="4">Also done!
-                        <small>Finish</small>
+                    <v-stepper-step color="red lighten-1" :complete="e6 > 4" step="4">{{$t('tours_steps[3].title')}}
+                        <small>{{$t('tours_steps[3].subtitle')}}</small>
                     </v-stepper-step>
                     <v-stepper-content step="4">
-                        <v-btn dark color="green" :loading="form.busy" @click="store">Save</v-btn>
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on }">
+                        <v-btn dark color="green" :loading="form.busy" @click="store">{{$t('btns.save')}}</v-btn>
                                 <v-btn
                                         :disabled="form.id < 1"
                                         color="primary"
                                         @click="e6 = 5"
                                 >
-                                    Continue
+                                    {{$t('btns.continue')}}
                                 </v-btn>
-                            </template>
-                            <span>Enabled if we saved the marker</span>
-                        </v-tooltip>
-
                         <v-btn dark color="orange" @click="e6 = e6-1">{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step step="5">Images
-                        <small>Uploade and manage images</small>
+                    <v-stepper-step step="5">  {{$t('tours_steps[4].title')}}
+                        <small>{{$t('tours_steps[4].subtitle')}}</small>
                     </v-stepper-step>
                     <v-stepper-content step="5">
                         <v-flex>
@@ -435,6 +461,8 @@
         },
         data() {
             return {
+                menu: false,
+
                 modal: false,
                 modal2: false,
 
@@ -457,6 +485,7 @@
                     category: '',
                     price:0,
                     duration:0,
+                    available_dates:[],
                     markers:[],
                     marker_ids:[],
                     directions:{},
@@ -588,6 +617,9 @@
                 let index = this.form.markers.findIndex(obj => obj.id === itemID)
                 this.form.markers.splice(index, 1);
             },
+            removeDates(index) {
+                this.form.available_dates.splice(index, 1);
+            },
             styleHandler() {
                 let mystyle = this.toogleMapStyle ? this.$store.state.gMapStyles.showLabels : this.$store.state.gMapStyles.hideLabels;
                 this.map.set('styles', mystyle);
@@ -603,6 +635,7 @@
 
             async store() {
                 this.form.marker_ids = JSON.stringify(this.form.markers.map(item => {return item.id}))
+                this.form.dates = JSON.stringify(this.form.available_dates)
                 let url = 'tour/store'
                 if (this.form.id > 0) url = 'tour/edit'
                 await this.form.put(url).then((data) => {
@@ -684,22 +717,17 @@
         width: 100%;
         min-height: 600px;
     }
-
     #d_panel {
         /*overflow-x: scroll;*/
         word-wrap: break-word;
     }
-
     .adp-step, .adp-substep {
         max-width: 200px;
     }
-
     .v-speed-dial__list {
         top: -170px;
     }
-
     .v-speed-dial--absolute, .v-speed-dial--fixed {
         z-index: 1
     }
-
 </style>

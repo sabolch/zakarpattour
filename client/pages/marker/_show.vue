@@ -181,7 +181,7 @@
         },
         head() {
             return {
-                title: this.$t('navbar.home'),
+                title: this.title,
             }
         },
 
@@ -196,7 +196,7 @@
 
         data() {
             return {
-                sight: null,
+                sight: {},
                 marker: null,
 
 
@@ -207,7 +207,7 @@
                     text: 'Copied to clipboard',
                     color: 'success'
                 },
-
+                title:'',
 
                 showmenu: false,
                 fab: false,
@@ -259,7 +259,7 @@
                     }
                 })
             }
-
+            this.title = this.getTitle(this.sight)
         },
         methods: {
             copyTextArea() {

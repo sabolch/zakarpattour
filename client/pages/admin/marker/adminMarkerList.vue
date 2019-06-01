@@ -6,7 +6,7 @@
             <v-text-field
                     v-model="search"
                     clearable
-                    label="Search ..."
+                    :label="`${$t('form.search')}..`"
                     type="text"
                     @keyup="keyupHandle"
                     @click:clear="keyupHandle"
@@ -111,9 +111,9 @@
         >
             <v-card>
                 <v-card-title class="headline">
-                    Remove
+                    {{$t('btns.remove')}}
                 </v-card-title>
-                <v-card-text> Are you sure remove this item?</v-card-text>
+                <v-card-text>  {{$t('conf_remove')}}</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -121,7 +121,7 @@
                             flat
                             @click="dialog = false"
                     >
-                        Close
+                        {{$t('btns.close')}}
                     </v-btn>
                     <v-btn
                             :loading="form.busy"
@@ -129,7 +129,7 @@
                             flat
                             @click="trash"
                     >
-                        Remove
+                        {{$t('btns.remove')}}
                     </v-btn>
                 </v-card-actions>
             </v-card>

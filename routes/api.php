@@ -60,7 +60,7 @@ Route::group(['prefix' => 'tour/category'], function () {
 Route::group(['prefix' => 'tour'], function () {
     Route::put('/store', 'TourController@store');
     Route::put('/edit', 'TourController@edit');
-    Route::delete('/delete', 'TourController@destroy');
+    Route::delete('/trash', 'TourController@destroy');
     Route::get('/show/{slug}', 'TourController@show');
     Route::get('/trashed', 'TourController@trashed');
     Route::get('/', 'TourController@index');
@@ -153,8 +153,11 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:admin'], function () {
     Route::put('/create', 'AdminController@create');
     Route::post('/activate', 'AdminController@activate');
     Route::delete('/delete', 'AdminController@delete');
+});
 
-
+Route::group(['prefix' => 'pages'], function () {
+    Route::get('/', 'PagesController@readContent');
+    Route::put('/put', 'PagesController@writeContent');
 });
 
 Route::get('mapkey/icons', function () {

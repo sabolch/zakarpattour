@@ -5,8 +5,8 @@
         <v-card dark class="text-xs-center red lighten-3" style="padding:10%; border-radius:2px">
           <v-icon size="140">error</v-icon>
           <h1 class="error-title">404</h1>
-          <h2>Sorry, page not found</h2>
-         <v-btn class="mt-4" medium outline :to="{name: 'welcome'}">Go Home</v-btn>
+          <h2>{{$t('page_not_found')}}</h2>
+         <v-btn class="mt-4" medium outline :to="{name: 'welcome'}">{{$t('go_home')}}</v-btn>
         </v-card>
       </v-flex>
     </v-layout>

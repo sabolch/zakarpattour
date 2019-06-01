@@ -17,7 +17,8 @@ class Tour extends Model
     protected $table = 'tours';
 
     protected $casts = [
-        'directions' => 'object'
+        'directions' => 'object',
+        'available_dates'=>'array'
     ];
 
     public $translatedAttributes = ['title', 'description'];
@@ -89,12 +90,6 @@ class Tour extends Model
                    }
                 });
             })
-//            // settlements
-//            ->when($settlements, function ($q) use ($settlements) {
-//                return $q->whereHas('markers', function($q) use ($settlements) {
-//                    $q->whereIn('settlement_id',$settlements);
-//                });
-//            })
             // search query
             ->when($search_query, function ($q) use ($search_query) {
                 return $q->whereHas('translations', function($q) use ($search_query) {

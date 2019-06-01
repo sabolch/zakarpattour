@@ -6,7 +6,7 @@
             <v-text-field
                     v-model="search"
                     clearable
-                    label="Search ..."
+                    :label="`${$t('form.search')}..`"
                     type="text"
                     @keyup="keyupHandle"
                     @click:clear="keyupHandle"
@@ -88,7 +88,7 @@
 
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="warning">
-                    Sorry, nothing to display here :(
+                    {{$t('messages.no_data')}}
                 </v-alert>
             </template>
         </v-data-table>
@@ -108,9 +108,9 @@
         >
             <v-card>
                 <v-card-title class="headline">
-                    Remove
-                </v-card-title>
-                <v-card-text> Are you sure remove this item?</v-card-text>
+                    {{$t('btns.remove')}}
+                </v-card-title>conf_remove
+                <v-card-text>  {{$t('conf_remove')}}</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -118,7 +118,7 @@
                             flat
                             @click="dialog = false"
                     >
-                        Close
+                        {{$t('btns.close')}}
                     </v-btn>
                     <v-btn
                             :loading="form.busy"
@@ -126,7 +126,7 @@
                             flat
                             @click="trash"
                     >
-                        Remove
+                        {{$t('btns.remove')}}
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -142,9 +142,9 @@
         >
             <v-card>
                 <v-card-title class="headline">
-                    Check
+                    {{$t('check')}}
                 </v-card-title>
-                <v-card-text> Are you sure to mark as checked?</v-card-text>
+                <v-card-text>{{$t('conf_check')}}</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -152,7 +152,7 @@
                             flat
                             @click="checkdialog = false"
                     >
-                        Close
+                        {{$t('btns.close')}}
                     </v-btn>
                     <v-btn
                             :loading="form.busy"
@@ -160,7 +160,7 @@
                             flat
                             @click="checkMessage"
                     >
-                        Confirm
+                        {{$t('btns.confirm')}}
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -183,21 +183,21 @@
                             <v-flex xs12>
                                 <v-text-field
                                         :value="form.name"
-                                        label="From"
+                                        :label="$t('form.from')"
                                         readonly
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12>
                             <v-text-field
                                     :value="form.email"
-                                    label="Email"
+                                    :label="$t('form.email')"
                                     readonly
                             ></v-text-field>
                             </v-flex>
                             <v-flex xs12>
                             <v-text-field
                                     :value="form.subject"
-                                    label="Subject"
+                                    :label="$t('form.subject')"
                                     readonly
                             ></v-text-field>
                             </v-flex>
@@ -205,7 +205,7 @@
                                 <v-textarea
                                         readonly
                                         box
-                                        label="Message"
+                                        :label="$t('form.message')"
                                         :value="form.message"
                                 ></v-textarea>
                             </v-flex>
@@ -214,8 +214,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn outline color="green darken-1" flat @click="openReplyDialog">Reply</v-btn>
-                    <v-btn outline color="blue darken-1" flat @click="showdialog = false">Close</v-btn>
+                    <v-btn outline color="green darken-1" flat @click="openReplyDialog">{{$t('btns.reply')}}</v-btn>
+                    <v-btn outline color="blue darken-1" flat @click="showdialog = false">{{$t('btns.close')}}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -227,7 +227,7 @@
                 <v-card-title>
                     <v-layout justify-center pa-0 ma-0>
                         <v-flex xs12 class="headline">
-                            <v-card dark class="pa-3" color="primary">Reply to user message</v-card>
+                            <v-card dark class="pa-3" color="primary">{{$t('reply_msg')}}</v-card>
                         </v-flex>
                     </v-layout>
                 </v-card-title>
@@ -237,7 +237,7 @@
                             <v-flex xs12>
                                 <v-text-field
                                         :value="replyForm.to"
-                                        label="From"
+                                        :label="$t('form.from')"
                                         readonly
                                 ></v-text-field>
                             </v-flex>
@@ -245,21 +245,21 @@
                                 <v-textarea
                                         readonly
                                         box
-                                        label="Message"
+                                        :label="$t('form.message')"
                                         :value="form.message"
                                 ></v-textarea>
                             </v-flex>
                             <v-flex xs12>
                                 <v-text-field
                                         v-model="replyForm.subject"
-                                        label="Reply subject"
+                                        :label="$t('form.subject')"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12>
                                 <v-textarea
                                         v-model="replyForm.message"
                                         box
-                                        label="Reply to message"
+                                        :label="$t('reply_msg')"
                                 ></v-textarea>
                             </v-flex>
                         </v-layout>
@@ -267,8 +267,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn outline color="red darken-1" :loading="replyForm.busy" flat @click="replyToMessage">Send</v-btn>
-                    <v-btn outline color="blue darken-1" flat @click="replydialog = false">Close</v-btn>
+                    <v-btn outline color="red darken-1" :loading="replyForm.busy" flat @click="replyToMessage">{{$t('btns.reply')}}</v-btn>
+                    <v-btn outline color="blue darken-1" flat @click="replydialog = false">{{$t('btns.close')}}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

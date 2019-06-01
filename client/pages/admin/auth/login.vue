@@ -7,10 +7,19 @@
                         <v-card class="elevation-1 pa-3">
                             <v-card-text class="text-xs-center">
                                 <div class="layout column align-center">
-                                    <img src="/images/logo.png" alt="Vue Material Admin"  height="180">
-                                    <h1 class="flex my-4 primary--text">Admin Login</h1>
+                                    <img src="/images/logo.png" alt="Vue Material Admin" height="180">
+                                    <h1 v-if="!error.active" class="flex my-4 primary--text">Admin Login</h1>
                                 </div>
                                 <v-form>
+                                    <v-alert
+                                            class="mt-3 mb-3"
+                                            :value="error.active"
+                                            color="error"
+                                            icon="warning"
+                                            outline
+                                    >
+                                        {{error.text}}
+                                    </v-alert>
                                     <v-text-field prepend-icon="person"
                                                   label="Login"
                                                   type="text"
@@ -24,7 +33,9 @@
                                             label="Password"
                                             v-model="form.password">
                                     </v-text-field>
-                                    <recaptcha/>
+                                    <recaptcha
+                                            @error="onError"
+                                    />
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
@@ -33,7 +44,8 @@
                                         color="primary"
                                         @click="onSubmit"
                                         :loading="form.busy"
-                                >Login</v-btn>
+                                >Login
+                                </v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-flex>
@@ -49,28 +61,43 @@
 
     export default {
         layout: 'simple',
-        middleware:['admin-route','adminLoggedIn'],
+        middleware: ['admin-route', 'adminLoggedIn'],
         name: "login",
         components: {VueRecaptcha},
         data: () => ({
             showPassword: false,
-            remember:false,
+            remember: false,
 
             form: new Form({
                 email: 'admin@app.com',
                 password: 'windows7',
                 recaptchaToken: ''
-            })
+            }),
+
+            error: {
+                active: false,
+                text: ''
+            }
         }),
-         mounted() {
-             if (this.$store.state.auth.loggedIn) {
-                 this.$router.push({name: 'settings.profile'})
-             }
+        mounted() {
+            if (this.$store.state.auth.loggedIn) {
+                this.$router.push({name: 'settings.profile'})
+            }
         },
         methods: {
+            onError(error) {
+                console.log('ReCaptcha erorr:', error)
+                this.error.text = `ReCaptcha erorr: ${error}`
+                this.error.active = true
+                setTimeout(() => {
+                    this.error.active = false
+                }, 5000)
+            },
+
             async onSubmit() {
                 try {
                     // this.form.recaptchaToken = await this.$recaptcha.getResponse()
+                    this.form.recaptchaToken = await this.$recaptcha.getResponse()
                     // Submit the form.
                     const {data} = await this.form.post('/admin/login')
 
@@ -103,7 +130,8 @@
         content: "";
         z-index: 0;
     }
-    .g-recaptcha div{
+
+    .g-recaptcha div {
         margin: auto !important;
     }
 </style>

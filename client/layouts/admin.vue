@@ -64,7 +64,7 @@
                         <v-list-tile slot="activator">
                             <v-list-tile-content>
                                 <v-list-tile-title>
-                                    {{ item.text }}
+                                    {{ $t(item.text) }}
                                 </v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
@@ -80,7 +80,7 @@
                             </v-list-tile-action>
                             <v-list-tile-content>
                                 <v-list-tile-title>
-                                    {{ child.text }}
+                                    {{ $t(child.text) }}
                                 </v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
@@ -91,7 +91,7 @@
                         </v-list-tile-action>
                         <v-list-tile-content>
                             <v-list-tile-title>
-                                {{ item.text }}
+                                {{ $t(item.text) }}
                             </v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
@@ -156,7 +156,7 @@
                             <v-icon>account_circle</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title>Profile</v-list-tile-title>
+                            <v-list-tile-title>{{$t('profile')}}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-list-tile  ripple="ripple" @click="logout" rel="noopener" >
@@ -164,7 +164,7 @@
                             <v-icon>logout</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title>Logout</v-list-tile-title>
+                            <v-list-tile-title>{{ $t('logout') }}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list>
@@ -207,7 +207,7 @@
         </v-content>
         <v-footer  app color="indigo" dark>
             <v-flex xs12 class="text-xs-center">
-                   {{ new Date().getFullYear() }} &copy; ZakarpatTour. All rights reserved.
+                   {{ new Date().getFullYear() }} &copy; {{$t('footer.title')}}
             </v-flex>
         </v-footer>
         <v-fab-transition>
@@ -256,65 +256,65 @@
             },
 
             items: [
-                { text: 'Dashboard', icon: 'dashboard',href:'admin.dash' },
+                { text: 'navbar.dashboard', icon: 'dashboard',href:'admin.dash' },
                 {
                     icon: 'keyboard_arrow_up',
                     'icon-alt': 'notifications_active',
-                    text: 'Notifications',
+                    text: 'navbar.notifications',
                     model: false,
                     children: [
-                        { icon: 'markunread', text: 'Contact Us', href:'admin.notifications.message' },
+                        { icon: 'markunread', text: 'navbar.contact', href:'admin.notifications.message' },
                     ]
                 },
                 {
                     icon: 'keyboard_arrow_up',
                     'icon-alt': 'people',
-                    text: 'Users',
+                    text: 'navbar.users',
                     model: false,
                     children: [
-                        { icon: 'face', text: 'Profile', href:'admin.profile' },
-                        { icon: 'build', text: 'Admins', href:'admin.admins' },
-                        { icon: 'people', text: 'Users', href:'admin.users' },
+                        { icon: 'face', text: 'navbar.profile', href:'admin.profile' },
+                        { icon: 'build', text: 'navbar.admins', href:'admin.admins' },
+                        { icon: 'people', text: 'navbar.users', href:'admin.users' },
                     ]
                 },
                 {
                     icon: 'keyboard_arrow_up',
                     'icon-alt': 'location_city',
-                    text: 'Settlement',
+                    text: 'navbar.settlements',
                     model: false,
                     children: [
-                        { icon: 'location_city', text: 'Settlements', href:'admin.settlement' },
+                        { icon: 'location_city', text: 'navbar.settlements', href:'admin.settlement' },
                     ]
                 },
                 {
                     icon: 'keyboard_arrow_up',
                     'icon-alt': 'location_on',
-                    text: 'Sight',
+                    text: 'navbar.sights',
                     model: false,
                     children: [
-                        { icon: 'category', text: 'Categories', href:'admin.marker.category' },
-                        { icon: 'add', text: 'Create', href:'admin.marker' },
-                        { icon: 'location_on', text: 'Sights', href:'admin.marker.list' },
+                        { icon: 'category', text: 'navbar.categories', href:'admin.marker.category' },
+                        { icon: 'add', text: 'navbar.create', href:'admin.marker' },
+                        { icon: 'location_on', text: 'navbar.sights', href:'admin.marker.list' },
                     ]
                 },
                 {
                     icon: 'keyboard_arrow_up',
                     'icon-alt': 'timeline',
-                    text: 'Tour',
+                    text: 'navbar.tours',
                     model: false,
                     children: [
-                        { icon: 'category', text: 'Categories', href:'admin.tour.category' },
-                        { icon: 'add', text: 'Create', href:'admin.tour' },
-                        { icon: 'timeline', text: 'Tours', href:'admin.tour.list' },
+                        { icon: 'category', text: 'navbar.categories', href:'admin.tour.category' },
+                        { icon: 'add', text: 'navbar.create', href:'admin.tour' },
+                        { icon: 'timeline', text: 'navbar.tours', href:'admin.tour.list' },
                     ]
                 },
                 {
                     icon: 'keyboard_arrow_up',
                     'icon-alt': 'pages',
-                    text: 'Pages',
+                    text: 'navbar.pages',
                     model: false,
                     children: [
-                        { icon: 'info', text: 'About Us', href:'admin.notifications.message' },
+                        { icon: 'info', text: 'navbar.about', href:'admin.about' },
                     ]
                 },
             ],

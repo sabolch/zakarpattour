@@ -12,13 +12,13 @@
                     <v-icon medium dark>add</v-icon>
 
                 </v-btn>
-                <span>Create new settlement</span>
+                <span>{{$t('settlement.new')}}</span>
             </v-tooltip>
             <v-spacer></v-spacer>
             <v-text-field
                     v-model="search"
                     clearable
-                    label="Search ..."
+                    :label="`${$t('form.search')}..`"
                     type="text"
                     @keyup="keyupHandle"
                     @click:clear="keyupHandle"
@@ -88,7 +88,7 @@
 
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="warning">
-                    Sorry, nothing to display here :(
+                    {{$t('messages.no_data')}}
                 </v-alert>
             </template>
         </v-data-table>
@@ -108,9 +108,9 @@
         >
             <v-card>
                 <v-card-title class="headline">
-                    Remove settlement
+                    {{$t('settlement.remove')}}
                 </v-card-title>
-                <v-card-text> Are you sure remove this settlement?</v-card-text>
+                <v-card-text>{{$t('settlement.remove_msg')}}</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -138,7 +138,7 @@
             <v-card>
                 <v-card-title>
                     <v-layout justify-center>
-                        <span class="headline">Adding settlement</span>
+                        <span class="headline">{{ editing ? $t('settlement.edit') : $t('settlement.new')}}</span>
                     </v-layout>
                 </v-card-title>
                 <v-card-text>
@@ -176,8 +176,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn outline color="blue darken-1" flat @click="savedialog = false">Close</v-btn>
-                    <v-btn :loading="form.busy" outline color="green darken-1" flat @click="saveCategory">Save</v-btn>
+                    <v-btn outline color="blue darken-1" flat @click="savedialog = false">{{$t('btns.close')}}</v-btn>
+                    <v-btn :loading="form.busy" outline color="green darken-1" flat @click="saveCategory">{{$t('btns.save')}}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

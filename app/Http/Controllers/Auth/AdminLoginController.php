@@ -29,26 +29,23 @@ class AdminLoginController extends Controller
     /**
      * Attempt to log the user into the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return bool
      */
     protected function attemptLogin(Request $request)
     {
-//        $g_token = $request->input('recaptchaToken');
+        $g_token = $request->input('recaptchaToken');
 
-//        // if google captcha is not empty
-//        if(strlen($g_token) > 0) {
-//            // create https client for check the token
-//            $client = new Client();
-//            $response = $client->post("https://www.google.com/recaptcha/api/siteverify", [
-//                'form_params' => array(
-//                    'secret' => '6LfeIXYUAAAAADT7qhrqb5jNZVBh1qTcJ4uau2Oj',
-//                    'response' => $g_token
-//                )
-//            ]);
-//            $verification = json_decode($response->getBody()->getContents());
-//            if ($verification->success) {
-
+        if (strlen($g_token) > 0) {
+            $client = new Client();
+            $response = $client->post(config('services.recaptcha.url'), [
+                'form_params' => array(
+                    'secret' => config('services.recaptcha.secret_key'),
+                    'response' => $g_token
+                )
+            ]);
+            $verification = json_decode($response->getBody()->getContents());
+            if ($verification->success) {
 
                 $token = $this->guard()->attempt($this->credentials($request));
 
@@ -56,11 +53,10 @@ class AdminLoginController extends Controller
                     $this->guard()->setToken($token);
                     return true;
                 }
-//
-//                return false;
-//            }
-//            return false;
-//        }
+                return false;
+            }
+            return false;
+        }
         return true;
 
     }
@@ -68,14 +64,14 @@ class AdminLoginController extends Controller
     /**
      * Send the response after the user was authenticated.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     protected function sendLoginResponse(Request $request)
     {
         $this->clearLoginAttempts($request);
 
-        $token = (string) $this->guard()->getToken();
+        $token = (string)$this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
 
         return [
@@ -88,7 +84,7 @@ class AdminLoginController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function logout(Request $request)

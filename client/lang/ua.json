@@ -1,122 +1,234 @@
 {
   "navbar": {
-    "home": "Home",
-    "sights": "Sights",
-    "tours": "Tours",
-    "about": "About Us",
-    "contact": "Contact"
+    "home": "Головна",
+    "sights": "Визначні пам'ятки",
+    "tours": "Тури",
+    "about": "Про нас",
+    "contact": "Контакти",
+    "settlements": "Поселення",
+    "dashboard": "Панель приладів",
+    "notifications": "Сповіщення",
+    "users": "Користувачі",
+    "profile": "Профіль",
+    "admins": "Адміністратори",
+    "create": "Створити",
+    "categories": "Категорії",
+    "pages": "Сторінки"
   },
 
   "index": {
-    "title": "Transcarpathian tours",
-    "subtitle": "Sights, natural and historical monuments!",
+    "title": "Закарпатські тури",
+    "subtitle": "Визначні пам'ятки, природні та історичні пам'ятки!",
     "tiles": [
-      "Landscape","Buildings","Hotels","Culinary","Tours","Activities"
+      "Краєвид","Будинки","Готелі","Кулінарні","Тури","Програми"
     ],
     "subtitles": {
-      "recommended_slights": "Recommended slights",
-      "recommended_tours": "Recommended tours",
-      "popular_slights": "Popular slights",
-      "popular_tours": "Popular tours"
+      "recommended_slights": "Рекомендовані пам'ятки",
+      "recommended_tours": "Рекомендовані тури",
+      "popular_slights": "Популярні пам'ятки",
+      "popular_tours": "Популярні тури"
     }
   },
 
   "contact_us": {
-    "title":"Contact Us"
+    "title":"Зв'яжіться з нами"
   },
 
   "form": {
-    "name": "Name",
-    "email": "Email",
-    "subject": "Subject",
-    "message": "Message",
+    "from": "From",
+    "available_dates": "Виберіть доступні дати",
+    "name": "Ім'я",
+    "title": "Заголовок",
+    "email": "Електронна пошта",
+    "subject": "Тема",
+    "message": "Повідомлення",
 
-    "search" : "Search",
-    "sort_by": "Sort By",
-    "category": "Category",
-    "select": "Select",
+    "search" : "Пошук",
+    "sort_by": "Сортувати за",
+    "category": "Категорія",
+    "select": "Виберіть",
 
     "data_panel":{
-      "hint": "Filtering options",
-      "title": "Filtering results",
-      "rate": "Rate",
-      "price": "Price",
-      "start_date": "Start date",
-      "end_date": "End date"
+      "hint": "Параметри фільтрації",
+      "title": "Результати фільтрації",
+      "rate": "Оцінити",
+      "price": "Ціна",
+      "duration": "Тривалість у днях",
+      "start_date": "Дата початку",
+      "end_date": "Дата закінчення"
     }
   },
 
   "btns": {
-    "read_more" : "Read more",
-    "all" : "All",
-    "send": "Send",
-    "cancel": "Cancel",
-    "close": "Close",
-    "continue": "Continue",
-    "back": "Back"
+    "read_more" : "Докладніше",
+    "all" : "Все",
+    "send": "Надіслати",
+    "cancel": "Скасувати",
+    "close": "Закрити",
+    "continue": "Продовжити",
+    "back": "Назад",
+    "ok": "Гаразд",
+    "save": "Зберегти",
+    "activate": "Активувати",
+    "remove": "Видалити",
+    "confirm": "Підтвердити",
+    "reply": "Відповісти",
+    "add_marker": "Додати маркер",
+    "select_files": "Виберіть файли",
+    "upload": "Завантажити"
   },
 
   "messages": {
-    "saved": "Successfully saved!",
-    "not_saved": "Not saved! :( Try again later!",
-    "no_data": " Sorry, nothing to display here :("
+    "saved": "Успішно збережено!",
+    "not_saved": "Не збережено! :( Спробуйте ще раз пізніше!",
+    "no_data": "На жаль, тут нічого не відображається :("
   },
 
   "footer": {
     "tiles": [
-      {"title": "Great programs","text": "You can choose from 7,000+ sights, tours and activities"},
-      {"title": "Booking","text": "Avoid queuing and book your programs"},
-      {"title": "Discover","text": "Transcarpathia has diverse natural features and history"}
+      {"title": "Програми","text": "Ви можете вибрати один з 7000 + визначних пам'яток, екскурсії та заходи"},
+      {"title": "Бронювання","text": "Уникайте черги та бронюйте програми"},
+      {"title": "Відкрийте","text": "Закарпаття має різноманітні природні особливості та історію"}
     ],
-    "title": "TouristRoutes. All rights reserved."
+    "title": "Zakarpattour. Всі права захищені."
   },
 
   "errors": {
-    "something": "Something goes wrong :("
+    "something": "Щось пішло не так :("
   },
 
-  "ok": "Ok",
-  "cancel": "Cancel",
-  "error_alert_title": "Oops...",
-  "error_alert_text": "Something went wrong! Please try again.",
-  "token_expired_alert_title": "Session Expired!",
-  "token_expired_alert_text": "Please log in again to continue.",
-  "login": "Log In",
-  "register": "Register",
-  "page_not_found": "Page Not Found",
-  "go_home": "Go Home",
-  "logout": "Logout",
-  "email": "Email",
-  "remember_me": "Remember Me",
-  "password": "Password",
-  "forgot_password": "Forgot Your Password?",
-  "confirm_password": "Confirm Password",
-  "name": "Name",
-  "toggle_navigation": "Toggle navigation",
-  "home": "Home",
-  "you_are_logged_in": "You are logged in!",
-  "reset_password": "Reset Password",
-  "send_password_reset_link": "Send Password Reset Link",
-  "settings": "Settings",
-  "profile": "Profile",
-  "your_info": "Your Info",
-  "info_updated": "Your info has been updated!",
-  "update": "Update",
-  "your_password": "Your Password",
-  "password_updated": "Your password has been updated!",
-  "new_password": "New Password",
-  "login_with": "Login with",
-  "register_with": "Register with",
+  "ok": "Гаразд",
+  "cancel": "Скасувати",
+  "error_alert_title": "Ой ...",
+  "error_alert_text": "Щось пішло не так! Будь ласка спробуйте ще раз.",
+  "token_expired_alert_title": "Сесія закінчилася!",
+  "token_expired_alert_text": "Щоб продовжити, увійдіть знову.",
+  "login": "Увійти",
+  "register": "Реєстрація",
+  "page_not_found": "На жаль, сторінку не знайдено",
+  "go_home": "Йти додому",
+  "logout": "Вийти",
+  "email": "Електронна пошта",
+  "remember_me": "Пам'ятай мене",
+  "password": "Пароль",
+  "forgot_password": "Забули свій пароль?",
+  "confirm_password": "Підтвердити пароль",
+  "name": "Ім'я",
+  "toggle_navigation": "Перемикання навігації",
+  "home": "Головна",
+  "you_are_logged_in": "Ви увійшли!",
+  "reset_password": "Скинути пароль",
+  "send_password_reset_link": "Надіслати посилання на скидання пароля",
+  "settings": "Налаштування",
+  "profile": "Профіль",
+  "your_info": "Ваша інформація",
+  "info_updated": "Вашу інформацію оновлено!",
+  "update": "Оновлення",
+  "your_password": "Ваш пароль",
+  "password_updated": "Ваш пароль оновлено!",
+  "new_password": "Новий пароль",
+  "login_with": "Увійти з",
+  "register_with": "Реєстрація з",
+  "telephone": "Телефон",
+  "conf_remove": "Дійсно видалити цей елемент?",
+  "conf_check": "Ви обов'язково позначите як перевірено?",
+  "check": "Перевірити",
+  "reply_msg": "Відповісти на повідомлення",
+  "no_directions": "На жаль, не доступні напрямки ..",
 
   "marker_sort": [
     {
-      "name": "By date",
+      "name": "За датою",
       "value": "created_at"
     },
     {
-      "name": "By title",
+      "name": "За назвою",
       "value": "title"
     }
   ],
-  "marker_filtering": "Filtering options"
+  "marker_filtering": "Параметри фільтрації",
+  "settlements_search": "Шукати поселення ..",
+  "sights_search": "Шукати пам'ятки ..",
+  "img_ctn_msg": "Увімкнено, якщо зміни збережено",
+
+  "image_upload": {
+    "tabs": [
+      {
+        "title": "Завантажуйте зображення та керуйте ними"
+      },
+      {
+        "title": "Керування зображенням заголовка"
+      }
+    ],
+    "upload": "Завантажити зображення",
+    "review": "Перегляньте зображення",
+    "cover_img": "Зображенням заголовка",
+    "uploaded": "Завантажені зображення",
+    "cover": "Встановити зображення заголовка",
+    "small": "Вибрано зображення малого розміру! Виберіть мінімум",
+    "s_size": "Невеликий розмір зображення",
+    "set_cover": "Встановіть як зображення заголовка"
+  },
+  "sights_steps": [
+    {
+      "title": "Назва та категорія",
+      "subtitle": "Дайте назву і перекладіть її також встановіть категорію"
+    },
+    {
+      "title": "Маркер карти",
+      "subtitle": "Виберіть місце розташування"
+    },
+    {
+      "title": "Опис",
+      "subtitle": "Встановіть опис і перекладіть його"
+    },
+    {
+      "title": "Майже готово",
+      "subtitle": "Збережіть зміни"
+    },
+    {
+      "title": "Завантаження зображень",
+      "subtitle": "Завантажуйте зображення та керуйте ними"
+    }
+  ],
+  "tours_steps": [
+    {
+      "title": "Назва та категорія",
+      "subtitle": "Дайте назву і перекладіть її також встановіть категорію"
+    },
+    {
+      "title": "Напрямки",
+      "subtitle": "Створіть напрямки подорожі"
+    },
+    {
+      "title": "Опис",
+      "subtitle": "Встановіть опис і перекладіть його"
+    },
+    {
+      "title": "Майже готово",
+      "subtitle": "Збережіть зміни"
+    },
+    {
+      "title": "Завантаження зображень",
+      "subtitle": "Завантажуйте зображення та керуйте ними"
+    }
+  ],
+  "admin": {
+    "new": "Створити нового адміністратора",
+    "edit": "Редагувати дані адміністратора",
+    "remove": "Деактивувати адміністратора",
+    "remove_msg": "Дійсно вимкнути цей адміністратор?"
+  },
+  "settlement": {
+    "new": "Створити нове поселення",
+    "edit": "Редагувати поселення",
+    "remove": "Видалити поселення",
+    "remove_msg": "Ви впевнені, що видалити це поселення?"
+  },
+  "category": {
+    "new": "Створити нову категорію",
+    "edit": "Редагувати категорію",
+    "remove": "Видалити категорію",
+    "remove_msg": "Дійсно видалити цю категорію?"
+  }
 }

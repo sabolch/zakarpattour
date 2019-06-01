@@ -12,13 +12,13 @@
                     <v-icon medium dark>add</v-icon>
 
                 </v-btn>
-                <span>Create new admin</span>
+                <span>{{$t('admin.new')}}</span>
             </v-tooltip>
             <v-spacer></v-spacer>
             <v-text-field
                     v-model="search"
                     clearable
-                    label="Search ..."
+                    :label="`${$t('form.search')}..`"
                     type="text"
                     @keyup="keyupHandle"
                     @click:clear="keyupHandle"
@@ -102,7 +102,7 @@
 
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="warning">
-                    Sorry, nothing to display here :(
+                    {{$t('messages.no_data')}}
                 </v-alert>
             </template>
         </v-data-table>
@@ -122,9 +122,9 @@
         >
             <v-card>
                 <v-card-title class="headline">
-                    Remove admin
+                    {{$t('admin.remove')}}
                 </v-card-title>
-                <v-card-text> Are you sure remove this user?</v-card-text>
+                <v-card-text>  {{$t('admin.remove_msg')}}</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -132,7 +132,7 @@
                             flat
                             @click="dialog = false"
                     >
-                        Close
+                        {{$t('btns.close')}}
                     </v-btn>
                     <v-btn
                             :loading="form.busy"
@@ -140,7 +140,7 @@
                             flat
                             @click="trash"
                     >
-                        Remove
+                        {{$t('btns.remove')}}
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -152,7 +152,7 @@
             <v-card>
                 <v-card-title>
                     <v-layout justify-center>
-                        <span class="headline">Create admin</span>
+                        <span class="headline">{{ editing ?  $t('admin.edit') : $t('admin.new')}}</span>
                     </v-layout>
                 </v-card-title>
                 <v-card-text>
@@ -164,7 +164,7 @@
                                             v-model="form.name"
                                             v-validate="'required|max:30'"
                                             :error-messages="errors.collect('name')"
-                                            label="Name"
+                                            :label="$t('name')"
                                             data-vv-name="username"
                                             clearable
                                             required
@@ -173,7 +173,7 @@
                                             v-model="form.email"
                                             v-validate="'required|email'"
                                             :error-messages="errors.collect('email')"
-                                            label="E-mail"
+                                            :label="$t('email')"
                                             data-vv-name="email"
                                     ></v-text-field>
                                     <v-text-field
@@ -181,7 +181,7 @@
                                             v-model="form.telephone"
                                             v-validate="'required|min:10'"
                                             :error-messages="errors.collect('telephone')"
-                                            label="Telephone"
+                                            :label="$t('telephone')"
                                             data-vv-name="telephone"
                                             clearable
                                             required
@@ -194,7 +194,7 @@
                                             v-model="form.password"
                                             v-validate="'required|min:5|max:15'"
                                             :error-messages="errors.collect('password')"
-                                            label="Password"
+                                            :label="$t('password')"
                                             data-vv-name="password"
                                             clearable
                                             required
@@ -206,7 +206,7 @@
                                             v-model="form.password_confirmation"
                                             v-validate="'required|confirmed:password'"
                                             :error-messages="errors.collect('password_confirmation')"
-                                            label="Confirm Password"
+                                            :label="$t('confirm_password')"
                                             data-vv-name="password_confirmation"
                                             required
                                     ></v-text-field>
@@ -217,9 +217,9 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn outline color="blue darken-1" flat @click="savedialog = false">Close</v-btn>
-                    <v-btn v-if="form.deleted_at" outline color="amber darken-4" flat @click="activate">Activate</v-btn>
-                    <v-btn :loading="form.busy" outline color="green darken-1" flat @click="saveCategory">Save</v-btn>
+                    <v-btn outline color="blue darken-1" flat @click="savedialog = false">{{$t('btns.close')}}</v-btn>
+                    <v-btn v-if="form.deleted_at" outline color="amber darken-4" flat @click="activate">{{$t('btns.activate')}}</v-btn>
+                    <v-btn :loading="form.busy" outline color="green darken-1" flat @click="saveCategory">{{$t('btns.save')}}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

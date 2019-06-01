@@ -3,11 +3,11 @@
 
         <v-stepper v-model="e1">
             <v-stepper-header>
-                <v-stepper-step editable :complete="e1 > 1" step="1">Upload Images</v-stepper-step>
+                <v-stepper-step editable :complete="e1 > 1" step="1">{{$t('image_upload.upload')}}</v-stepper-step>
 
                 <v-divider></v-divider>
 
-                <v-stepper-step :complete="e1 > 2" step="2">Set cover image</v-stepper-step>
+                <v-stepper-step :complete="e1 > 2" step="2">{{$t('image_upload.cover')}}</v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
@@ -18,7 +18,7 @@
                                 <v-layout row wrap>
                                     <v-flex v-if="uploades.length > 0" xs12>
                                         <v-card :elevation="2" color="green darken-2" dark
-                                                class="pa-3 headline font-weight-bold">Uploaded Images
+                                                class="pa-3 headline font-weight-bold">{{$t('image_upload.uploaded')}}
                                         </v-card>
                                     </v-flex>
                                     <v-flex
@@ -66,13 +66,13 @@
 
                                     <v-flex v-if="files.length > 0" xs12>
                                         <v-card :elevation="2" class="pa-3 headline font-weight-bold" color="primary"
-                                                dark>Review Images
+                                                dark>{{$t('image_upload.review')}}
                                         </v-card>
                                         <v-alert
                                                 :value="smallSize"
                                                 type="error"
                                         >
-                                            Small size images selected! Please select minimum
+                                            {{$t('image_upload.small')}}
                                             {{`${this.minHeight}x${this.minWidth}`}} pixels or larger.
                                         </v-alert>
                                     </v-flex>
@@ -124,7 +124,7 @@
                                                                         photo_size_select_large
                                                                     </v-icon>
                                                                 </template>
-                                                                <span>Small image size</span>
+                                                                <span>{{$t('image_upload.s_size')}}</span>
                                                             </v-tooltip>
                                                         </v-flex>
                                                     </v-layout>
@@ -146,7 +146,7 @@
                                         color="primary"
                                         :disabled="loading"
                                 >
-                                    Select files
+                                    {{$t('btns.select_files')}}
                                     <v-icon right dark>add_to_photos</v-icon>
                                 </v-btn>
                                 <v-btn
@@ -156,7 +156,7 @@
                                         class="white--text"
                                         @click="submitFiles"
                                 >
-                                    Upload
+                                    {{$t('btns.upload')}}
                                     <v-icon right dark>cloud_upload</v-icon>
                                 </v-btn>
                                 <input hidden type="file" id="files" ref="files" multiple
@@ -172,7 +172,7 @@
                             @click="e1 = 2"
                             :disabled="uploades.length < 1"
                     >
-                        Continue
+                        {{$t('btns.continue')}}
                     </v-btn>
 
                 </v-stepper-content>
@@ -184,7 +184,7 @@
                                 <v-layout row wrap>
                                     <v-flex v-if="uploades.length > 0" xs12>
                                         <v-card :elevation="2" color="green darken-2" dark
-                                                class="pa-3 headline font-weight-bold">Uploaded Images
+                                                class="pa-3 headline font-weight-bold">{{$t('image_upload.uploaded')}}
                                         </v-card>
                                     </v-flex>
                                     <v-flex
@@ -228,7 +228,7 @@
                                                                         </v-icon>
                                                                     </v-btn>
                                                                 </template>
-                                                                <span>Set as like cover image</span>
+                                                                <span>{{$t('image_upload.set_cover')}}</span>
                                                             </v-tooltip>
                                                         </v-flex>
                                                     </v-layout>
@@ -240,7 +240,7 @@
 
                                     <v-flex xs12>
                                         <v-card :elevation="2" class="pa-3 headline font-weight-bold" color="primary"
-                                                dark>Cover image
+                                                dark>{{$t('image_upload.cover_img')}}
                                         </v-card>
 
                                     </v-flex>
@@ -274,7 +274,7 @@
                             </v-container>
                         </v-flex>
                     </v-layout>
-                    <v-btn dark @click="e1 = 1" color="amber darken-2">Back</v-btn>
+                    <v-btn dark @click="e1 = 1" color="amber darken-2">{{$t('btns.back')}}</v-btn>
                 </v-stepper-content>
             </v-stepper-items>
         </v-stepper>

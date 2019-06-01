@@ -4,7 +4,17 @@
     "sights": "Látnivalók",
     "tours": "Túrák",
     "about": "Rólunk",
-    "contact": "Kapcsolat"
+    "contact": "Kapcsolat",
+    "settlements": "Settlements",
+
+    "dashboard": "Dashboard",
+    "notifications": "Notifications",
+    "users": "Users",
+    "profile": "Profile",
+    "admins": "Admins",
+    "create": "Create",
+    "categories": "Categories",
+    "pages": "Pages"
   },
   "index": {
     "title": "Kárpátaljai utazások",

@@ -6,9 +6,8 @@
                 :src="imgUrl"
                 :category="`${getName(item.category.translations)}`"
         >
-
         </lazy-item-img>
-        <v-card-text class="align-center text-xs-justify pa-2">
+        <v-card-text class="align-center pa-2">
             <h1 class="headline">{{ getTitle(item.translations) }}</h1>
             <v-chip color="blue darken-4" outline>
                 <v-icon left>location_city</v-icon>
@@ -68,7 +67,9 @@
         },
         methods: {
             getTitle(item) {
-                return item.find(obj => obj.locale ===  this.getLocal).title
+                let title = item.find(obj => obj.locale ===  this.getLocal).title
+                if(title.length > 30) return title.substr(0,33) + '..'
+                return title
             },
             getName(item) {
                 return item.find(obj => obj.locale ===  this.getLocal).name

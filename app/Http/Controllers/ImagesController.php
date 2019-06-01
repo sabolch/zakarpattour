@@ -97,7 +97,7 @@ class ImagesController extends Controller
             }
             $img = Image::make($image_full_path);
 //            // resize the image
-            $img->resize(600, 400, function ($constraint) {
+            $img->resize(300, 300, function ($constraint) {
                 $constraint->aspectRatio();
             });
 //            // create dir if not exist with sizes
