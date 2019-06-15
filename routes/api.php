@@ -64,6 +64,7 @@ Route::group(['prefix' => 'tour'], function () {
     Route::get('/show/{slug}', 'TourController@show');
     Route::get('/trashed', 'TourController@trashed');
     Route::get('/', 'TourController@index');
+    Route::post('/get', 'TourController@get');
 });
 //    Marker Category
 Route::group(['prefix' => 'marker/category'], function () {
@@ -86,6 +87,7 @@ Route::group(['prefix' => 'marker'], function () {
     Route::get('/show/{slug}', 'MarkerController@show');
     Route::post('/restore', 'MarkerController@restoreTrashed');
     Route::get('/', 'MarkerController@index');
+    Route::post('/get', 'MarkerController@get');
     Route::get('/trashed', 'MarkerController@trashed');
     Route::delete('/remove', 'MarkerController@destroyForever');
 });
@@ -105,12 +107,16 @@ Route::group(['prefix' => 'settlement'], function () {
 
 // Favourite
 Route::group(['middleware' => 'auth:api','prefix' => 'favourite'], function () {
+    Route::delete('/marker', 'FavouritesController@deleteMarker');
+    Route::delete('/tour', 'FavouritesController@deleteTour');
+
     Route::put('/add/marker', 'FavouritesController@createMarker');
     Route::put('/add/tour', 'FavouritesController@createTour');
+
     Route::get('/tours', 'FavouritesController@tours');
     Route::get('/markers', 'FavouritesController@markers');
-    Route::delete('/remove/marker', 'FavouritesController@deleteMarker');
-    Route::delete('/remove/tour', 'FavouritesController@deleteTour');
+    Route::post('/get', 'FavouritesController@getFavorites');
+
 });
 
 // Contact us

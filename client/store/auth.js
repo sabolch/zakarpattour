@@ -53,7 +53,6 @@ export const actions = {
       commit('FETCH_USER_SUCCESS', data)
     } catch (e) {
       Cookies.remove('token')
-
       commit('FETCH_USER_FAILURE')
     }
   },
@@ -68,7 +67,6 @@ export const actions = {
     } catch (e) { }
 
     Cookies.remove('token')
-
     commit('LOGOUT')
   },
 

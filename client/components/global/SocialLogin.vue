@@ -67,7 +67,6 @@
                 const url = await this.$store.dispatch('auth/fetchOauthUrl', {
                     provider: this.provider
                 })
-
                 newWindow.location.href = url
             },
 
@@ -82,8 +81,9 @@
                 this.$store.dispatch('auth/saveToken', {
                     token: e.data.token
                 })
-
                 this.$router.push({name: 'settings.profile'})
+                this.$store.dispatch('favorite/setFavourite')
+
             }
         }
     }

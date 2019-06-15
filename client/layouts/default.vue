@@ -61,7 +61,7 @@
                 <v-btn v-for="(item,key) in items" :key="key" :to="{name: `${item.href}`}" exact flat> {{ $t(item.text) }}</v-btn>
             </v-toolbar-items>
             <v-spacer/>
-            <v-btn icon :to="{name: 'user.favorites'}">
+            <v-btn icon :to="{name: 'user.favorite.sights'}">
                 <v-icon medium>favorite</v-icon>
             </v-btn>
             <v-badge

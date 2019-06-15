@@ -33,8 +33,8 @@ const CartProcessing = () => import('~/pages/user/cart/processing').then(m => m.
 const CartChecked = () => import('~/pages/user/cart/checked').then(m => m.default || m)
 const CartHistory = () => import('~/pages/user/cart/history').then(m => m.default || m)
 
-const Favorites = () => import('~/pages/user/favorites').then(m => m.default || m)
-
+const FavoriteSights = () => import('~/pages/user/favorites/favoriteSights').then(m => m.default || m)
+const FavoriteTours = () => import('~/pages/user/favorites/favoriteTours').then(m => m.default || m)
 
 // admin pages
 const AdminIndex = () => import('~/pages/admin/index').then(m => m.default || m)
@@ -65,7 +65,6 @@ const AdminPagesAbout = () => import('~/pages/admin/pages/about').then(m => m.de
 const routes = [
 
   { path: '/', name: 'welcome', component: Welcome },
-  { path: '/home', name: 'home', component: Home },
 
     //
   { path: '/sights', name: 'sights', component: MarkersIndex },
@@ -84,7 +83,8 @@ const routes = [
         { path: 'cart/checked', name: 'cart.checked', component: CartChecked },
         { path: 'cart/history', name: 'cart.history', component: CartHistory },
 
-        { path: 'favorites', name: 'user.favorites', component: Favorites },
+        { path: 'favorite/tours', name: 'user.favorite.tours', component: FavoriteTours },
+        { path: 'favorite/sights', name: 'user.favorite.sights', component: FavoriteSights },
       ] },
   // User login/register/reset
   { path: '/login', name: 'login', component: Login },

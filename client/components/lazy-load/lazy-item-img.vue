@@ -14,11 +14,10 @@
         >
             <v-progress-circular indeterminate color="grey lighten-5"/>
         </v-layout>
-
         <v-card-actions>
             <span class="white--text amber darken-4 pa-1 font-weight-black subheading">#{{category}}</span>
             <v-spacer></v-spacer>
-            <btn-favorite type="sight" :itemID="itemID"></btn-favorite>
+            <btn-favorite :type="type" :itemID="itemID"></btn-favorite>
         </v-card-actions>
     </v-img>
 </template>
@@ -68,7 +67,6 @@
                     this.observer.disconnect();
                 }
             });
-
             this.observer.observe(this.$el);
         },
         destroyed() {
@@ -76,9 +74,6 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
+<style scoped></style>
 
 

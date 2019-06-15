@@ -61,23 +61,21 @@
                     return
                 }
 
+                console.log(this.itemID)
                 this.form = new Form({id: this.itemID})
                 let  url = 'favourite/add/marker'
-                if (this.type === 'sight') {
+                console.log(this.type)
+                if (this.type === 'tour') {
                     url = 'favourite/add/tour'
                 }
                 try {
                     const {data} = await this.form.put(url)
-                    console.log(data)
+                    await this.$store.dispatch('favorite/setFavourite')
                 } catch (e) {
-                    alert(this.$t('errors.something'))
+                    console.log(e)
                 }
-
             }
         }
     }
 </script>
-
-<style scoped>
-
-</style>
+<style scoped></style>

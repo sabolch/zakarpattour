@@ -47,18 +47,15 @@
                                                     <v-icon left>access_time</v-icon>
                                                     Duration : {{tour.duration}} days
                                                 </v-chip>
-                                                <v-chip color="green darken-4" outline>
-                                                    <v-icon left>date_range</v-icon>
-                                                    Start : {{ tour.start_date.substr(0,10) }}
-                                                </v-chip>
-                                                <v-chip color="orange darken-4" outline>
-                                                    <v-icon left>date_range</v-icon>
-                                                    End : {{tour.end_date.substr(0,10)}}
-                                                </v-chip>
-                                                <v-chip color="red darken-1" outline>
-                                                    <v-icon left>attach_money</v-icon>
-                                                    Price : {{tour.price}}
-                                                </v-chip>
+                                                <v-tooltip bottom>
+                                                    <template v-slot:activator="{ on }">
+                                                        <v-chip color="red darken-1" v-on="on" outline>
+                                                            <span class="title">₴</span>&nbsp;&nbsp;&nbsp;Price : {{tour.price}}
+                                                        </v-chip>
+                                                    </template>
+                                                    <span>Ціна у грн</span>
+                                                </v-tooltip>
+
                                             </v-layout>
                                         </v-flex>
                                     </v-layout>
@@ -184,31 +181,32 @@
                                                                             <template v-slot:activator>
                                                                                 <v-list-tile>
                                                                                     <v-list-tile-content>
-                                                                                        <v-list-tile-title>
-                                                                                            {{ item }}
-                                                                                        </v-list-tile-title>
+                                                                                        <v-tooltip bottom :disabled="notAvailable(item)">
+                                                                                            <template v-slot:activator="{ on }">
+                                                                                                <v-chip :color="notAvailable(item) ? 'red' : 'green'" v-on="on" text-color="white">{{item}}</v-chip>
+                                                                                            </template>
+                                                                                            <span>No more ticket</span>
+                                                                                        </v-tooltip>
                                                                                     </v-list-tile-content>
                                                                                 </v-list-tile>
                                                                             </template>
 
                                                                             <v-list-tile>
                                                                                 <v-list-tile-content>
-                                                                                    <v-list-tile-title>
-                                                                                        <v-icon color="primary">
-                                                                                            attach_money
-                                                                                        </v-icon>
+                                                                                    <v-list-tile-title class="green--text">
+                                                                                        <span class="title ">₴</span>&nbsp;&nbsp;&nbsp;
                                                                                        <strong>{{tour.price}}</strong>
                                                                                     </v-list-tile-title>
                                                                                 </v-list-tile-content>
                                                                                 <v-list-tile-action>
                                                                                     <add-to-cart
-                                                                                            :item-id="tour.id"
-                                                                                            :price="tour.price"
+                                                                                            :tour="tour"
                                                                                             :date="item"
+                                                                                            :disabled="notAvailable(item)"
+                                                                                            :max-person-count="20"
                                                                                     ></add-to-cart>
                                                                                 </v-list-tile-action>
                                                                             </v-list-tile>
-
                                                                         </v-list-group>
                                                                     </v-list>
                                                                 </v-card>
@@ -360,6 +358,10 @@
             this.title = this.getTitle(this.tour)
         },
         methods: {
+            notAvailable(item){
+                return false;
+            },
+
             addToCart(id) {
                 console.log(id);
             },
@@ -388,8 +390,6 @@
             getLocal() {
                 return this.$i18n.locale
             },
-
-
         }
     }
 </script>
@@ -407,5 +407,8 @@
 
     .card-bord{
         border-radius: 5px;
+    }
+    .text--strickout{
+        text-decoration: line-through !important;
     }
 </style>

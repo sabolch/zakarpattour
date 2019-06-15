@@ -11,7 +11,5 @@ class FavouriteTours extends Model
 
     protected $table = "favourite_tours";
 
-    public function user(){
-        return $this->belongsTo(User::class,'user_id','id');
-    }
+
 }

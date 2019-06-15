@@ -1,7 +1,7 @@
 <template>
     <v-card class="my-1" :dark="dark">
         <lazy-item-img
-                :itemID="5"
+                :itemID="item.id"
                 type="tour"
                 :src="imgUrl"
                 :category="`${getName(item.category.translations)}`"

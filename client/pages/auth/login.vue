@@ -60,7 +60,6 @@
                                         </v-flex>
                                     </v-layout>
                                 </v-flex>
-
                             </v-layout>
                         </v-card-actions>
                     </v-card>
@@ -114,9 +113,13 @@
 
                     // Fetch the user.
                     await this.$store.dispatch('auth/fetchUser')
+                    // Load favorites
+                    await this.$store.dispatch('favorite/setFavourite')
 
                     // Redirect home.
                     // this.$router.go(-1)
+                    this.$store.dispatch('favorite/setFavourite')
+
                     this.$router.push({name: 'settings.profile'})
                 } catch (e) {
                     if(e.response){

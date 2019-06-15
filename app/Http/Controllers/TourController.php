@@ -155,6 +155,23 @@ class TourController extends Controller
         }
     }
 
+    public function get(Request $request)
+    {
+        $ids = json_decode($request->input('tour_ids'));
+        try{
+            $tours = Tour::whereIn('id',$ids)->get(['id','slug','price']);
+            return response()->json([
+                'success'=>true,
+                'data'=> $tours
+            ],200);
+        }catch (\Exception $e){
+            return response()->json([
+                'success'=>false,
+                'error'=>'Data not found!'
+            ],404);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -54,7 +54,7 @@
         },
         data() {
             return {
-                rating: 4,
+                rating: 4
             }
         },
         computed: {
