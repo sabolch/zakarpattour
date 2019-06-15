@@ -14,7 +14,8 @@
     "admins": "Admins",
     "create": "Create",
     "categories": "Categories",
-    "pages": "Pages"
+    "pages": "Pages",
+    "trash": "Trash"
   },
   "index": {
     "title": "Kárpátaljai utazások",
@@ -30,11 +31,55 @@
     }
   },
 
-  "btns": {
-    "read_more" : "Olvass tovább",
-    "all" : "Mind"
+  "contact_us": {
+    "title": "Contact Us"
+  },
+  "form": {
+    "name": "Name",
+    "title": "Title",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "from": "From",
+    "search": "Search",
+    "sort_by": "Sort By",
+    "category": "Category",
+    "select": "Select",
+    "available_dates": "Select available dates",
+    "data_panel": {
+      "hint": "Filtering options",
+      "title": "Filtering results",
+      "rate": "Rate",
+      "price": "Price",
+      "duration": "Duration in days",
+      "start_date": "Start date",
+      "end_date": "End date"
+    }
   },
 
+  "btns": {
+    "ok": "Ok",
+    "read_more": "Read more",
+    "all": "All",
+    "send": "Send",
+    "cancel": "Cancel",
+    "close": "Close",
+    "continue": "Continue",
+    "back": "Back",
+    "save": "Save",
+    "activate": "Activate",
+    "remove": "Remove",
+    "confirm": "Confirm",
+    "reply": "Reply",
+    "add_marker": "Add marker",
+    "select_files": "Select files",
+    "upload": "Upload"
+  },
+  "messages": {
+    "saved": "Successfully saved!",
+    "not_saved": "Not saved! :( Try again later!",
+    "no_data": " Sorry, nothing to display here :("
+  },
   "footer": {
     "tiles": [
       {"title": "Nagyszerű programok","text": "7 000+ látnivaló, túra és tevékenység közül választhat"},
@@ -43,12 +88,10 @@
     ],
     "title": "TouristRoutes. Minden jog fenntartva."
   },
-
-  "paralax": {
-    "main": "Kárpátaljai utazások",
-    "subtitle": "Визначні пам'ятки, природні та історичні пам'ятки!"
+  "errors": {
+    "something": "Something goes wrong :("
   },
-  "ok": "Ok",
+  "ok": "OK",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",
   "error_alert_text": "Something went wrong! Please try again.",
@@ -56,12 +99,13 @@
   "token_expired_alert_text": "Please log in again to continue.",
   "login": "Log In",
   "register": "Register",
-  "page_not_found": "Page Not Found",
+  "page_not_found": "Sorry, page not found",
   "go_home": "Go Home",
   "logout": "Logout",
   "email": "Email",
   "remember_me": "Remember Me",
   "password": "Password",
+  "telephone": "Telephone",
   "forgot_password": "Forgot Your Password?",
   "confirm_password": "Confirm Password",
   "name": "Name",
@@ -79,5 +123,106 @@
   "password_updated": "Your password has been updated!",
   "new_password": "New Password",
   "login_with": "Login with",
-  "register_with": "Register with"
+  "register_with": "Register with",
+  "conf_remove": "Are you sure remove this item?",
+  "conf_check": "Are you sure to mark as checked?",
+  "check": "Check",
+  "reply_msg": "Reply to message",
+  "no_directions": "Opps no directions available.",
+  "marker_sort": [
+    {
+      "name": "By date",
+      "value": "created_at"
+    },
+    {
+      "name": "By views",
+      "value": "views"
+    }
+  ],
+  "marker_filtering": "Filtering options",
+  "settlements_search": "Search for a settlement ..",
+  "sights_search": "Search for sights ..",
+  "img_ctn_msg": "Enabled if changes saved",
+  "image_upload": {
+    "tabs": [
+      {
+        "title": "Upload and manage images"
+      },
+      {
+        "title": "Manage cover image"
+      }
+    ],
+    "upload": "Upload Images",
+    "review": "Review Images",
+    "cover_img": "Cover Image",
+    "uploaded": "Uploaded Images",
+    "cover": "Set cover image",
+    "small": "Small size images selected! Please select minimum",
+    "s_size": "Small image size",
+    "set_cover": "Set as like cover image"
+  },
+  "sights_steps": [
+    {
+      "title": "Title & category",
+      "subtitle": "Give a title and translate it also set the category"
+    },
+    {
+      "title": "Map marker",
+      "subtitle": "Select the location"
+    },
+    {
+      "title": "Description",
+      "subtitle": "Set the description and translate it"
+    },
+    {
+      "title": "Almost done",
+      "subtitle": "Save the changes"
+    },
+    {
+      "title": "Upload images",
+      "subtitle": "Upload and manage images"
+    }
+  ],
+  "tours_steps": [
+    {
+      "title": "Title & category",
+      "subtitle": "Give a title and translate it also set the category"
+    },
+    {
+      "title": "Directions",
+      "subtitle": "Build tour directions"
+    },
+    {
+      "title": "Description",
+      "subtitle": "Set the description and translate it"
+    },
+    {
+      "title": "Also done",
+      "subtitle": "Save the changes"
+    },
+    {
+      "title": "Upload images",
+      "subtitle": "Upload and manage images"
+    }
+  ],
+  "admin": {
+    "new": "Create new admin",
+    "edit": "Edit admin data",
+    "remove": "Deactivate admin",
+    "remove_msg": "Are you sure deactivate this admin?"
+  },
+  "settlement": {
+    "new": "Create new settlement",
+    "edit": "Edit settlement",
+    "remove": "Remove settlement",
+    "remove_msg": "Are you sure remove this settlement? All markers and tours with this settlement will be uncategorized!",
+    "restore": "Restore settlement",
+    "restore_msg": "Are you sure restore this settlement?"
+  },
+  "category": {
+    "new": "Create new category",
+    "edit": "Edit category",
+    "remove": "Remove category",
+    "remove_msg": "Are you sure remove this category?"
+  }
 }

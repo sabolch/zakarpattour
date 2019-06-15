@@ -8,7 +8,7 @@
         >
         </lazy-item-img>
         <v-card-text class="align-center pa-2">
-            <h1 class="headline">{{ getTitle(item.translations) }}</h1>
+            <h1 class="headline text-truncate">{{ getTitle(item.translations) }}</h1>
             <v-chip color="blue darken-4" outline>
                 <v-icon left>location_city</v-icon>
                 {{ getTitle(item.settlement.translations) }}

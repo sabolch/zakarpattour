@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\MarkerCategoryResource;
+use App\Models\Marker;
 use App\Models\MarkerCategory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -192,8 +193,13 @@ class MarkerCategoryController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $marker_category = MarkerCategory::findOrFail($request->input('id'));
+            $id = $request->input('id');
+            $marker_category = MarkerCategory::findOrFail($id);
             $marker_category->delete();
+
+            Marker::where('marker_category_id',$id)
+                ->update(['marker_category_id' => 0]);
+
             return response()->json(
                 ['success' => true],
                 200

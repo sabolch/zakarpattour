@@ -36,7 +36,7 @@ class TourController extends Controller
         $settlements = Input::has('settlements') ? json_decode(Input::get('settlements')) : '';
         $order_by = Input::has('order') ? Input::get('order') : 'created_at';
 
-        $start_date = Input::has('start_date') ? Input::get('start_date') : date('Y-m-d');
+        $start_date = Input::has('start_date') ? Input::get('start_date') : date('Y-m-d', strtotime('-7 months'));
         $end_date = Input::has('end_date') ? Input::get('end_date') : date('Y-m-d', strtotime('+7 months'));
 
         return  TourResource::collection(Tour::pagination(true, $search_query,  $category, $sights,$settlements,$price,

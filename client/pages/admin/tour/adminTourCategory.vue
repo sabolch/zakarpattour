@@ -60,6 +60,7 @@
             <template
                     slot="items"
                     slot-scope="props"
+                    v-if="props.item.id !== 0"
             >
                 <td>{{ getName(props.item) }}</td>
                 <td>

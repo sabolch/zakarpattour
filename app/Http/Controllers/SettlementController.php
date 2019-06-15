@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SettlementResource;
+use App\Models\Marker;
 use App\Models\Settlement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -62,6 +63,13 @@ class SettlementController extends Controller
         }
 
         $data = $validator->valid();
+
+        //Translate check
+        foreach ($data['translations'] as $array) {
+            if(empty($array['title']) || empty($array['description'])){
+                return response()->json(['errors'=>['translations'=>'Empty data in translations']],400);
+            }
+        }
 
         $settlement = new Settlement();
         $settlement->lat = $data['lat'];
@@ -180,8 +188,35 @@ class SettlementController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $settlement = Settlement::findOrFail($request->input('id'));
+            $id = $request->input('id');
+            $settlement = Settlement::findOrFail($id);
             $settlement->delete();
+
+             Marker::where('settlement_id',$id)
+                 ->update(['settlement_id' => 0]);
+
+            return response()->json(
+                ['success'=>true],
+                200
+            );
+        }catch (ModelNotFoundException $e){
+            return response()->json(
+                [
+                    'success'=>false,
+                    'error'=>'Data not found!'
+                ],
+                400
+            );
+        }
+    }
+
+    public function restore(Request $request)
+    {
+        try{
+            $settlement = Settlement::onlyTrashed()->findOrFail($request->input('id'));
+            $settlement->deleted_at = null;
+            $settlement->save();
+
             return response()->json(
                 ['success'=>true],
                 200

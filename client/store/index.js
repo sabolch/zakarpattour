@@ -18,6 +18,11 @@ export const actions = {
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
     }
+
+    const shopping_cart = cookieFromRequest(req, 'shopping_cart')
+    if (shopping_cart) {
+      commit('shopping_cart/SET_ITEMS', { items:JSON.parse(decodeURIComponent(shopping_cart))  })
+    }
   },
 
   nuxtClientInit ({ commit }) {
@@ -26,7 +31,7 @@ export const actions = {
       commit('auth/SET_TOKEN', token)
     }
 
-    const admin_token = cookieFromRequest(req, 'admin_token')
+    const admin_token = Cookies.get('admin_token')
     if (admin_token) {
       commit('admin/SET_TOKEN', admin_token)
     }
@@ -34,6 +39,11 @@ export const actions = {
     const locale = Cookies.get('locale')
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
+    }
+
+    const shopping_cart = Cookies.get('shopping_cart')
+    if (shopping_cart) {
+      commit('shopping_cart/SET_ITEMS', {  items:JSON.parse(decodeURIComponent(shopping_cart))})
     }
   }
 }

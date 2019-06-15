@@ -111,7 +111,7 @@
         data() {
             return {
                 drawer: true,
-                mini:false,
+                mini:true,
 
                 items: [
                     {title: 'Cart', icon: 'shopping_cart', route: 'cart.cart'},
@@ -119,14 +119,14 @@
                     {title: 'Checked', icon: 'done_all', route: 'cart.checked'},
                     {title: 'History', icon: 'history', route: 'cart.history'}
                 ],
-                right: null
+                right: null,
+
             }
         },
-        mounted () {},
+
         methods: {
             setMinify () {
                 this.$store.commit('user_cart_mini')
-                console.log(this.$store.state.user_cart_mini)
             }
         }
     }

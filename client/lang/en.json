@@ -13,7 +13,8 @@
     "admins": "Admins",
     "create": "Create",
     "categories": "Categories",
-    "pages": "Pages"
+    "pages": "Pages",
+    "trash": "Trash"
   },
   "index": {
     "title": "Transcarpathian tours",
@@ -145,8 +146,8 @@
       "value": "created_at"
     },
     {
-      "name": "By title",
-      "value": "title"
+      "name": "By views",
+      "value": "views"
     }
   ],
   "marker_filtering": "Filtering options",
@@ -225,7 +226,9 @@
     "new": "Create new settlement",
     "edit": "Edit settlement",
     "remove": "Remove settlement",
-    "remove_msg": "Are you sure remove this settlement?"
+    "remove_msg": "Are you sure remove this settlement? All markers and tours with this settlement will be uncategorized!",
+    "restore": "Restore settlement",
+    "restore_msg": "Are you sure restore this settlement?"
   },
   "category": {
     "new": "Create new category",

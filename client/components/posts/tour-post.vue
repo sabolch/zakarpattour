@@ -7,7 +7,7 @@
                 :category="`${getName(item.category.translations)}`"
         ></lazy-item-img>
         <v-card-text class="align-center text-xs-justify pa-2">
-            <h1 class="headline">{{getTitle(item.translations)}}</h1>
+            <h1 class="headline text-truncate">{{getTitle(item.translations)}}</h1>
             <v-rating
                     color="blue darken-3"
                     readonly

@@ -50,6 +50,8 @@ const AdminTourList = () => import('~/pages/admin/tour/adminTourList').then(m =>
 const AdminTourCategory = () => import('~/pages/admin/tour/adminTourCategory').then(m => m.default || m)
 
 const AdminSettlements = () => import('~/pages/admin/settlement/SettlementsIndex').then(m => m.default || m)
+const AdminSettlementsTrash = () => import('~/pages/admin/settlement/trashed').then(m => m.default || m)
+const AdminSettlementsIndex = () => import('~/pages/admin/settlement/index').then(m => m.default || m)
 
 const NotificationsMessage = () => import('~/pages/admin/notifications/contactUsMessage').then(m => m.default || m)
 // Users
@@ -115,7 +117,14 @@ const routes = [
   { path: '/admin/tours', name: 'admin.tour.list', component: AdminTourList},
   { path: '/admin/category/tour', name: 'admin.tour.category', component: AdminTourCategory },
 
-  { path: '/admin/settlement', name: 'admin.settlement', component: AdminSettlements },
+  { path: '/admin/settlement',
+    component: AdminSettlements,
+    children: [
+      { path: '', redirect: {  name: 'admin.settlement' } },
+      { path: 'index', name: 'admin.settlement', component: AdminSettlementsIndex },
+      { path: 'trashed', name: 'ast', component: AdminSettlementsTrash }
+    ]
+  },
 
   { path: '/admin/notifications/message', name: 'admin.notifications.message', component: NotificationsMessage },
     // users

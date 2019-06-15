@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\TourCategoryResource;
+use App\Models\Marker;
+use App\Models\Tour;
 use App\Models\TourCategory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -192,8 +194,13 @@ class TourCategoryController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $tour_category = TourCategory::findOrFail($request->input('id'));
+            $id = $request->input('id');
+            $tour_category = TourCategory::findOrFail($id);
             $tour_category->delete();
+
+            Tour::where('tour_category_id',$id)
+                ->update(['tour_category_id' => 0]);
+
             return response()->json(
                 ['success'=>true],
                 200

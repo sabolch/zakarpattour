@@ -201,14 +201,11 @@
                                                                                     </v-list-tile-title>
                                                                                 </v-list-tile-content>
                                                                                 <v-list-tile-action>
-                                                                                    <v-btn
-                                                                                            icon
-                                                                                            @click=""
-                                                                                    >
-                                                                                        <v-icon color="red">
-                                                                                            shopping_cart
-                                                                                        </v-icon>
-                                                                                    </v-btn>
+                                                                                    <add-to-cart
+                                                                                            :item-id="tour.id"
+                                                                                            :price="tour.price"
+                                                                                            :date="item"
+                                                                                    ></add-to-cart>
                                                                                 </v-list-tile-action>
                                                                             </v-list-tile>
 

@@ -57,6 +57,7 @@
                                             prepend-inner-icon="filter_list"
                                             :items="$t('marker_sort')"
                                             item-text="name"
+                                            item-value="value"
                                             outline
                                             solo
                                             :disabled="loading"
@@ -203,7 +204,7 @@
                                             close
                                             outline
                                             color="indigo"
-                                            @input="remove(data.item)"
+                                            @input="remove(data.item.id)"
 
                                     >
                                         <v-icon left>label</v-icon>
@@ -341,8 +342,7 @@
                 selectedSettlements:[],
                 settlementSearch:'',
 
-
-                sortBy: null,
+                sortBy: 'created_at',
             }
         },
         async mounted() {
@@ -383,7 +383,7 @@
             search(val) {
                 val && val !== this.select && this.querySelections(val)
             },
-            sortBy: function () {
+            sortBy: function (v) {
                 this.sendRequest();
             }
         },
@@ -408,9 +408,9 @@
                     this.sendRequest();
                 }, 700);
             },
-            remove(item) {
-                this.types.splice(this.types.indexOf(item), 1);
-                this.types = [...this.types]
+            remove(itemID) {
+                let index = this.types.indexOf(itemID)
+                this.types.splice(index, 1)
             },
             getDataFromApi(url) {
                 this.loading = true
@@ -429,7 +429,7 @@
                 if (this.search) {
                     url += `&q=${this.search}`
                 }
-                if (this.order) {
+                if (this.sortBy) {
                     url += `&order=${this.sortBy}`
                 }
                 this.getDataFromApi(url)

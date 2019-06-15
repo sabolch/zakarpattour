@@ -64,9 +64,19 @@
             <v-btn icon :to="{name: 'user.favorites'}">
                 <v-icon medium>favorite</v-icon>
             </v-btn>
-            <v-btn icon :to="{name: 'cart.cart'}">
-                <v-icon medium>shopping_cart</v-icon>
-            </v-btn>
+            <v-badge
+                    v-model="shopping_cart_model"
+                    color="red lighteen-3"
+                    right
+                    overlap
+            >
+                <template v-slot:badge>
+                    <span>{{shopping_cart_length}}</span>
+                </template>
+                <v-btn icon :to="{name: 'cart.cart'}">
+                    <v-icon medium>shopping_cart</v-icon>
+                </v-btn>
+            </v-badge>
 
             <v-menu
                     bottom
@@ -86,7 +96,6 @@
                     >
                         <v-list-tile-title>
                             <v-icon class="flag-icon ">{{ `flag-icon-${item}` }}</v-icon>
-
                             {{item.toUpperCase() }}
                         </v-list-tile-title>
                     </v-list-tile>
@@ -198,6 +207,12 @@
                     offset: 0,
                     easing: 'easeInQuint'
                 }
+            },
+            shopping_cart_length(){
+                return this.$store.state.shopping_cart.items.length
+            },
+            shopping_cart_model(){
+                return this.shopping_cart_length > 0
             }
         }
     }

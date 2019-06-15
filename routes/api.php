@@ -95,6 +95,7 @@ Route::group(['prefix' => 'marker'], function () {
 Route::group(['prefix' => 'settlement'], function () {
     Route::put('/store', 'SettlementController@store');
     Route::put('/edit', 'SettlementController@edit');
+    Route::post('/restore', 'SettlementController@restore');
     Route::delete('/trash', 'SettlementController@destroy');
     Route::get('/show/{slug}', 'SettlementController@show');
     Route::get('/', 'SettlementController@index');
