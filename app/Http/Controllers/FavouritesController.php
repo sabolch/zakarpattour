@@ -23,7 +23,6 @@ class FavouritesController extends Controller
         return FavouritesResource::collection(
             $request->user()->favouriteMarkers()->paginate($pre_page)
         );
-
     }
 
     public function getFavorites(Request $request){
@@ -87,14 +86,14 @@ class FavouritesController extends Controller
         }
         $request->user()->favouriteMarkers()->detach($validator->valid()['item_id']);
 
-        $markers = FavouriteMarkers::where('user_id',$request->user()->id)->get(['marker_id']);
+//        $markers = FavouriteMarkers::where('user_id',$request->user()->id)->get(['marker_id']);
 
-        return response()->json(['success'=>true,'data'=>$markers],200);
+        return response()->json(['success'=>true/*,'data'=>$markers*/],200);
     }
 //    Remove tour from favourites
     public function deleteTour(Request $request){
         $validator = \Validator::make($request->all(),[
-            'id'=>'required|integer'
+            'item_id'=>'required|integer'
         ],[
             'required'=>'ID required',
             'integer'=>'ID must be a type of integer'
@@ -102,10 +101,11 @@ class FavouritesController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()],400);
         }
-        $request->user()->favouriteTours()->detach($validator->valid()['id']);
+        $request->user()->favouriteTours()->detach($validator->valid()['item_id']);
 
-        $tours = FavouriteTours::where('user_id',$request->user()->id)->get(['tour_id']);
-        return response()->json(['success'=>true,'data'=>$tours],200);
+//        $markers = FavouriteMarkers::where('user_id',$request->user()->id)->get(['marker_id']);
+
+        return response()->json(['success'=>true/*,'data'=>$markers*/],200);
     }
 
 }

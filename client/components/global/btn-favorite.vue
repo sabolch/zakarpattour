@@ -6,7 +6,7 @@
             fab
             @click="addToFavorites"
     >
-        <v-icon :color="icon_color">{{icon}}</v-icon>
+        <v-icon :color=" inFavotites ? 'amber darken-4' : ''">{{icon}}</v-icon>
     </v-btn>
 </template>
 
@@ -47,33 +47,65 @@
                 form: new Form({
                     id: -1,
                 }),
+                inFavotites: false,
             }
         },
         computed: mapGetters({
             user: 'auth/user'
         }),
-        mounted(){
+        mounted() {
+            if (this.$store.state.auth.user) {
+                this.checkInFavorites()
+            }
         },
         methods: {
             async addToFavorites() {
+                // check authentication
                 if (!this.$store.state.auth.user) {
                     this.$router.push({name: 'login'})
                     return
                 }
-
-                console.log(this.itemID)
-                this.form = new Form({id: this.itemID})
-                let  url = 'favourite/add/marker'
-                console.log(this.type)
-                if (this.type === 'tour') {
-                    url = 'favourite/add/tour'
+                // set token to axios
+                this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.state.auth.token}`
+                // if in favourites
+                if (this.inFavotites) {
+                    this.removeFromFavorites(this.favType)
+                    return;
                 }
+                this.form = new Form({id: this.itemID})
                 try {
-                    const {data} = await this.form.put(url)
+                    // add to favorites
+                    const {data} = await this.form.put(`favourite/add/${this.favType}`)
                     await this.$store.dispatch('favorite/setFavourite')
+                    this.checkInFavorites()
                 } catch (e) {
                     console.log(e)
                 }
+            },
+            async removeFromFavorites(type){
+                console.log(this.favType)
+
+                await this.$axios.$delete(`favourite/${type}`, {data:{item_id: this.itemID}})
+                await this.$store.dispatch('favorite/setFavourite')
+                this.checkInFavorites()
+            },
+
+            checkInFavorites(){
+                if (this.type === 'tour') {
+                    this.inFavotites = this.$store.state.favorite.items.tours.find(function (item) {
+                        return item.tour_id === this.itemID;
+                    }, this);
+                } else {
+                    this.inFavotites = this.$store.state.favorite.items.markers.find(function (item) {
+                        return item.marker_id === this.itemID;
+                    }, this);
+                }
+            }
+
+        },
+        computed:{
+            favType(){
+                return this.type === 'tour' ? 'tour' : 'marker'
             }
         }
     }

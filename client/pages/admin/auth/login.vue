@@ -70,7 +70,7 @@
 
             form: new Form({
                 email: 'admin@app.com',
-                password: 'windows7',
+                password: 'q1s2d3w41',
                 recaptchaToken: ''
             }),
 

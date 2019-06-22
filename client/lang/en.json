@@ -49,6 +49,7 @@
     "category": "Category",
     "select": "Select",
     "available_dates": "Select available dates",
+    "person": "Count of persons",
     "data_panel": {
       "hint": "Filtering options",
       "title": "Filtering results",

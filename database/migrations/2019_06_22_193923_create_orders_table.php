@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration
             $table->increments('id')->unique();
             $table->string('status',20);
             $table->double('total_price')->default(0.0);
+            $table->integer('user_id');
 
             $table->timestamps();
             $table->softDeletes();

@@ -3,6 +3,7 @@
             v-model="dialog"
             width="500"
             persistent
+            transition="scale-transition"
     >
         <template v-slot:activator="{ on }">
             <v-btn
@@ -44,7 +45,9 @@
                         prepend-icon="person"
                 ></v-text-field>
                 <v-divider></v-divider>
-                <div class="text-xs-left pt-3 pl-1 title font-weight-bold primary--text">Total price: ₴ {{totalprice}} UAH</div>
+                <div class="text-xs-left pt-3 pl-1 title font-weight-bold primary--text">Total price: ₴ {{totalprice}}
+                    UAH
+                </div>
             </v-card-text>
 
             <v-divider></v-divider>
@@ -85,7 +88,7 @@
             },
             disabled: {
                 type: Boolean,
-                default:false
+                default: false
             },
             maxPersonCount: {
                 type: Number,
@@ -97,52 +100,78 @@
                 count: 1,
                 dialog: false,
                 loading: false,
-                datacheck:null
+                datacheck: null
             }
         },
-        mounted(){
-            console.log(this.tour)
+        mounted() {
+
         },
-        watch:{
-          count:function (v) {
-              clearTimeout(this.datacheck)
-              this.datacheck = setTimeout(()=>{
-                  if(!v){
-                      this.count = 1
-                  }
-                  if(parseInt(v) >= this.maxPersonCount){
-                      this.count = this.maxPersonCount
-                  }
-                  if(parseInt(v) <= 1){
-                      this.count = 1
-                  }
-                  console.log(parseInt(v))
-              },200)
-          }
+        watch: {
+            count: function (v) {
+                clearTimeout(this.datacheck)
+                this.datacheck = setTimeout(() => {
+                    if (!v) {
+                        this.count = 1
+                    }
+                    if (parseInt(v) >= this.maxPersonCount) {
+                        this.count = this.maxPersonCount
+                    }
+                    if (parseInt(v) <= 1) {
+                        this.count = 1
+                    }
+                }, 200)
+            }
         },
-        computed:{
-            totalprice(){
+        computed: {
+            totalprice() {
                 return this.tour.price * this.count;
             }
         },
         methods: {
             async add() {
-                this.loading = true
-                await this.$store.dispatch('shopping_cart/pushItem', {
-                    item: {
+                // this.loading = true
+                let item = {}
+
+                let items = this.$store.state.shopping_cart.items
+                let index = items.findIndex(item => {
+                    return item.tour_id === this.tour.id && item.date === this.date
+                })
+                if (index > -1) {
+                    let clone = items[index]
+                    item = {
+                        tour_id: this.tour.id,
+                        date: this.date,
+                        persons: parseInt(this.count) + parseInt(clone.persons),
+                        price: (this.tour.price * this.count) + parseInt(clone.price),
+                        slug: this.tour.slug,
+                        translations: this.tour.translations.map(obj => {
+                            return {
+                                locale: obj.locale,
+                                title: obj.title,
+                            }
+                        })
+                    }
+                    await this.$store.dispatch('shopping_cart/updateItem', {index: index,item:item})
+                } else {
+                    item = {
                         tour_id: this.tour.id,
                         date: this.date,
                         persons: this.count,
                         price: (this.tour.price * this.count),
-                        slug:this.tour.slug,
+                        slug: this.tour.slug,
                         translations: this.tour.translations.map(obj => {
                             return {
                                 locale: obj.locale,
-                                title:obj.title,
+                                title: obj.title,
                             }
                         })
                     }
-                })
+                    await this.$store.dispatch('shopping_cart/pushItem', {
+                        item: item
+                    })
+                }
+
+
                 this.loading = false
                 this.dialog = false
 

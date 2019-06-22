@@ -17,12 +17,14 @@ class CreateShoppingCartTable extends Migration
             $table->increments('id');
 
             $table->integer('order_id')->unsigned();
-            $table->integer('user_id')->unsigned();
             $table->integer('tour_id')->unsigned();
-            $table->unique(array('order_id','user_id', 'tour_id'));
+            $table->integer('price');
+            $table->integer('persons');
+            $table->date('date');
+
+            $table->unique(array('order_id', 'tour_id'));
 
             // foreign key constraints are optional (but pretty useful, especially with cascade delete
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
 

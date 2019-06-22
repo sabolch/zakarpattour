@@ -9,11 +9,55 @@
 
         <v-card-text>
             <v-list three-line>
-                <template v-for="(item, index) in cart" >
-                    <v-divider></v-divider>
+                <v-list-group
+                        v-for="(item, index) in items.data"
+                        :key="index"
+                        no-action
+                >
+                    <template v-slot:activator>
+                        <v-list-tile  avatar>
+                            <v-list-tile-avatar>
+                                <v-icon size="50" color="primary">add_shopping_cart</v-icon>
+                            </v-list-tile-avatar>
+                            <v-list-tile-content>
+                                <v-list-tile-title class="font-weight-bold">Cart item</v-list-tile-title>
+                                <v-list-tile-sub-title>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-chip
+                                                    color="red"
+                                                    label
+                                                    outline
+                                                    small
+                                                    v-on="on"
+                                            >Total price ₴ {{item.total_price }}
+                                            </v-chip>
+                                        </template>
+                                        <span>Ціна у грн</span>
+                                    </v-tooltip>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-chip
+                                                    color="purple"
+                                                    label
+                                                    outline
+                                                    small
+                                                    v-on="on"
+                                            >
+                                                <v-icon small left>event</v-icon>
+                                                {{item.updated_at}}
+                                            </v-chip>
+                                        </template>
+                                        <span>Дата відправки</span>
+                                    </v-tooltip>
+                                </v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </template>
 
                     <v-list-tile
-                            :key="index"
+                            v-for="subItem in item.orders"
+                            :key="subItem.id"
                             avatar
                     >
                         <v-list-tile-avatar>
@@ -21,7 +65,7 @@
                         </v-list-tile-avatar>
 
                         <v-list-tile-content>
-                            <v-list-tile-title class="font-weight-bold">{{getTitle(item)}}</v-list-tile-title>
+                            <v-list-tile-title class="font-weight-bold">{{getTitle(subItem.tour)}}</v-list-tile-title>
                             <v-list-tile-sub-title>
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
@@ -31,7 +75,8 @@
                                                 outline
                                                 small
                                                 v-on="on"
-                                        >Price ₴ {{item.price}}</v-chip>
+                                        >Price ₴ {{subItem.price }}
+                                        </v-chip>
                                     </template>
                                     <span>Ціна у грн</span>
                                 </v-tooltip>
@@ -45,7 +90,8 @@
                                                 v-on="on"
                                         >
                                             <v-icon small left>person</v-icon>
-                                            Person {{item.persons}}</v-chip>
+                                            Person {{subItem.persons}}
+                                        </v-chip>
                                     </template>
                                     <span>Кількість осіб</span>
                                 </v-tooltip>
@@ -60,11 +106,11 @@
                                                 v-on="on"
                                         >
                                             <v-icon small left>event</v-icon>
-                                            {{item.date}}</v-chip>
+                                            {{subItem.date}}
+                                        </v-chip>
                                     </template>
                                     <span>Дата відправки</span>
                                 </v-tooltip>
-
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                         <v-list-tile-action>
@@ -74,8 +120,7 @@
                                             v-on="on"
                                             icon
                                             flat
-                                            :to="{name:'tour.show',params: {slug:item.slug}}"
-
+                                            :to="{name:'tour.show',params: {slug:subItem.tour.slug}}"
                                     >
                                         <v-icon color="blue">remove_red_eye</v-icon>
                                     </v-btn>
@@ -84,8 +129,7 @@
                             </v-tooltip>
                         </v-list-tile-action>
                     </v-list-tile>
-                </template>
-                <v-divider  v-if="noItemInCart"></v-divider>
+                </v-list-group>
                 <v-list-tile
                         v-if="!noItemInCart"
                 >
@@ -95,6 +139,7 @@
                 </v-list-tile>
             </v-list>
         </v-card-text>
+
     </v-card>
 </template>
 
@@ -106,6 +151,17 @@
                 title: 'Shopping cart',
             }
         },
+
+        async asyncData({params, $axios, redirect}) {
+            try {
+                let data = await $axios.$post(`/order/user`,{status:'checked'})
+                return {items: data}
+            } catch (e) {
+                console.log(e)
+                // redirect('/erorr')
+            }
+        },
+
         data() {
             return {
                 rating: 4,
@@ -115,34 +171,25 @@
             }
         },
         mounted () {
-            // this.$store.dispatch('shopping_cart/setItems', { items: this.cart_items })
+            console.log(this.items)
         },
         methods: {
-            removeAll() {
-                this.$store.dispatch('shopping_cart/setItems', { items: [] })
-            },
-            removeItem(index){
-                this.$store.dispatch('shopping_cart/deleteItem', { items: index })
-            },
-            confirmOrder(){
-                console.log(this.$store.state.auth.user.id)
-            },
+
             getTitle(item) {
                 return item.translations.find(obj => obj.locale === this.getLocal).title
             }
         },
         computed:{
-            cart(){
-                return this.$store.state.shopping_cart.items
-            },
-            noItemInCart(){
-                return this.cart.length > 0
-            },
+
             getLocal(){
                 return this.$i18n.locale
             },
+            noItemInCart(){
+                return this.items.data.length > 0
+            }
         }
 
     }
 </script>
-<style scoped></style>
+<style scoped>
+</style>

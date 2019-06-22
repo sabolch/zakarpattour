@@ -99,7 +99,7 @@ class Tour extends Model
             ->with('markers')
             ->with('category')
             ->orderBy( $order_by,'desc')
-            ->paginate($per_page,['id','slug','tour_category_id','start_date','end_date','duration','price','views',
+            ->paginate($per_page,['id','slug','tour_category_id','start_date','end_date','duration','person','price','views',
                 'created_at','updated_at']);
     }
 
@@ -124,7 +124,7 @@ class Tour extends Model
             })
             ->with('category')
             ->orderBy( $order_by,'desc')
-            ->paginate($per_page,['id','slug','tour_category_id','start_date','end_date','duration','price','views',
+            ->paginate($per_page,['id','slug','tour_category_id','start_date','end_date','duration','person','price','views',
                 'created_at','updated_at']);
 
     }

@@ -4,16 +4,18 @@
                 class="headline primary white--text font-weight-bold"
                 primary-title
         >
-           Your Order <v-spacer></v-spacer> <v-icon large dark>shopping_basket</v-icon>
+            Your Order
+            <v-spacer></v-spacer>
+            <v-icon large dark>shopping_basket</v-icon>
         </v-card-title>
 
         <v-card-text>
             <v-list three-line>
-                <template v-for="(item, index) in cart" >
+                <template v-for="(item, index) in cart">
                     <v-divider></v-divider>
 
                     <v-list-tile
-                          :key="index"
+                            :key="index"
                             avatar
                     >
                         <v-list-tile-avatar>
@@ -31,7 +33,8 @@
                                                 outline
                                                 small
                                                 v-on="on"
-                                        >Price ₴ {{item.price}}</v-chip>
+                                        >Price ₴ {{item.price }}
+                                        </v-chip>
                                     </template>
                                     <span>Ціна у грн</span>
                                 </v-tooltip>
@@ -45,7 +48,8 @@
                                                 v-on="on"
                                         >
                                             <v-icon small left>person</v-icon>
-                                            Person {{item.persons}}</v-chip>
+                                            Person {{item.persons}}
+                                        </v-chip>
                                     </template>
                                     <span>Кількість осіб</span>
                                 </v-tooltip>
@@ -60,7 +64,8 @@
                                                 v-on="on"
                                         >
                                             <v-icon small left>event</v-icon>
-                                            {{item.date}}</v-chip>
+                                            {{item.date}}
+                                        </v-chip>
                                     </template>
                                     <span>Дата відправки</span>
                                 </v-tooltip>
@@ -71,7 +76,7 @@
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on }">
                                     <v-btn v-on="on" icon flat @click="removeItem(index)">
-                                        <v-icon color="pink">delete</v-icon>
+                                        <v-icon color="pink">remove_shopping_cart</v-icon>
                                     </v-btn>
                                 </template>
                                 <span>Видалити з кошика</span>
@@ -80,8 +85,8 @@
                                 <template v-slot:activator="{ on }">
                                     <v-btn
                                             v-on="on"
-                                           icon
-                                           flat
+                                            icon
+                                            flat
                                             :to="{name:'tour.show',params: {slug:item.slug}}"
 
                                     >
@@ -93,7 +98,26 @@
                         </v-list-tile-action>
                     </v-list-tile>
                 </template>
-                <v-divider  v-if="noItemInCart"></v-divider>
+                <v-divider v-if="noItemInCart"></v-divider>
+                <v-list-tile
+                        v-if="noItemInCart"
+                >
+                    <v-list-tile-content class="text-xs-center font-weight-bold">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-chip
+                                        color="red"
+                                        label
+                                        outline
+                                        v-on="on"
+                                >Total Price ₴ {{ getTotalPrice }}
+                                </v-chip>
+                            </template>
+                            <span>Ціна у грн</span>
+                        </v-tooltip>
+
+                    </v-list-tile-content>
+                </v-list-tile>
                 <v-list-tile
                         v-if="!noItemInCart"
                 >
@@ -140,37 +164,55 @@
             return {
                 rating: 4,
                 available: true,
-                confirmModal:false,
-                items: []
+                confirmModal: false,
             }
         },
-        mounted () {
-            // this.$store.dispatch('shopping_cart/setItems', { items: this.cart_items })
+        mounted() {
+            this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.state.auth.token}`
         },
         methods: {
             removeAll() {
-                this.$store.dispatch('shopping_cart/setItems', { items: [] })
+                this.$store.dispatch('shopping_cart/setItems', {items: []})
             },
-            removeItem(index){
-                this.$store.dispatch('shopping_cart/deleteItem', { items: index })
+            removeItem(index) {
+                this.$store.dispatch('shopping_cart/deleteItem', {index: index})
             },
-            confirmOrder(){
-                console.log(this.$store.state.auth.user.id)
+            async confirmOrder() {
+                let self = this
+                // console.log(this.$store.state.auth.user.id)
+                await this.$axios.$post(`order/store`, {
+                    total_price: this.getTotalPrice,
+                    tours: this.$store.state.shopping_cart.items
+                }).then(function (res) {
+                    console.log(res)
+                    self.$store.dispatch('shopping_cart/setItems', {items: []})
+                    self.$router.push({name: 'cart.processing'})
+                }).catch(function (e)  {
+                    console.log(e)
+                })
             },
             getTitle(item) {
                 return item.translations.find(obj => obj.locale === this.getLocal).title
             }
         },
-        computed:{
-            cart(){
+        computed: {
+            cart() {
                 return this.$store.state.shopping_cart.items
             },
-            noItemInCart(){
+            noItemInCart() {
                 return this.cart.length > 0
             },
-            getLocal(){
+            getLocal() {
                 return this.$i18n.locale
             },
+            getTotalPrice() {
+                let total = 0
+                for (let i = 0; i < this.cart.length; i++) {
+
+                    total += parseInt(this.cart[i].price)
+                }
+                return total
+            }
         }
     }
 </script>

@@ -75,6 +75,7 @@ class TourController extends Controller
                 'start_date' =>'required|date',
                 'end_date' =>'required|date',
                 'duration' =>'required|integer',
+                'person' =>'required|integer',
                 'price' =>'required|numeric',
                 'directions' =>'required',
                 'dates' =>'required',
@@ -85,7 +86,9 @@ class TourController extends Controller
                 'start_date.required'=>'Start Date is required',
                 'end_date.required'=>'End Date is required',
                 'duration.required'=>'Duration is required',
+                'person.required'=>'person is required',
                 'duration.integer'=>'Duration must be integer',
+                'person.integer'=>'person must be integer',
                 'price.required'=>'Price is required',
                 'price.numeric'=>'Price must be numeric',
                 'translations.required'=>'Translation is required!',
@@ -103,6 +106,7 @@ class TourController extends Controller
         $tour->tour_category_id = $data['category'];
         $tour->price = $data['price'];
         $tour->duration = $data['duration'];
+        $tour->person = $data['person'];
         $tour->start_date = $data['start_date'];
         $tour->end_date = $data['end_date'];
 
@@ -141,6 +145,7 @@ class TourController extends Controller
             $tour = Tour::whereSlug($slug)->with('category')->with(['markers'=>function($q){
                 $q->with('settlement');
             }])->first();
+
             $tour->increment('views');
 
             return response()->json([
@@ -157,19 +162,9 @@ class TourController extends Controller
 
     public function get(Request $request)
     {
-        $ids = json_decode($request->input('tour_ids'));
-        try{
-            $tours = Tour::whereIn('id',$ids)->get(['id','slug','price']);
-            return response()->json([
-                'success'=>true,
-                'data'=> $tours
-            ],200);
-        }catch (\Exception $e){
-            return response()->json([
-                'success'=>false,
-                'error'=>'Data not found!'
-            ],404);
-        }
+        $ids = json_decode($request->input('marker_ids'));
+        $sights = Tour::whereIn('id', $ids)->paginate(10, ['id', 'slug']);
+        return TourResource::collection($sights);
     }
 
     /**
@@ -189,6 +184,7 @@ class TourController extends Controller
                 'start_date' =>'required|date',
                 'end_date' =>'required|date',
                 'duration' =>'required|integer',
+                'person' =>'required|integer',
                 'price' =>'required|numeric',
                 'directions' =>'required',
                 'dates' =>'required',
@@ -199,7 +195,9 @@ class TourController extends Controller
                 'start_date.required'=>'Start Date is required',
                 'end_date.required'=>'End Date is required',
                 'duration.required'=>'Duration is required',
+                'person.required'=>'person is required',
                 'duration.integer'=>'Duration must be integer',
+                'person.integer'=>'person must be integer',
                 'price.required'=>'Price is required',
                 'price.numeric'=>'Price must be numeric',
                 'translations.required'=>'Translation is required!',
@@ -223,6 +221,7 @@ class TourController extends Controller
             $tour->tour_category_id = $data['category'];
             $tour->price = $data['price'];
             $tour->duration = $data['duration'];
+            $tour->person = $data['person'];
             $tour->start_date = $data['start_date'];
             $tour->end_date = $data['end_date'];
 

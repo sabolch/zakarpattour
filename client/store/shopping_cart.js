@@ -18,11 +18,12 @@ export const mutations = {
     PUSH_ITEM (state, { item }) {
         state.items.push(item)
     },
-    DELETE_ITEM: (state, itemID) => {
-        let index = state.items.findIndex(obj => obj.id === itemID);
-        state.items.splice(index, 1);
+    UPDATE_ITEM (state, { index, item }) {
+        state.items[index] = item
+    },
+    DELETE_ITEM: (state, index) => {
+        state.items.splice(index.index, 1);
     }
-
 }
 
 // actions
@@ -33,12 +34,15 @@ export const actions = {
     },
     pushItem ({ commit,state }, { item }) {
         commit('PUSH_ITEM', { item })
-
         Cookies.set('shopping_cart',state.items , { expires: 365 })
     },
-    deleteItem ({ commit,state }, { itemID }) {
-        commit('DELETE_ITEM', { itemID })
+    deleteItem ({ commit,state }, { index }) {
+        commit('DELETE_ITEM', { index })
+        Cookies.set('shopping_cart',state.items , { expires: 365 })
+    },
 
+    updateItem ({ commit,state }, { index,item }) {
+        commit('UPDATE_ITEM', { index,item })
         Cookies.set('shopping_cart',state.items , { expires: 365 })
     },
 }

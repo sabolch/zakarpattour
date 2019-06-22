@@ -80,7 +80,14 @@
                                     :max="100"
                                     :min="1"
                             ></v-text-field>
-
+                            <v-text-field
+                                    class="mx-3"
+                                    :label="$t('form.person')"
+                                    v-model="form.person"
+                                    type="number"
+                                    :max="100"
+                                    :min="1"
+                            ></v-text-field>
                             <v-dialog
                                     ref="dialog1"
                                     v-model="modal"
@@ -131,9 +138,6 @@
                                 </v-date-picker>
                             </v-dialog>
                         </v-flex>
-
-
-
                         <v-flex xs12 class="pl-3 pr-3">
                                     <v-combobox
                                             v-model="form.available_dates"
@@ -159,6 +163,8 @@
                         <v-flex xs12 class="text-xs-center">
                             <v-date-picker
                                     v-model="form.available_dates"
+                                    :min="form.start_date"
+                                    :max="form.end_date"
                                     multiple
                                     :locale="$i18n.locale"
                             ></v-date-picker>
@@ -185,7 +191,6 @@
                                             chips
                                             clearable
                                             hide-details
-                                            hide-selected
                                             item-text="title"
                                             :label="$t('sights_search')"
                                             multiple
@@ -554,6 +559,9 @@
                 this.form = new Form(this.formData.data.data)
                 this.form.category = this.form.tour_category_id
                 this.map.set('position', new google.maps.LatLng(this.form.lat, this.form.lng))
+
+
+                this.loadSights()
             }
             this.formData = null
 
@@ -653,7 +661,7 @@
                         color: 'error',
                         message: 'messages.not_saved',
                     }
-                    console.log(e)
+                    // console.log(e)
                 })
             },
 
@@ -673,7 +681,7 @@
                 this.map.setCenter({lat: 48.496582, lng: 23.5212107});
             },
             autoFilterSights(item, queryText, itemText) {
-                console.log(item,queryText,itemText)
+                // console.log(item,queryText,itemText)
                 return this.getTitle(item).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
         },
@@ -731,3 +739,4 @@
         z-index: 1
     }
 </style>
+

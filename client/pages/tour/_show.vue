@@ -16,11 +16,10 @@
                                                 class="amber darken-4 pa-1 white--text font-weight-bold title">#{{getName(tour.category)}}</span>
                                         </v-toolbar-title>
                                         <v-spacer></v-spacer>
-                                        <v-btn fab small color="primary"
-                                               @click="addToFavorites(5)"
-                                        >
-                                            <v-icon>favorite</v-icon>
-                                        </v-btn>
+                                        <btn-favorite
+                                        type="tour"
+                                        :item-i-d="tour.id"
+                                        ></btn-favorite>
                                     </v-toolbar>
                                 </v-carousel-item>
                             </v-carousel>
@@ -55,7 +54,6 @@
                                                     </template>
                                                     <span>Ціна у грн</span>
                                                 </v-tooltip>
-
                                             </v-layout>
                                         </v-flex>
                                     </v-layout>
@@ -181,16 +179,17 @@
                                                                             <template v-slot:activator>
                                                                                 <v-list-tile>
                                                                                     <v-list-tile-content>
-                                                                                        <v-tooltip bottom :disabled="notAvailable(item)">
+                                                                                        <v-tooltip bottom :disabled="!notAvailable(item)">
                                                                                             <template v-slot:activator="{ on }">
-                                                                                                <v-chip :color="notAvailable(item) ? 'red' : 'green'" v-on="on" text-color="white">{{item}}</v-chip>
+                                                                                                <v-chip :color="notAvailable(item) ? 'red' : 'green'" v-on="on" text-color="white">
+                                                                                                    {{item}} - {{ getDateRange(item) }}
+                                                                                                </v-chip>
                                                                                             </template>
                                                                                             <span>No more ticket</span>
                                                                                         </v-tooltip>
                                                                                     </v-list-tile-content>
                                                                                 </v-list-tile>
                                                                             </template>
-
                                                                             <v-list-tile>
                                                                                 <v-list-tile-content>
                                                                                     <v-list-tile-title class="green--text">
@@ -203,7 +202,7 @@
                                                                                             :tour="tour"
                                                                                             :date="item"
                                                                                             :disabled="notAvailable(item)"
-                                                                                            :max-person-count="20"
+                                                                                            :max-person-count="tour.person"
                                                                                     ></add-to-cart>
                                                                                 </v-list-tile-action>
                                                                             </v-list-tile>
@@ -217,7 +216,6 @@
                                             </v-container>
                                         </v-flex>
                                         <v-flex xs12 md6 mb-2>
-
                                             <v-timeline dense>
                                                 <v-timeline-item
                                                         v-for="item in tour.markers"
@@ -225,8 +223,6 @@
                                                         :key="item.slug"
                                                         small
                                                 >
-
-
                                                     <v-card class="elevation-2 card-bord" elevation="5">
                                                         <v-card-title class="title">
                                                             <v-icon color="primary" left>location_city</v-icon>
@@ -242,8 +238,6 @@
                                                     </v-card>
                                                 </v-timeline-item>
                                             </v-timeline>
-
-
                                         </v-flex>
                                         <v-flex xs12 class="ql-editor" v-html="getDescription(tour)"></v-flex>
                                         <v-flex xs12 class="align-content-end mt-2">
@@ -265,8 +259,10 @@
 </template>
 
 <script>
+    import BtnFavorite from "../../components/global/btn-favorite";
     export default {
         name: "show",
+        components: {BtnFavorite},
         validate({params}) {
             return /^[a-zA-Z0-9._-]+$/.test(params.slug)
         },
@@ -362,13 +358,9 @@
                 return false;
             },
 
-            addToCart(id) {
-                console.log(id);
-            },
             addToFavorites(id) {
                 console.log(id);
             },
-
             getTitle(item) {
                 return item.translations.find(obj => obj.locale === this.getLocal).title
             },
@@ -384,6 +376,11 @@
             getRandomColor() {
                 let rnd = Math.floor(Math.random() * (this.colors.length - 0)) + 0;
                 return this.colors[rnd]
+            },
+            getDateRange (item){
+                let start = new Date(item);
+                start.setDate(start.getDate() + parseInt(this.tour.duration))
+                return start.toISOString().slice(0, 10)
             }
         },
         computed: {
