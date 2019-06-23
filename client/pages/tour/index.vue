@@ -181,7 +181,7 @@
                             </v-autocomplete>
                         </v-flex>
 
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Settlement</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('navbar.settlements')}}</v-subheader>
                         <v-flex xs12>
                             <v-autocomplete
                                     class="pl-3 pr-3"
@@ -193,7 +193,7 @@
                                     hide-selected
                                     item-text="title"
                                     item-value="id"
-                                    label="Search for a settlements.."
+                                    :label="$t('settlements_search')"
                                     multiple
                                     single-line
                                     :disabled="loading"
@@ -202,7 +202,7 @@
                                 <template v-slot:no-data>
                                     <v-list-tile>
                                         <v-list-tile-title>
-                                            Search for settlements ..
+                                           {{$t('settlements_search')}}
                                         </v-list-tile-title>
                                     </v-list-tile>
                                 </template>
@@ -247,7 +247,7 @@
                                     hide-selected
                                     item-text="title"
                                     item-value="id"
-                                    label="Search for a sight.."
+                                    :label="$t('settlements_search')"
                                     multiple
                                     single-line
                                     :filter="autoFilter"
@@ -256,7 +256,7 @@
                                 <template v-slot:no-data>
                                     <v-list-tile>
                                         <v-list-tile-title>
-                                            Search for sights ..
+                                            {{$t('settlements_search')}}
                                         </v-list-tile-title>
                                     </v-list-tile>
                                 </template>
