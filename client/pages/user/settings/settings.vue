@@ -63,7 +63,7 @@
                                         </v-list-tile-action>
 
                                         <v-list-tile-content>
-                                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                            <v-list-tile-title>{{ $t(item.title )}}</v-list-tile-title>
                                         </v-list-tile-content>
                                     </v-list-tile>
                                     <v-list-tile
@@ -75,7 +75,7 @@
                                         </v-list-tile-action>
 
                                         <v-list-tile-content>
-                                            <v-list-tile-title>Logout</v-list-tile-title>
+                                            <v-list-tile-title>{{$t('logout')}}</v-list-tile-title>
                                         </v-list-tile-content>
                                     </v-list-tile>
                                 </v-list>
@@ -106,8 +106,8 @@
                 drawer: true,
                 // mini: false,
                 items: [
-                    {title: 'Profile', icon: 'account_circle', route: 'settings.profile'},
-                    {title: 'Password', icon: 'vpn_key', route: 'settings.password'},
+                    {title: 'profile', icon: 'account_circle', route: 'settings.profile'},
+                    {title: 'password', icon: 'vpn_key', route: 'settings.password'},
                 ],
                 right: null,
 

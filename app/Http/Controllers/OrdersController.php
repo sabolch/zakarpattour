@@ -36,7 +36,7 @@ class OrdersController extends Controller
         }
         $data = $validator->valid();
 
-        return OrderResource::collection(Order::where('status', $data['status'])->items()->paginate($per_page));
+        return OrderResource::collection(Order::paginating($data['status'], $per_page));
 
 
     }

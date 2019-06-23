@@ -102,6 +102,12 @@ class TourController extends Controller
 
         $data = $validator->valid();
 
+        foreach ($data['translations'] as $array) {
+            if(empty($array['title']) || empty($array['description'])){
+                return response()->json(['errors'=>['translations'=>'Empty data in translations']],400);
+            }
+        }
+
         $tour = new Tour();
         $tour->tour_category_id = $data['category'];
         $tour->price = $data['price'];
@@ -214,6 +220,12 @@ class TourController extends Controller
         $data = $validator->valid();
 
         try{
+            foreach ($data['translations'] as $array) {
+                if(empty($array['title']) || empty($array['description'])){
+                    return response()->json(['errors'=>['translations'=>'Empty data in translations']],400);
+                }
+            }
+
             $tour = Tour::findOrFail($data['id']);
 
             $tour->slug = null;

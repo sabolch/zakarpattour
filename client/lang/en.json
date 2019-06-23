@@ -14,7 +14,9 @@
     "create": "Create",
     "categories": "Categories",
     "pages": "Pages",
-    "trash": "Trash"
+    "trash": "Trash",
+    "favorite": "Favorites",
+    "orders": "Orders"
   },
   "index": {
     "title": "Transcarpathian tours",
@@ -47,6 +49,7 @@
     "search": "Search",
     "sort_by": "Sort By",
     "category": "Category",
+    "category_filter": "Filter by categories",
     "select": "Select",
     "available_dates": "Select available dates",
     "person": "Count of persons",
@@ -76,7 +79,10 @@
     "reply": "Reply",
     "add_marker": "Add marker",
     "select_files": "Select files",
-    "upload": "Upload"
+    "upload": "Upload",
+    "add": "Add",
+    "clear_all": "Clear all",
+    "show": "Show"
   },
   "messages": {
     "saved": "Successfully saved!",
@@ -125,6 +131,7 @@
   "home": "Home",
   "you_are_logged_in": "You are logged in!",
   "reset_password": "Reset Password",
+  "create_account": "Create an account",
   "send_password_reset_link": "Send Password Reset Link",
   "settings": "Settings",
   "profile": "Profile",
@@ -141,6 +148,21 @@
   "check": "Check",
   "reply_msg": "Reply to message",
   "no_directions": "Opps no directions available.",
+  "locations": "Locations",
+  "views": "Views",
+  "duration": "Duration",
+  "change": "Change",
+  "change_password": "Change your password",
+  "remove_account": "Remove Your Account Forever",
+  "bucket_list": "Bucket list",
+  "shopping_cart": "Shopping cart",
+  "no_items": "No items :(",
+  "available_dates": "Available dates",
+  "total_price": "Total price",
+  "add_to_cart_title": "Add to shopping cart",
+  "cart_item": "Cart item",
+  "base_stats": "Base statistics",
+
   "marker_sort": [
     {
       "name": "By date",
@@ -175,7 +197,7 @@
   },
   "sights_steps": [
     {
-      "title": "Title & category",
+      "title": "Sight title & category",
       "subtitle": "Give a title and translate it also set the category"
     },
     {
@@ -183,8 +205,8 @@
       "subtitle": "Select the location"
     },
     {
-      "title": "Description",
-      "subtitle": "Set the description and translate it"
+      "title": "Sight description",
+      "subtitle": "Add the description and translate it"
     },
     {
       "title": "Almost done",
@@ -197,19 +219,19 @@
   ],
   "tours_steps": [
     {
-      "title": "Title & category",
+      "title": "Tour title & category",
       "subtitle": "Give a title and translate it also set the category"
     },
     {
-      "title": "Directions",
-      "subtitle": "Build tour directions"
+      "title": "Tour directions",
+      "subtitle": "Set tour directions"
     },
     {
-      "title": "Description",
-      "subtitle": "Set the description and translate it"
+      "title": "Tour description",
+      "subtitle": "Add the description and translate it"
     },
     {
-      "title": "Also done",
+      "title": "Almost done",
       "subtitle": "Save the changes"
     },
     {
@@ -236,6 +258,17 @@
     "edit": "Edit category",
     "remove": "Remove category",
     "remove_msg": "Are you sure remove this category?"
+  },
+
+  "hint": {
+    "price": "Price in UAH",
+    "show_details": "Show details"
+  },
+  "shopping_cart_nav": {
+    "processing": "Processing",
+    "cart": "Cart",
+    "checked": "Checked",
+    "history": "History"
   }
 }
 

@@ -4,7 +4,7 @@
                 class="headline primary white--text font-weight-bold"
                 primary-title
         >
-            Your Order
+           {{$t('shopping_cart_nav.cart')}}
             <v-spacer></v-spacer>
             <v-icon large dark>shopping_basket</v-icon>
         </v-card-title>
@@ -33,10 +33,10 @@
                                                 outline
                                                 small
                                                 v-on="on"
-                                        >Price ₴ {{item.price }}
+                                        >{{$t('form.data_panel.price')}} ₴ {{item.price }}
                                         </v-chip>
                                     </template>
-                                    <span>Ціна у грн</span>
+                                    <span>{{$t('hint.price')}}</span>
                                 </v-tooltip>
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
@@ -48,10 +48,10 @@
                                                 v-on="on"
                                         >
                                             <v-icon small left>person</v-icon>
-                                            Person {{item.persons}}
+                                            {{$t('form.person')}} {{item.persons}}
                                         </v-chip>
                                     </template>
-                                    <span>Кількість осіб</span>
+                                    <span>{{$t('form.person')}}</span>
                                 </v-tooltip>
 
                                 <v-tooltip bottom>
@@ -67,7 +67,7 @@
                                             {{item.date}}
                                         </v-chip>
                                     </template>
-                                    <span>Дата відправки</span>
+                                    <span>{{$t('form.data_panel.start_date')}}</span>
                                 </v-tooltip>
 
                             </v-list-tile-sub-title>
@@ -79,7 +79,7 @@
                                         <v-icon color="pink">remove_shopping_cart</v-icon>
                                     </v-btn>
                                 </template>
-                                <span>Видалити з кошика</span>
+                                <span>{{$t('btns.remove')}}</span>
                             </v-tooltip>
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on }">
@@ -93,7 +93,7 @@
                                         <v-icon color="blue">remove_red_eye</v-icon>
                                     </v-btn>
                                 </template>
-                                <span>Показати деталі туру</span>
+                                <span>{{$t('hint.show_details')}}</span>
                             </v-tooltip>
                         </v-list-tile-action>
                     </v-list-tile>
@@ -110,10 +110,10 @@
                                         label
                                         outline
                                         v-on="on"
-                                >Total Price ₴ {{ getTotalPrice }}
+                                >{{$t('total_price')}} ₴ {{ getTotalPrice }}
                                 </v-chip>
                             </template>
-                            <span>Ціна у грн</span>
+                            <span>{{$t('hint.price')}}</span>
                         </v-tooltip>
 
                     </v-list-tile-content>
@@ -122,7 +122,7 @@
                         v-if="!noItemInCart"
                 >
                     <v-list-tile-content>
-                        <v-list-tile-title class="text-xs-center grey--text">No items :(</v-list-tile-title>
+                        <v-list-tile-title class="text-xs-center grey--text">{{$t('no_items')}}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
@@ -138,7 +138,7 @@
                     :disabled="!noItemInCart"
                     @click="removeAll"
             >
-                Clear all
+                {{$t('btns.clear_all')}}
             </v-btn>
             <v-btn
                     color="red"
@@ -146,7 +146,7 @@
                     :disabled="!noItemInCart"
                     @click="confirmOrder"
             >
-                Confirm
+                {{$t('btns.confirm')}}
             </v-btn>
         </v-card-actions>
     </v-card>

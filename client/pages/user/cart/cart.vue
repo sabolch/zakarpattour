@@ -23,7 +23,8 @@
                                             </v-list-tile-avatar>
 
                                             <v-list-tile-content>
-                                                <v-list-tile-title class="title font-weight-light">Bucket list
+                                                <v-list-tile-title class="title font-weight-light">
+                                                    {{$t('bucket_list')}}
                                                 </v-list-tile-title>
                                             </v-list-tile-content>
                                             <v-list-tile-action>
@@ -49,7 +50,7 @@
                                         </v-list-tile-action>
 
                                         <v-list-tile-content>
-                                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                            <v-list-tile-title>{{ $t(item.title) }}</v-list-tile-title>
                                         </v-list-tile-content>
                                     </v-list-tile>
                                 </v-list>
@@ -63,7 +64,8 @@
                                             </v-list-tile-avatar>
 
                                             <v-list-tile-content>
-                                                <v-list-tile-title class="title font-weight-light">Shopping cart
+                                                <v-list-tile-title class="title font-weight-light">
+                                                    {{$t('shopping_cart')}}
                                                 </v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
@@ -83,7 +85,7 @@
                                         </v-list-tile-action>
 
                                         <v-list-tile-content>
-                                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                            <v-list-tile-title>{{$t( item.title) }}</v-list-tile-title>
                                         </v-list-tile-content>
                                     </v-list-tile>
                                 </v-list>
@@ -112,15 +114,15 @@
                 mini:true,
 
                 items: [
-                    {title: 'Cart', icon: 'shopping_cart', route: 'cart.cart'},
-                    {title: 'Processing', icon: 'loop', route: 'cart.processing'},
-                    {title: 'Checked', icon: 'done_all', route: 'cart.checked'},
-                    {title: 'History', icon: 'history', route: 'cart.history'}
+                    {title: 'shopping_cart_nav.cart', icon: 'shopping_cart', route: 'cart.cart'},
+                    {title: 'shopping_cart_nav.processing', icon: 'loop', route: 'cart.processing'},
+                    {title: 'shopping_cart_nav.checked', icon: 'done_all', route: 'cart.checked'},
+                    {title: 'shopping_cart_nav.history', icon: 'history', route: 'cart.history'}
                 ],
 
                 fav_items: [
-                    {title: 'Sights', icon: 'location_on', route: 'user.favorite.sights'},
-                    {title: 'Tours', icon: 'timeline', route: 'user.favorite.tours'},
+                    {title: 'navbar.sights', icon: 'location_on', route: 'user.favorite.sights'},
+                    {title: 'navbar.tours', icon: 'timeline', route: 'user.favorite.tours'},
                 ],
                 right: null,
 

@@ -5,17 +5,20 @@
     "tours": "Túrák",
     "about": "Rólunk",
     "contact": "Kapcsolat",
-    "settlements": "Settlements",
+    "settlements": "Települések",
 
-    "dashboard": "Dashboard",
-    "notifications": "Notifications",
-    "users": "Users",
-    "profile": "Profile",
-    "admins": "Admins",
-    "create": "Create",
-    "categories": "Categories",
-    "pages": "Pages",
-    "trash": "Trash"
+    "dashboard": "Irányítópult",
+    "notifications": "Értesítések",
+    "users": "Felhasználók",
+    "profile": "Profil",
+    "admins": "Adminisztrátorok",
+    "create": "Létrehoz",
+    "categories": "Kategóriák",
+    "pages": "Lapok",
+    "trash": "Kuka",
+    "favorite": "Kedvencek",
+    "orders": "Rendelések"
+
   },
   "index": {
     "title": "Kárpátaljai utazások",
@@ -32,53 +35,58 @@
   },
 
   "contact_us": {
-    "title": "Contact Us"
+    "title": "Kapcsolat"
   },
   "form": {
-    "name": "Name",
-    "title": "Title",
-    "email": "Email",
-    "subject": "Subject",
-    "message": "Message",
-    "from": "From",
-    "search": "Search",
-    "sort_by": "Sort By",
-    "category": "Category",
+    "name": "Név",
+    "title": "Cím",
+    "email": "E-mail",
+    "subject": "Tárgy",
+    "message": "Üzenet",
+    "from": "Kitől",
+    "search": "Keresés",
+    "sort_by": "Sorrend",
+    "category": "Kategória",
+    "category_filter": "Szűrés kategóriák szerint",
     "select": "Select",
-    "available_dates": "Select available dates",
+    "available_dates": "Válassza ki az elérhető dátumokat",
+    "person": "Személyek száma",
     "data_panel": {
-      "hint": "Filtering options",
-      "title": "Filtering results",
-      "rate": "Rate",
-      "price": "Price",
-      "duration": "Duration in days",
-      "start_date": "Start date",
-      "end_date": "End date"
+      "hint": "Szűrési lehetőségek",
+      "title": "Az eredmények szűrése",
+      "rate": "Értékel",
+      "price": "Ár",
+      "duration": "Időtartam napokban",
+      "start_date": "Kezdő dátum",
+      "end_date": "Befejezés dátuma"
     }
   },
 
   "btns": {
     "ok": "Ok",
-    "read_more": "Read more",
-    "all": "All",
-    "send": "Send",
-    "cancel": "Cancel",
-    "close": "Close",
-    "continue": "Continue",
-    "back": "Back",
-    "save": "Save",
-    "activate": "Activate",
-    "remove": "Remove",
-    "confirm": "Confirm",
-    "reply": "Reply",
-    "add_marker": "Add marker",
-    "select_files": "Select files",
-    "upload": "Upload"
+    "read_more": "Olvass tovább",
+    "all": "Mind",
+    "send": "Küld",
+    "cancel": "Mégse",
+    "close": "Bezár",
+    "continue": "Folytatás",
+    "back": "Vissza",
+    "save": "Mentés",
+    "activate": "Aktíválás",
+    "remove": "Eltávolítás",
+    "confirm": "Megerősítés",
+    "reply": "Válasz",
+    "add_marker": "Pont hozzáadása",
+    "select_files": "Filek kiválasztása",
+    "upload": "Feltöltés",
+    "show": "Mutasd meg",
+    "clear_all": "Összes törlése",
+    "add": "Hozzáad"
   },
   "messages": {
-    "saved": "Successfully saved!",
-    "not_saved": "Not saved! :( Try again later!",
-    "no_data": " Sorry, nothing to display here :("
+    "saved": "Sikeresen mentve!",
+    "not_saved": "Nem sikerült elmenteni! :( Próbáld meg később!",
+    "no_data": " Sajnáljuk, de itt semmi nem jelenik meg :("
   },
   "footer": {
     "tiles": [
@@ -89,140 +97,166 @@
     "title": "TouristRoutes. Minden jog fenntartva."
   },
   "errors": {
-    "something": "Something goes wrong :("
+    "something": "Valami baj van :("
   },
   "ok": "OK",
-  "cancel": "Cancel",
+  "cancel": "Mégse",
   "error_alert_title": "Oops...",
-  "error_alert_text": "Something went wrong! Please try again.",
-  "token_expired_alert_title": "Session Expired!",
-  "token_expired_alert_text": "Please log in again to continue.",
-  "login": "Log In",
-  "register": "Register",
-  "page_not_found": "Sorry, page not found",
-  "go_home": "Go Home",
-  "logout": "Logout",
-  "email": "Email",
-  "remember_me": "Remember Me",
-  "password": "Password",
-  "telephone": "Telephone",
-  "forgot_password": "Forgot Your Password?",
-  "confirm_password": "Confirm Password",
-  "name": "Name",
-  "toggle_navigation": "Toggle navigation",
-  "home": "Home",
-  "you_are_logged_in": "You are logged in!",
-  "reset_password": "Reset Password",
-  "send_password_reset_link": "Send Password Reset Link",
-  "settings": "Settings",
-  "profile": "Profile",
-  "your_info": "Your Info",
-  "info_updated": "Your info has been updated!",
-  "update": "Update",
-  "your_password": "Your Password",
-  "password_updated": "Your password has been updated!",
-  "new_password": "New Password",
-  "login_with": "Login with",
-  "register_with": "Register with",
-  "conf_remove": "Are you sure remove this item?",
-  "conf_check": "Are you sure to mark as checked?",
-  "check": "Check",
-  "reply_msg": "Reply to message",
-  "no_directions": "Opps no directions available.",
+  "error_alert_text": "Valami elromlott! Kérlek próbáld újra.",
+  "token_expired_alert_title": "A munkamenet ideje lejárt!",
+  "token_expired_alert_text": "A folytatáshoz jelentkezzen be újra.",
+  "login": "Belépés",
+  "register": "Regisztráció",
+  "page_not_found": "Sajnáljuk, az oldal nem található",
+  "go_home": "Főoldal",
+  "logout": "Kijelentkezés",
+  "email": "E-mail",
+  "remember_me": "Emlékezz rám",
+  "password": "Jelszó",
+  "telephone": "Telefon",
+  "forgot_password": "Elfelejtette a jelszavát?",
+  "confirm_password": "Jelszó megerősítése",
+  "name": "Név",
+  "toggle_navigation": "Váltás a navigációra",
+  "home": "Főoldal",
+  "you_are_logged_in": "Ön bejelentkezett!",
+  "reset_password": "Jelszó visszaállítása",
+  "send_password_reset_link": "Jelszó visszaállítása link küldése",
+  "settings": "Beállítások",
+  "profile": "Profil",
+  "your_info": "Az Ön adatai",
+  "info_updated": "Információját frissítették!",
+  "update": "Frissítés",
+  "your_password": "A jelszavad",
+  "password_updated": "A jelszavát frissítette!",
+  "new_password": "Új jelszó",
+  "login_with": "Bejelentkezés vele",
+  "create_account": "Fiók létrehozása",
+  "register_with": "Regisztráljon",
+  "conf_remove": "Biztosan eltávolítja ezt az elemet?",
+  "conf_check": "Biztosan bejelöli, hogy ellenőrzött?",
+  "check": "Ellenőrzés",
+  "reply_msg": "Válasz az üzenetre",
+  "no_directions": "Hoppá nincsenek elérhető utak.",
+  "locations": "Helyszínek",
+  "views": "Megtekintések",
+  "duration": "Időtartam",
+  "change": "Csere",
+  "change_password": "Változtasd meg a jelszavadat",
+  "remove_account": "Eltávolítja a fiókját örökre",
+  "bucket_list": "Bakancslista",
+  "shopping_cart": "Bevásárlókocsi",
+  "no_items": "Üres :(",
+  "available_dates": "Elérhető dátumok",
+  "total_price": "Teljes ár",
+  "add_to_cart_title": "Add hozzá a bevásárlókosárhoz",
+  "cart_item": "Kosár elem",
+  "base_stats": "Alapstatisztikák",
+
   "marker_sort": [
     {
-      "name": "By date",
+      "name": "Dátum szerint",
       "value": "created_at"
     },
     {
-      "name": "By views",
+      "name": "Megtekintések szerint",
       "value": "views"
     }
   ],
-  "marker_filtering": "Filtering options",
-  "settlements_search": "Search for a settlement ..",
-  "sights_search": "Search for sights ..",
-  "img_ctn_msg": "Enabled if changes saved",
+  "marker_filtering": "Szűrési lehetőségek",
+  "settlements_search": "Település keresése ..",
+  "sights_search": "Látnivalók keresése ..",
+  "img_ctn_msg": "Engedélyezve, ha a módosítások mentve vannak",
   "image_upload": {
     "tabs": [
       {
-        "title": "Upload and manage images"
+        "title": "Képek feltöltése és kezelése"
       },
       {
-        "title": "Manage cover image"
+        "title": "A borító képének kezelése"
       }
     ],
-    "upload": "Upload Images",
-    "review": "Review Images",
-    "cover_img": "Cover Image",
-    "uploaded": "Uploaded Images",
-    "cover": "Set cover image",
-    "small": "Small size images selected! Please select minimum",
-    "s_size": "Small image size",
-    "set_cover": "Set as like cover image"
+    "upload": "Képek feltöltése",
+    "review": "Tekintse át a képeket",
+    "cover_img": "Borítókép",
+    "uploaded": "Feltöltött képek",
+    "cover": "Állítsa be a borító képét",
+    "small": "Kis méretű képek kiválasztva! Kérjük, válasszon minimumot",
+    "s_size": "Kis képméret",
+    "set_cover": "Állítsa be a fedőképet"
   },
   "sights_steps": [
     {
-      "title": "Title & category",
-      "subtitle": "Give a title and translate it also set the category"
+      "title": "Látnivaló cím és kategória",
+      "subtitle": "Adjon meg címet, és fordítsa, állítsa be a kategóriát"
     },
     {
-      "title": "Map marker",
-      "subtitle": "Select the location"
+      "title": "Térképjelző",
+      "subtitle": "Válassza ki a helyet"
     },
     {
-      "title": "Description",
-      "subtitle": "Set the description and translate it"
+      "title": "Látnivaló leírása",
+      "subtitle": "Adja hozzá a leírást és fordítsa le"
     },
     {
-      "title": "Almost done",
-      "subtitle": "Save the changes"
+      "title": "Majdnem kész",
+      "subtitle": "Mentse el a módosításokat"
     },
     {
-      "title": "Upload images",
-      "subtitle": "Upload and manage images"
+      "title": "Képek feltöltése",
+      "subtitle": "Képek feltöltése és kezelése"
     }
   ],
   "tours_steps": [
     {
-      "title": "Title & category",
-      "subtitle": "Give a title and translate it also set the category"
+      "title": "Túra címe és kategória",
+      "subtitle": "Adjon meg címet, és fordítsa le azt, és állítsa be a kategóriát"
     },
     {
-      "title": "Directions",
-      "subtitle": "Build tour directions"
+      "title": "Túra útvonalak",
+      "subtitle": "A túra irányainak beállítása"
     },
     {
-      "title": "Description",
-      "subtitle": "Set the description and translate it"
+      "title": "Túra leírása",
+      "subtitle": "Adja hozzá a leírást és fordítsa le"
     },
     {
-      "title": "Also done",
-      "subtitle": "Save the changes"
+      "title": "Majdnem kész",
+      "subtitle": "Mentse el a módosításokat"
     },
     {
-      "title": "Upload images",
-      "subtitle": "Upload and manage images"
+      "title": "Képek feltöltése",
+      "subtitle": "Képek feltöltése és kezelése"
     }
   ],
   "admin": {
-    "new": "Create new admin",
-    "edit": "Edit admin data",
-    "remove": "Deactivate admin",
-    "remove_msg": "Are you sure deactivate this admin?"
+    "new": "Új adminisztrátor létrehozása",
+    "edit": "Adminisztrátori adatok szerkesztése",
+    "remove": "Deaktiválja az admin",
+    "remove_msg": "Biztosan kikapcsolja ezt az adminisztrátort?"
   },
   "settlement": {
-    "new": "Create new settlement",
-    "edit": "Edit settlement",
-    "remove": "Remove settlement",
-    "remove_msg": "Are you sure remove this settlement? All markers and tours with this settlement will be uncategorized!",
-    "restore": "Restore settlement",
-    "restore_msg": "Are you sure restore this settlement?"
+    "new": "Új település létrehozása",
+    "edit": "Település szerkesztése",
+    "remove": "Eltávolítás",
+    "remove_msg": "Biztosan eltávolítja ezt a települést? Minden markerek és túrák ezzel a településsel kategorizálatlanok lesznek!",
+    "restore": "Település visszaállítása",
+    "restore_msg": "Biztosan visszaállítja ezt a települést?"
   },
   "category": {
-    "new": "Create new category",
-    "edit": "Edit category",
-    "remove": "Remove category",
-    "remove_msg": "Are you sure remove this category?"
+    "new": "Új kategória létrehozása",
+    "edit": "Kategória szerkesztése",
+    "remove": "Kategória eltávolítása",
+    "remove_msg": "Biztosan eltávolítja ezt a kategóriát?"
+  },
+  "hint": {
+    "price": "Ár UAH",
+    "show_details": "Részletek megjelenítése"
+  },
+  "shopping_cart_nav": {
+    "processing": "Feldolgozás",
+    "cart": "Kosár",
+    "checked": "Feldolgozott",
+    "history": "Előzmény"
   }
 }

@@ -123,7 +123,7 @@ class Tour extends Model
                 });
             })
             ->with('category')
-            ->orderBy( $order_by,'desc')
+            ->orderBy( $order_by,'asc')
             ->paginate($per_page,['id','slug','tour_category_id','start_date','end_date','duration','person','price','views',
                 'created_at','updated_at']);
 

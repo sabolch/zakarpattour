@@ -122,7 +122,7 @@ Route::group(['middleware' => 'auth:api','prefix' => 'favourite'], function () {
 //    Orders
 Route::group(['prefix' => 'order'], function () {
     Route::delete('/trash', 'OrdersController@destroy');
-    Route::get('/', 'OrdersController@index');
+    Route::post('/', 'OrdersController@index');
     Route::post('/user', 'OrdersController@user');
     Route::put('/status', 'OrdersController@status');
     Route::post('/store', 'OrdersController@store');

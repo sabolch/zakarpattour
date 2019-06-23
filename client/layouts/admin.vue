@@ -111,7 +111,7 @@
             </v-btn>
 
             <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
-                <v-btn icon flat slot="activator" @click="$router.push({name:'admin.profile'})">
+                <v-btn icon flat slot="activator" @click="$router.push({name:'admin.notifications.message'})">
                     <v-badge color="red" overlap>
                         <span slot="badge">3</span>
                         <v-icon medium>notifications</v-icon>
@@ -264,6 +264,7 @@
                     model: false,
                     children: [
                         { icon: 'markunread', text: 'navbar.contact', href:'admin.notifications.message' },
+                        { icon: 'shopping_cart', text: 'navbar.orders', href:'admin.orders' },
                     ]
                 },
                 {
@@ -382,16 +383,16 @@
                 await this.$store.dispatch('admin/logout')
                 // Redirect to login.
                 this.$router.push({name: 'admin.login'})
-            }
+            },
+
         },
         computed: {
+            getAdmin(){
+                return this.$store.state.admin.user ? this.$store.state.admin.user.name : ''
+            },
             target() {
                 return 0
             },
-            getAdmin(){
-              return this.$store.state.admin.user.name
-            },
-
             getLang() {
                 return this.$i18n.locale
             },

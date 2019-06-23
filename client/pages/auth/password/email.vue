@@ -5,7 +5,7 @@
         <v-slide-y-transition>
           <v-card class="elevation-12" v-show="expand">
             <v-toolbar color="primary">
-              <v-toolbar-title class="white--text">Send reset password email</v-toolbar-title>
+              <v-toolbar-title class="white--text">{{$t('send_password_reset_link')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-card-text class="mb-0 pb-0">
@@ -21,7 +21,7 @@
                               :error-messages="errors.collect('email')"
                               data-vv-name="email"
                               clearable
-                              label="Email"
+                              :label="$t('form.email')"
                               type="text"></v-text-field>
                         </v-form>
             </v-card-text>
@@ -35,7 +35,7 @@
                               color="primary"
                               @click="send"
                               :loading="form.busy"
-                      >Send
+                      >{{$t('btns.send')}}
                       </v-btn>
                     </v-flex>
                   </v-layout>

@@ -5,7 +5,7 @@
             <v-flex xs12 class="mb-1 pa-1">
                 <v-card elevation="5">
                     <v-card-title class="primary white--text title pa-4">
-                        Logged In to Admin Dash
+                        {{$t('base_stats')}}
                     </v-card-title>
                 </v-card>
             </v-flex>
@@ -18,7 +18,7 @@
             <v-flex xs12  md6 class="pa-1">
                 <v-card elevation="5">
                     <v-card-title class="green white--text title">
-                        Logged In to Admin Dash
+                        {{$t('base_stats')}}
                     </v-card-title>
                     <v-card-text>
                         <LineChart :data="barChartData" :options="lineChartoptions"/>
@@ -29,7 +29,7 @@
             <v-flex xs12 md6 class="pa-1">
                 <v-card elevation="5">
                     <v-card-title class="primary white--text title">
-                        Logged In to Admin Dash
+                        {{$t('base_stats')}}
                     </v-card-title>
                     <v-card-text>
                         <PieChart :data="pieData" :options="{ maintainAspectRatio: false }"/>
@@ -39,7 +39,7 @@
             <v-flex xs12 md6 class="pa-1">
                 <v-card elevation="5">
                     <v-card-title class="orange white--text">
-                        Logged In to Admin Dash
+                        {{$t('base_stats')}}
                     </v-card-title>
                     <v-card-text>
                         <DoughnutChart :data="pieData" :options="{ maintainAspectRatio: false }"/>
@@ -50,7 +50,7 @@
             <v-flex xs12 md6 class="pa-1">
                 <v-card elevation="5">
                     <v-card-title class="purple white--text">
-                        Logged In to Admin Dash
+                        {{$t('base_stats')}}
                     </v-card-title>
                     <v-card-text>
                         <BarChart :data="barChartData" :options="lineChartoptions"/>
@@ -135,10 +135,10 @@
                     }
                 },
                 panels:[
-                    {color:'green darken-2',title:'200',icon:'group_add',subTitle:'New Users'},
-                    {color:'purple',title:'350',icon:'location_city',subTitle:'Settlements'},
-                    {color:'blue darken-2',title:'892',icon:'location_on',subTitle:'Sights'},
-                    {color:'red lighten-2',title:'152',icon:'favorite',subTitle:'In Favorites'},
+                    {color:'green darken-2',title:'200',icon:'group_add',subTitle:'navbar.users'},
+                    {color:'purple',title:'350',icon:'location_city',subTitle:'navbar.settlements'},
+                    {color:'blue darken-2',title:'892',icon:'location_on',subTitle:'navbar.tours'},
+                    {color:'red lighten-2',title:'152',icon:'favorite',subTitle:'navbar.favorite'},
                 ],
                 pieData:{}
             }

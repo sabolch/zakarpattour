@@ -4,7 +4,7 @@
                 class="headline primary white--text font-weight-bold"
                 primary-title
         >
-            Tours
+            {{$t('navbar.tours')}}
             <v-spacer></v-spacer>
             <v-icon large dark>favorite</v-icon>
         </v-card-title>
@@ -32,7 +32,7 @@
                                         <v-icon color="pink">delete</v-icon>
                                     </v-btn>
                                 </template>
-                                <span>Видалити з кошика</span>
+                                <span>{{$t('btns.remove')}}</span>
                             </v-tooltip>
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on }">

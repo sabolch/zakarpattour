@@ -5,7 +5,7 @@
                 <v-container fill-height fluid>
                     <v-layout row wrap>
                         <v-flex xs12>
-                            <h1 class="headline font-weight-bold">Profile</h1>
+                            <h1 class="headline font-weight-bold">{{$t('profile')}}</h1>
                         </v-flex>
 
                         <v-flex xs12 class="text-xs-center">
@@ -39,7 +39,7 @@
                                                     class="pl-1 pr-1 pt-2 pb-3 font-weight-light title indigo"
                                                     @click="pickFile"
                                             >
-                                                Change
+                                                {{$t('change')}}
                                             </v-card>
                                             <input
                                                     type="file"
@@ -59,7 +59,7 @@
                                     v-model="form.name"
                                     v-validate="'required'"
                                     :error-messages="errors.collect('name')"
-                                    label="Username"
+                                    :label="$t('form.name')"
                                     data-vv-name="username"
                                     clearable
                                     required
@@ -69,7 +69,7 @@
                                     v-model="form.email"
                                     v-validate="'required|email'"
                                     :error-messages="errors.collect('email')"
-                                    label="E-mail"
+                                    :label="$t('form.email')"
                                     data-vv-name="email"
                                     clearable
                                     required
@@ -79,7 +79,7 @@
                                     v-model="form.telephone"
                                     v-validate="'required|min:10'"
                                     :error-messages="errors.collect('telephone')"
-                                    label="Telephone"
+                                    :label="$t('telephone')"
                                     data-vv-name="telephone"
                                     clearable
                                     required
@@ -90,7 +90,7 @@
                                    @click="updateUser"
                                    :loading="form.busy"
                             >
-                                Save
+                                {{$t('btns.save')}}
                             </v-btn>
                         </v-flex>
                     </v-layout>
@@ -104,7 +104,7 @@
                 :color="infoSnackbar.success ? 'success' : 'error'"
                 top
                 >
-            {{ infoSnackbar.success ? 'Successfully saved' : 'Somethings went wrong :( Try again later'}}
+            {{ infoSnackbar.success ? $t('messages.saved') : $t('messages.not_saved')}}
             <v-btn
                     flat
                     dark
@@ -126,7 +126,7 @@
         scrollToTop: false,
         head() {
             return {
-                title: 'Profile Settings',
+                title: this.$t('profile'),
             }
         },
         data: () => ({

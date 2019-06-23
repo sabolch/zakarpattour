@@ -31,7 +31,7 @@
                                     <v-card-text>
                                         <v-text-field
                                                 v-model="item.title"
-                                                :label="`Title ${item.locale}`"
+                                                :label="` ${$t('form.title')} ${item.locale}`"
                                                 clearable
                                         ></v-text-field>
                                     </v-card-text>
@@ -42,7 +42,7 @@
                                 class="pl-3 pr-3"
                                 :items="categories"
                                 v-model="form.category"
-                                label="Select category"
+                                :label="$t('form.category')"
                                 persistent-hint
                                 :filter="autoFilter"
                                 :item-value="autoValue"
@@ -75,7 +75,7 @@
                                 hide-selected
                                 item-text="title"
                                 item-value="id"
-                                label="Search for a settlement.."
+                                :label="$t('settlements_search')"
                                 single-line
                                 :disabled="loading"
                                 :filter="autoSettlementFilter"
@@ -187,8 +187,13 @@
                     </v-stepper-step>
                     <v-stepper-content step="4">
                         <v-btn dark color="green" :loading="form.busy" @click="store">{{$t('btns.save')}}</v-btn>
-
-
+                        <v-btn
+                                v-if="form.slug"
+                               dark
+                                color="purple"
+                                :to="{name:'sight.show',params: {slug:form.slug}}"
+                                target="_blank"
+                        >{{$t('btns.show')}}</v-btn>
                                 <v-btn
                                         :disabled="form.id < 1"
                                         color="primary"
@@ -196,7 +201,6 @@
                                 >
                                     {{$t('btns.continue')}}
                                 </v-btn>
-
 
                         <v-btn dark color="orange" @click="e6 = e6-1">{{$t('btns.back')}}</v-btn>
                     </v-stepper-content>
@@ -461,12 +465,13 @@
             },
 
             async store() {
-                console.log(this.form)
+                // console.log(this.form)
                 let url = 'marker/store'
                 if (this.form.id > 0) url = 'marker/edit'
                 await this.form.put(url).then((data) => {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.form.id = data.data.data.id
+                    this.form.slug = data.data.data.slug
                     this.snackbar = {
                         status: true,
                         timeout: 4000,

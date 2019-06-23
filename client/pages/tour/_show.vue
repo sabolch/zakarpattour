@@ -18,7 +18,7 @@
                                         <v-spacer></v-spacer>
                                         <btn-favorite
                                         type="tour"
-                                        :item-i-d="tour.id"
+                                        :itemID="tour.id"
                                         ></btn-favorite>
                                     </v-toolbar>
                                 </v-carousel-item>
@@ -40,19 +40,19 @@
                                             >
                                                 <v-chip color="purple darken-4" outline>
                                                     <v-icon left>visibility</v-icon>
-                                                    Views : {{ tour.views }}
+                                                    {{$t('views')}} : {{ tour.views }}
                                                 </v-chip>
                                                 <v-chip color="blue darken-4" outline>
                                                     <v-icon left>access_time</v-icon>
-                                                    Duration : {{tour.duration}} days
+                                                    {{$t('duration')}} : {{tour.duration}} days
                                                 </v-chip>
                                                 <v-tooltip bottom>
                                                     <template v-slot:activator="{ on }">
                                                         <v-chip color="red darken-1" v-on="on" outline>
-                                                            <span class="title">₴</span>&nbsp;&nbsp;&nbsp;Price : {{tour.price}}
+                                                            <span class="title">₴</span>&nbsp;&nbsp;&nbsp;{{$t('form.data_panel.price')}} : {{tour.price}}
                                                         </v-chip>
                                                     </template>
-                                                    <span>Ціна у грн</span>
+                                                    <span>{{$t('hint.price')}}</span>
                                                 </v-tooltip>
                                             </v-layout>
                                         </v-flex>
@@ -166,7 +166,8 @@
                                                             <v-flex xs12>
                                                                 <v-card class="card-bord">
                                                                     <v-toolbar color="primary" dark>
-                                                                        <v-toolbar-title>Available dates
+                                                                        <v-toolbar-title>
+                                                                            {{$t('available_dates')}}
                                                                         </v-toolbar-title>
                                                                     </v-toolbar>
                                                                     <v-list>
@@ -308,7 +309,11 @@
         async mounted() {
             try {
                 let {data} = await this.$axios.get(`image/collect/tour/${this.tour.id}`)
-                this.tourImages = data;
+                if(data.length > 0){
+                    this.tourImages = data;
+                }else {
+                    this.tourImages = [{url: '/images/post', name: 'default.jpg'}];
+                }
             } catch (e) {
                 this.tourImages = [{url: '/images/post', name: 'default.jpg'}];
             }

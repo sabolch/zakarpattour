@@ -392,6 +392,13 @@
                     </v-stepper-step>
                     <v-stepper-content step="4">
                         <v-btn dark color="green" :loading="form.busy" @click="store">{{$t('btns.save')}}</v-btn>
+                        <v-btn
+                                v-if="form.slug"
+                                dark
+                                color="purple"
+                                :to="{name:'tour.show',params: {slug:form.slug}}"
+                                target="_blank"
+                        >{{$t('btns.show')}}</v-btn>
                                 <v-btn
                                         :disabled="form.id < 1"
                                         color="primary"
@@ -559,9 +566,6 @@
                 this.form = new Form(this.formData.data.data)
                 this.form.category = this.form.tour_category_id
                 this.map.set('position', new google.maps.LatLng(this.form.lat, this.form.lng))
-
-
-                this.loadSights()
             }
             this.formData = null
 
@@ -634,7 +638,7 @@
             },
 
             autoFilter(item, queryText, itemText) {
-                return item.name.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+                return item.name.toLocaleLowerCase().indexOf(queryText.trim().toLocaleLowerCase()) > -1
             },
 
             autoValue(value) {
@@ -682,7 +686,7 @@
             },
             autoFilterSights(item, queryText, itemText) {
                 // console.log(item,queryText,itemText)
-                return this.getTitle(item).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+                return this.getTitle(item).toLocaleLowerCase().indexOf(queryText.trim().toLocaleLowerCase()) > -1
             },
         },
         computed: {

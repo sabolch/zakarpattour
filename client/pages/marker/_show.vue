@@ -113,7 +113,7 @@
                                             <v-btn color="primary"
                                                    @click="$router.go(-1)"
                                             >
-                                                <v-icon>arrow_back</v-icon>&nbsp;Back
+                                                <v-icon>arrow_back</v-icon>&nbsp;{{$t('btns.back')}}
                                             </v-btn>
                                         </v-flex>
                                     </v-layout>
@@ -142,7 +142,7 @@
                                      ref="clipboard"></v-input>
 
                             <v-btn color="green darken-1" flat @click="copyTextArea">Copy</v-btn>
-                            <v-btn color="red darken-2" flat @click="dialog = false">Close</v-btn>
+                            <v-btn color="red darken-2" flat @click="dialog = false">{{$t('btns.close')}}</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -207,7 +207,7 @@
                     text: 'Copied to clipboard',
                     color: 'success'
                 },
-                title:'',
+                title: '',
 
                 showmenu: false,
                 fab: false,
@@ -221,10 +221,13 @@
         async mounted() {
             try {
                 let {data} = await this.$axios.get(`image/collect/sight/${this.sight.id}`)
-                this.images = data
-
+                if (data.length > 0) {
+                    this.images = data
+                } else {
+                    this.images = [{url: '/images/post', name: 'default.jpg'}];
+                }
             } catch (e) {
-                this.images = []
+                this.images = [{url: '/images/post', name: 'default.jpg'}];
             }
 
             this.map = new google.maps.Map(document.getElementById('gmap_container'), {

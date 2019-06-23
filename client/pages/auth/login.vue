@@ -5,7 +5,7 @@
                 <v-slide-y-transition>
                     <v-card class="elevation-12" v-show="expand">
                         <v-toolbar color="primary">
-                            <v-toolbar-title class="white--text">Login</v-toolbar-title>
+                            <v-toolbar-title class="white--text">{{$t('login')}}</v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-toolbar>
                         <v-card-text class="mb-0 pb-0 text-xs-center">
@@ -15,7 +15,7 @@
                                               :error-messages="ErrList"
                                 ></v-text-field>
                                 <v-text-field v-model="form.password" id="password" prepend-icon="lock" name="password"
-                                              label="Password"
+                                              :label="$t('password')"
                                               :type="showPassword ? 'text' : 'password'"
                                               :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                                               @click:append="showPassword = !showPassword"
@@ -29,10 +29,11 @@
                             <v-flex xs12>
                                 <v-layout row>
                                     <v-flex mt-2 class="text-xs-center">
-                                        <router-link class="black--text" :to="{name:'password.request'}">Forgot your
-                                            password?
+                                        <router-link class="black--text" :to="{name:'password.request'}">
+                                            {{$t('forgot_password')}}
                                         </router-link>&nbsp;
-                                        <router-link class="blue--text" :to="{name:'register'}">Create an account
+                                        <router-link class="blue--text" :to="{name:'register'}">
+                                            {{$t('create_account')}}
                                         </router-link>
                                     </v-flex>
                                 </v-layout>
@@ -55,7 +56,7 @@
                                                     color="primary"
                                                     @click="login"
                                                     :loading="form.busy"
-                                            >Login
+                                            >{{$t('login')}}
                                             </v-btn>
                                         </v-flex>
                                     </v-layout>

@@ -4,7 +4,7 @@
                 class="headline primary white--text font-weight-bold"
                 primary-title
         >
-            Order history <v-spacer></v-spacer> <v-icon large dark>history</v-icon>
+            {{$t('shopping_cart_nav.history')}} <v-spacer></v-spacer> <v-icon large dark>history</v-icon>
         </v-card-title>
 
         <v-card-text>
@@ -20,7 +20,7 @@
                                 <v-icon size="50" color="primary">add_shopping_cart</v-icon>
                             </v-list-tile-avatar>
                             <v-list-tile-content>
-                                <v-list-tile-title class="font-weight-bold">Cart item</v-list-tile-title>
+                                <v-list-tile-title class="font-weight-bold">{{$t('cart_item')}}</v-list-tile-title>
                                 <v-list-tile-sub-title>
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{ on }">
@@ -30,10 +30,10 @@
                                                     outline
                                                     small
                                                     v-on="on"
-                                            >Total price ₴ {{item.total_price }}
+                                            >{{$t('total_price')}} ₴ {{item.total_price }}
                                             </v-chip>
                                         </template>
-                                        <span>Ціна у грн</span>
+                                        <span>{{$t('hint.price')}}</span>
                                     </v-tooltip>
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{ on }">
@@ -48,7 +48,7 @@
                                                 {{item.updated_at}}
                                             </v-chip>
                                         </template>
-                                        <span>Дата відправки</span>
+                                        <span>{{$t('form.data_panel.start_date')}}</span>
                                     </v-tooltip>
                                 </v-list-tile-sub-title>
                             </v-list-tile-content>
@@ -75,10 +75,10 @@
                                                 outline
                                                 small
                                                 v-on="on"
-                                        >Price ₴ {{subItem.price }}
+                                        >{{$t('form.data_panel.price')}} ₴ {{subItem.price }}
                                         </v-chip>
                                     </template>
-                                    <span>Ціна у грн</span>
+                                    <span>{{$t('hint.price')}}</span>
                                 </v-tooltip>
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
@@ -90,10 +90,10 @@
                                                 v-on="on"
                                         >
                                             <v-icon small left>person</v-icon>
-                                            Person {{subItem.persons}}
+                                            {{$t('form.person')}} {{subItem.persons}}
                                         </v-chip>
                                     </template>
-                                    <span>Кількість осіб</span>
+                                    <span>{{$t('form.person')}}</span>
                                 </v-tooltip>
 
                                 <v-tooltip bottom>
@@ -109,7 +109,7 @@
                                             {{subItem.date}}
                                         </v-chip>
                                     </template>
-                                    <span>Дата відправки</span>
+                                    <span>{{$t('form.data_panel.start_date')}}</span>
                                 </v-tooltip>
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
@@ -125,7 +125,7 @@
                                         <v-icon color="blue">remove_red_eye</v-icon>
                                     </v-btn>
                                 </template>
-                                <span>Показати деталі туру</span>
+                                <span>{{$t('hint.show_details')}}</span>
                             </v-tooltip>
                         </v-list-tile-action>
                     </v-list-tile>
@@ -134,7 +134,7 @@
                         v-if="!noItemInCart"
                 >
                     <v-list-tile-content>
-                        <v-list-tile-title class="text-xs-center grey--text">No items :(</v-list-tile-title>
+                        <v-list-tile-title class="text-xs-center grey--text">{{$t('no_items')}}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>

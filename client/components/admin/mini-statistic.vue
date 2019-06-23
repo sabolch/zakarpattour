@@ -11,7 +11,7 @@
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title class="headline font-weight-bold pb-2">{{item.title}}+</v-list-tile-title>
-                            <v-list-tile-sub-title class="pt-2 subheading font-weight-regular">{{item.subTitle}}</v-list-tile-sub-title>
+                            <v-list-tile-sub-title class="pt-2 subheading font-weight-regular">{{$t(item.subTitle)}}</v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list>

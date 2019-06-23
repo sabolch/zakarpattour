@@ -94,6 +94,12 @@ class MarkerController extends Controller
 
         $data = $validator->valid();
 
+        foreach ($data['translations'] as $array) {
+            if(empty($array['title']) || empty($array['description'])){
+                return response()->json(['errors'=>['translations'=>'Empty data in translations']],400);
+            }
+        }
+
         $marker = new Marker();
         $marker->marker_category_id = $data['category'];
         $marker->settlement_id = $data['settlement'];
@@ -176,6 +182,13 @@ class MarkerController extends Controller
         $data = $validator->valid();
 
         try {
+
+            foreach ($data['translations'] as $array) {
+                if(empty($array['title']) || empty($array['description'])){
+                    return response()->json(['errors'=>['translations'=>'Empty data in translations']],400);
+                }
+            }
+
             $marker = Marker::findOrFail($data['id']);
             $marker->marker_category_id = $data['category'];
             $marker->settlement_id = $data['settlement'];

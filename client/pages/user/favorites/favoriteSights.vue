@@ -4,7 +4,7 @@
                 class="headline primary white--text font-weight-bold"
                 primary-title
         >
-            Sights
+            {{$t('navbar.sights')}}
             <v-spacer></v-spacer>
             <v-icon large dark>favorite</v-icon>
         </v-card-title>
@@ -32,7 +32,7 @@
                                         <v-icon color="pink">delete</v-icon>
                                     </v-btn>
                                 </template>
-                                <span>Видалити з кошика</span>
+                                <span>{{$t('btns.remove')}}</span>
                             </v-tooltip>
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on }">
@@ -46,7 +46,7 @@
                                         <v-icon color="blue">remove_red_eye</v-icon>
                                     </v-btn>
                                 </template>
-                                <span>Показати деталі туру</span>
+                                <span>{{$t('hint.show_details')}}</span>
                             </v-tooltip>
                         </v-list-tile-action>
                     </v-list-tile>

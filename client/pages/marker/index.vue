@@ -185,10 +185,12 @@
                         <v-flex xs12>
                             <v-autocomplete
                                     v-model="types"
+                                    class="pl-3 pr-3"
                                     :items="typeItems"
                                     multiple
                                     chips
                                     :disabled="loading"
+                                    :label="$t('form.category_filter')"
                                     persistent-hint
                                     hide-no-date
                                     :filter="autoFilterCat"
@@ -225,8 +227,6 @@
                                     :items="settlements"
                                     :search-input.sync="settlementSearch"
                                     chips
-                                    clearable
-                                    hide-details
                                     hide-selected
                                     item-text="title"
                                     item-value="id"
@@ -262,7 +262,6 @@
                                             outline
                                             color="indigo"
                                             @input="removeFromSettlements(data.item.id)"
-
                                     >
                                         <v-icon left>location_city</v-icon>
                                         <strong>{{ titleTrim(data.item) }}</strong>&nbsp;
@@ -452,7 +451,7 @@
                 return this.getName(item.translations).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
             autoFilter(item, queryText, itemText) {
-                return this.getTitle(item.translations).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+                return this.getTitle(item.translations).toLocaleLowerCase().indexOf(queryText.trim().toLocaleLowerCase()) > -1
             },
             autoValue(value) {
                 return value.id

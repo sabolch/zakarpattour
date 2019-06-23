@@ -23,20 +23,20 @@
                     class="headline primary white--text"
                     primary-title
             >
-                Add to shopping cart
+                {{$t('add_to_cart_title')}}
             </v-card-title>
 
             <v-card-text>
                 <v-icon size="70" class="pa-3" color="red">add_shopping_cart</v-icon>
                 <v-text-field
                         color="red"
-                        label="Start date"
+                        :label="$t('form.data_panel.start_date')"
                         :value="date"
                         readonly
                         prepend-icon="event"
                 ></v-text-field>
                 <v-text-field
-                        label="Count of persons"
+                        :label="$t('form.person')"
                         v-model="count"
                         min="1"
                         :max="maxPersonCount"
@@ -45,7 +45,7 @@
                         prepend-icon="person"
                 ></v-text-field>
                 <v-divider></v-divider>
-                <div class="text-xs-left pt-3 pl-1 title font-weight-bold primary--text">Total price: ₴ {{totalprice}}
+                <div class="text-xs-left pt-3 pl-1 title font-weight-bold primary--text">{{$t('total_price')}}: ₴ {{totalprice}}
                     UAH
                 </div>
             </v-card-text>
@@ -67,7 +67,7 @@
                         @click="add"
                         :loading="loading"
                 >
-                    Add
+                    {{$t('btns.add')}}
                 </v-btn>
             </v-card-actions>
         </v-card>

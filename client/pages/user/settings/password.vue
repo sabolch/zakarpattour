@@ -5,7 +5,7 @@
                 <v-container fill-height fluid>
                     <v-layout row wrap>
                         <v-flex xs12>
-                            <h1 class="headline font-weight-bold">Change your password</h1>
+                            <h1 class="headline font-weight-bold">{{$t('change_password')}}</h1>
                         </v-flex>
                         <v-flex xs12 class="pa-4">
                             <v-text-field
@@ -15,7 +15,7 @@
                                     v-model="form.oldPassword"
                                     v-validate="'required'"
                                     :error-messages="errors.collect('oldPassword')"
-                                    label="Old Password"
+                                    :label="$t('password')"
                                     data-vv-name="oldPassword"
                                     clearable
                                     required
@@ -29,7 +29,7 @@
                                     v-model="form.password"
                                     v-validate="'required|min:5|max:15'"
                                     :error-messages="errors.collect('password')"
-                                    label="New Password"
+                                    :label="$t('new_password')"
                                     data-vv-name="password"
                                     clearable
                                     required
@@ -43,7 +43,7 @@
                                     v-model="form.password_confirmation"
                                     v-validate="'required|confirmed:password'"
                                     :error-messages="errors.collect('password_confirmation')"
-                                    label="Confirm Password"
+                                    :label="$t('confirm_password')"
                                     data-vv-name="password_confirmation"
                                     clearable
                                     required
@@ -55,18 +55,18 @@
                                    :loading="form.busy"
                                    @click="update"
                             >
-                                Save
+                                {{$t('btns.save')}}
                             </v-btn>
                         </v-flex>
                         <v-flex xs12>
-                            <h1 class="headline font-weight-bold">Remove Your Account Forever</h1>
+                            <h1 class="headline font-weight-bold">{{$t('remove_account')}}</h1>
                         </v-flex>
                         <v-flex xs12 class="text-xs-right">
                             <v-btn color="error"
                                    @click="destroy"
                                    :loading="formDestroy.busy"
                             >
-                                Remove
+                                {{$t('btns.remove')}}
                             </v-btn>
                         </v-flex>
                     </v-layout>
@@ -102,7 +102,7 @@
 
         head() {
             return {
-                title: 'Password Settings',
+                title: this.$t('change_password'),
             }
         },
         data: () => ({

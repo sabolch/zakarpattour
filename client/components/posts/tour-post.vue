@@ -26,7 +26,7 @@
                             <v-icon large color="blue darken-4">timeline</v-icon>
                         </div>
                         <div class="title blue--text text--darken-4">
-                            Locations
+                            {{$t("locations")}}
                         </div>
                     </template>
                     <v-card>

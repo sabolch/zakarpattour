@@ -36,4 +36,16 @@ class Order extends Model
                 }])->select(['order_id','persons','price','date','tour_id']);
             }])->paginate($limit);
     }
+
+    public static function paginating($status, $limit)
+    {
+        return Order::where('status', $status)
+            ->with(['orders'=>function ($query){
+                $query->with(['tour' => function($q){
+                    $q->with(['translations' => function($x){
+                        $x->select(['tour_id','locale','title']);
+                    }])->select(['id','slug']);
+                }])->select(['order_id','persons','price','date','tour_id']);
+            }])->paginate($limit);
+    }
 }

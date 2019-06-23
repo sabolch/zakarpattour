@@ -131,7 +131,7 @@
                     <v-list class="pa-1">
                         <v-flex>
                             <v-layout row pa-2>
-                                <v-subheader class="font-weight-black headline text-xs-center">Filtering results</v-subheader>
+                                <v-subheader class="font-weight-black headline text-xs-center">{{$t('form.data_panel.title')}}</v-subheader>
                                 <v-spacer></v-spacer>
                                 <v-btn
                                         icon
@@ -146,12 +146,12 @@
                             </v-layout>
                         </v-flex>
                         <v-divider></v-divider>
-                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">Category</v-subheader>
+                        <v-subheader style="margin-bottom: -20px;" class="font-weight-black">{{$t('form.category')}}</v-subheader>
                         <v-flex xs12>
                             <v-autocomplete
                                     class="pl-3 pr-3"
                                     v-model="types"
-                                    label="Filter by categories"
+                                    :label="$t('form.category_filter')"
                                     :items="typeItems"
                                     multiple
                                     chips
@@ -190,8 +190,6 @@
                                     :items="settlements"
                                     :search-input.sync="settlementSearch"
                                     chips
-                                    clearable
-                                    hide-details
                                     hide-selected
                                     item-text="title"
                                     item-value="id"
@@ -246,8 +244,6 @@
                                     :items="sights"
                                     :search-input.sync="sightSearch"
                                     chips
-                                    clearable
-                                    hide-details
                                     hide-selected
                                     item-text="title"
                                     item-value="id"
@@ -649,7 +645,7 @@
                 if (this.search) {
                     url += `&q=${this.search}`
                 }
-                if (this.order) {
+                if (this.sortBy) {
                     url += `&order=${this.sortBy}`
                 }
                 if(this.selectedSights.length > 0){
@@ -697,7 +693,7 @@
                 return this.getName(item).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
             },
             autoFilter(item, queryText, itemText) {
-                return this.getTitle(item).toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+                return this.getTitle(item).toLocaleLowerCase().indexOf(queryText.trim().toLocaleLowerCase()) > -1
             },
             titleTrim(value){
                 return  value.translations.find(obj => obj.locale ===  this.$i18n.locale).title.substr(0,20)

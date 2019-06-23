@@ -23,11 +23,11 @@
                                               :error-messages="errors.collect('email')"
                                               data-vv-name="email"
                                               disabled
-                                              label="Email"
+                                              :label="$t('form.email')"
                                               type="text"></v-text-field>
                                 <v-text-field v-model="form.password" id="password" prepend-icon="lock" name="password"
                                               ref="password"
-                                              label="Password"
+                                              :label="$t('password')"
                                               :type="showPassword ? 'text' : 'password'"
                                               :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                                               @click:append="showPassword = !showPassword"
@@ -38,7 +38,7 @@
                                 ></v-text-field>
                                 <v-text-field v-model="form.password_confirmation" id="password_confirmation"
                                               prepend-icon="repeat" name="password_confirmation"
-                                              label="Password Confirmation"
+                                              :label="$t('confirm_password')"
                                               :type="showConfPassword ? 'text' : 'password'"
                                               :append-icon="showConfPassword ? 'visibility_off' : 'visibility'"
                                               @click:append="showConfPassword = !showConfPassword"
